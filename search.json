@@ -1,0 +1,30 @@
+[
+  {
+    "objectID": "eval.html",
+    "href": "eval.html",
+    "title": "Flu Metrocast Website",
+    "section": "",
+    "text": "this is replaced"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Introduction",
+    "section": "",
+    "text": "View The Latest Forecasts\nThis dashboard is designed for the Flu Metrocast hub, a national platform enabling collaborative, city-level forecasting of influenza-related emergency department visits and hospital admissions.\nCurrently, the project focuses on two regions:"
+  },
+  {
+    "objectID": "index.html#models-included",
+    "href": "index.html#models-included",
+    "title": "Introduction",
+    "section": "Models Included",
+    "text": "Models Included\n\nepiENGAGE-GBQR : A machine learning method that combines gradient boosting and quantile regression to predict conditional quantiles\nepiENGAGE-INFLAenza : A spatial time-series model that uses the R-INLA package for estimating forecast posterior distributions.\nepiENGAGE-Copycat : A pattern matching model that matches growth rate trends to historic growth rate curves.\nEpiforecasts-dyngam : A Bayesian hierarchical GAM with a univariate AR(1) process\nepiENGAGE-baseline : simple time series model as a reference model\nepiENGAGE-ensemble_mean : An equally weighted mean ensemble that takes the mean at each quantile level of all eligible forecasts\nepiENGAGE-log_norm : Linear pool (a.k.a. distributional mixture) ensemble of quantile forecast submissions."
+  },
+  {
+    "objectID": "forecast.html",
+    "href": "forecast.html",
+    "title": "Flu Metrocast Website",
+    "section": "",
+    "text": "this is replaced"
+  }
+]
