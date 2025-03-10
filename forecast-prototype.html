@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Influenza Forecasting – Flu MetroCast Hub</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+<!-- Bootstrap 4 -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.js"></script> -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"> -->
+<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script> -->
+
+<!-- https://www.daterangepicker.com/ -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
+
+<!-- plotly -->
+<script src="https://cdn.plot.ly/plotly-2.12.1.min.js"></script>
+
+<!-- DataTables, including ColumnControl and FixedColumns extensions -->
+<link rel="stylesheet" href="https://cdn.datatables.net/2.3.6/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/columncontrol/1.2.0/css/columnControl.bootstrap5.min.css">
+<script src="https://cdn.datatables.net/2.3.6/js/dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/2.3.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/columncontrol/1.2.0/js/dataTables.columnControl.min.js"></script>
+<script src="https://cdn.datatables.net/columncontrol/1.2.0/js/columnControl.bootstrap5.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/5.0.4/css/fixedColumns.bootstrap5.min.css">
+<script src="https://cdn.datatables.net/fixedcolumns/5.0.4/js/dataTables.fixedColumns.min.js"></script>
+<script src="https://cdn.datatables.net/fixedcolumns/5.0.4/js/fixedColumns.bootstrap5.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+
+
+<link rel="stylesheet" href="resources/css/styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Flu MetroCast Hub</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> <i class="bi bi-house" role="img">
+</i> 
+<span class="menu-text">Introduction</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./forecast.html"> <i class="bi bi-graph-up" role="img">
+</i> 
+<span class="menu-text">Forecasts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./eval.html"> <i class="bi bi-table" role="img">
+</i> 
+<span class="menu-text">Evaluation</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./datapage.html"> 
+<span class="menu-text">Data</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/reichlab/flu-metrocast"> <i class="bi bi-database" role="img">
+</i> 
+<span class="menu-text">flu-metrocast</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content column-page" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Influenza Forecasting</h1>
+</div>
+
+
+
+<div class="quarto-title-meta column-page">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!--
+Prototype page. Intentionally NOT linked from the site navbar
+(see site-config.yml — this file is omitted from the `pages:` list).
+Reach it directly at /forecast-prototype.html.
+-->
+<style>
+  /* Hide default Quarto page title — we render our own hero. */
+  #title-block-header { display: none; }
+  main.content { padding-top: 0 !important; }
+
+  .fp-hero {
+    background: linear-gradient(135deg, #0b1d4f 0%, #1e3a8a 60%, #2a4fb8 100%);
+    color: #fff;
+    padding: 28px 36px;
+    border-radius: 14px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .fp-hero h1 {
+    margin: 0;
+    font-size: 2.1rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #fff;
+  }
+  .fp-hero .fp-sub {
+    margin-top: 6px;
+    color: #c7d2fe;
+    font-size: 0.95rem;
+  }
+  .fp-hero-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .fp-horizon-label {
+    color: #c7d2fe;
+    font-size: 0.85rem;
+    margin-right: 4px;
+  }
+  .fp-horizon-group {
+    display: inline-flex;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 8px;
+    padding: 3px;
+  }
+  .fp-horizon-btn {
+    background: transparent;
+    color: #e0e7ff;
+    border: 0;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 120ms, color 120ms;
+  }
+  .fp-horizon-btn:hover { background: rgba(255,255,255,0.10); }
+  .fp-horizon-btn.active {
+    background: #ffffff;
+    color: #1e3a8a;
+  }
+  .fp-action {
+    background: transparent;
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.30);
+    padding: 7px 14px;
+    border-radius: 7px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  .fp-action:hover { background: rgba(255,255,255,0.10); }
+  .fp-action.primary {
+    background: #2563eb;
+    border-color: #2563eb;
+  }
+  .fp-action.primary:hover { background: #1d4ed8; }
+
+  .fp-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 1100px) { .fp-cards { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .fp-cards { grid-template-columns: 1fr; } }
+  .fp-card {
+    background: linear-gradient(180deg, #ffffff 0%, #f5f9ff 100%);
+    border: 1px solid #e3e9f4;
+    border-radius: 12px;
+    padding: 18px 20px;
+    min-height: 150px;
+  }
+  .fp-card-label {
+    text-transform: uppercase;
+    color: #64748b;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+  .fp-card-primary {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+  .fp-card-primary.muted { font-size: 1.45rem; font-weight: 700; }
+  .fp-pill {
+    display: inline-block;
+    background: #dbeafe;
+    color: #1d4ed8;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  .fp-percentile-row { display: flex; gap: 24px; }
+  .fp-percentile-row .fp-pct-block .lbl {
+    color: #64748b;
+    font-size: 0.78rem;
+    margin-bottom: 4px;
+  }
+  .fp-percentile-row .fp-pct-block .val {
+    font-size: 2.0rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .fp-percentile-row .fp-pct-block .val.future { color: #2563eb; }
+  .fp-card-sub {
+    color: #2563eb;
+    font-size: 0.82rem;
+    margin-top: 4px;
+    font-style: italic;
+  }
+  .fp-card-sub-strong {
+    color: #1d4ed8;
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-top: 2px;
+  }
+  .fp-trend-large {
+    font-size: 1.75rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+  .fp-trend-medium {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 6px 0 4px 0;
+  }
+  .fp-level-line {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .fp-level-line .lbl {
+    color: #64748b;
+    font-size: 0.82rem;
+    min-width: 78px;
+  }
+  .fp-level-line .val {
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.15;
+  }
+
+  .fp-controls {
+    background: #fff;
+    border: 1px solid #e3e9f4;
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 24px;
+    display: grid;
+    grid-template-columns: 2fr 1.4fr 1.4fr;
+    gap: 18px;
+    align-items: start;
+  }
+  @media (max-width: 800px) { .fp-controls { grid-template-columns: 1fr 1fr; } }
+  .fp-control-label {
+    color: #475569;
+    font-size: 0.78rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .fp-select {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 0.92rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    background: #fff;
+  }
+  .fp-toggle {
+    display: inline-flex;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 7px;
+    padding: 3px;
+  }
+  .fp-toggle button {
+    background: transparent;
+    border: 0;
+    padding: 6px 14px;
+    font-size: 0.85rem;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #475569;
+    font-weight: 500;
+  }
+  .fp-toggle button.active {
+    background: #fff;
+    color: #0f172a;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  }
+  .fp-model-list { display: flex; flex-direction: column; gap: 6px; }
+  .fp-model-list label {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 0.9rem; cursor: pointer;
+  }
+  .fp-uncertainty {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 12px;
+    padding: 18px 20px;
+  }
+  .fp-uncertainty h4 {
+    text-transform: uppercase;
+    color: #1e3a8a;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin: 0 0 8px 0;
+  }
+  .fp-uncertainty p { color: #1e3a8a; font-size: 0.86rem; line-height: 1.4; margin: 0 0 10px 0; }
+  .fp-uncertainty .src { color: #64748b; font-size: 0.78rem; margin: 0; }
+
+  .fp-chart-card {
+    background: #fff;
+    border: 1px solid #e3e9f4;
+    border-radius: 12px;
+    padding: 22px 24px;
+  }
+  .fp-chart-head {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 16px; flex-wrap: wrap; gap: 8px;
+  }
+  .fp-chart-head h3 { margin: 0; font-size: 1.15rem; font-weight: 700; color: #0f172a; }
+  .fp-chart-head .sub { color: #64748b; font-size: 0.85rem; margin-top: 2px; }
+  .fp-chart-head .stamp { color: #94a3b8; font-size: 0.8rem; }
+  #fp-chart { width: 100%; height: 460px; }
+  .fp-legend {
+    margin-top: 14px;
+    display: flex; flex-wrap: wrap; gap: 16px;
+    font-size: 0.82rem; color: #475569;
+  }
+  .fp-legend-item { display: flex; align-items: center; gap: 7px; }
+  .fp-legend-swatch { width: 26px; height: 3px; border-radius: 1px; }
+  .fp-legend-swatch.dash { background: repeating-linear-gradient(90deg, currentColor 0 5px, transparent 5px 9px); height: 2px; }
+  .fp-legend-swatch.shade { height: 10px; opacity: 0.25; }
+</style>
+
+<div class="fp-hero">
+  <div>
+    <h1>Influenza Forecasting</h1>
+    <div class="fp-sub">Full-season outlook • <span id="fp-season-label">2025-2026</span></div>
+  </div>
+</div>
+
+<div class="fp-controls">
+  <div>
+    <div class="fp-control-label">Region</div>
+    <select class="fp-select" id="fp-region"></select>
+  </div>
+  <div>
+    <div class="fp-control-label">Metric</div>
+    <select class="fp-select" id="fp-metric" disabled="">
+      <option>Percent ED Visits</option>
+    </select>
+  </div>
+  <div>
+    <div class="fp-control-label">View Mode</div>
+    <div class="fp-toggle" id="fp-viewmode">
+      <button data-v="intervals">Intervals</button>
+      <button class="active" data-v="trajectories">Trajectories</button>
+    </div>
+  </div>
+</div>
+
+<div class="fp-cards">
+  <div class="fp-card">
+    <div class="fp-card-label">Epidemic trend</div>
+    <div class="fp-trend-large" id="fp-trend-label">—</div>
+    <div class="fp-card-sub" id="fp-trend-sub"></div>
+  </div>
+  <div class="fp-card">
+    <div class="fp-card-label">Epidemic level</div>
+    <div class="fp-level-line">
+      <span class="lbl">Current:</span>
+      <span class="val" id="fp-level-current">—</span>
+    </div>
+    <div class="fp-level-line">
+      <span class="lbl">In 4 weeks:</span>
+      <span class="val" id="fp-level-future">—</span>
+    </div>
+    <div class="fp-card-sub" id="fp-level-sub"></div>
+  </div>
+  <div class="fp-card">
+    <div class="fp-card-label">Expected peak week</div>
+    <div class="fp-card-primary muted" id="fp-peak-week">—</div>
+    <div class="fp-card-sub" id="fp-peak-week-sub"></div>
+    <div class="fp-card-sub" id="fp-peak-week-hist"></div>
+  </div>
+  <div class="fp-card">
+    <div class="fp-card-label">Expected season peak</div>
+    <div class="fp-trend-large" id="fp-peak-vs-last">—</div>
+    <div class="fp-card-sub-strong" id="fp-peak-value">—</div>
+    <div class="fp-card-sub" id="fp-peak-vs-last-prob"></div>
+  </div>
+</div>
+
+<div class="fp-chart-card">
+  <div class="fp-chart-head">
+    <div>
+      <h3 class="anchored">ED Visits Forecast</h3>
+      <div class="sub"><span class="fp-h-label">4-week</span> ahead projection • Data source: NSSP</div>
+    </div>
+    <div class="stamp">Reference date: <span id="fp-ref-date">—</span></div>
+  </div>
+  <div id="fp-chart"></div>
+  <div class="fp-legend">
+    <div class="fp-legend-item"><span class="fp-legend-swatch" style="background:#0f172a"></span> Observed data through current week</div>
+    <div class="fp-legend-item"><span class="fp-legend-swatch" style="background:#94a3b8"></span> Last year (2024-2025)</div>
+    <div class="fp-legend-item" style="color:#2563eb"><span class="fp-legend-swatch dash"></span> Ensemble forecast (100 simulated trajectories)</div>
+  </div>
+</div>
+
+<script>
+(async function () {
+  const resp = await fetch("data/forecast_prototype_data.json", { cache: "no-cache" });
+  if (!resp.ok) {
+    document.getElementById("fp-chart").innerHTML =
+      `<div style="padding:24px;color:#b91c1c">Failed to load forecast data (${resp.status}). ` +
+      `If you're viewing this via file://, serve the directory over HTTP (e.g. <code>quarto preview</code>).</div>`;
+    return;
+  }
+  const DATA = await resp.json();
+  const MODEL_COLORS = { Ensemble: "#2563eb", GAM: "#9333ea", Baseline: "#0d9488" };
+
+  const state = {
+    region: null,
+    viewMode: "trajectories",
+    enabledModels: new Set(["Ensemble"]),
+  };
+
+  const QUANTILE_LEVELS = [0.025, 0.25, 0.5, 0.75, 0.975];
+  const N_TRAJ_DRAWS = 30;  // how many sample paths to render in trajectories view
+
+  // Default region: prefer Texas if present, else first.
+  const defaultLoc = DATA.locations.find(l => l.id === "texas") || DATA.locations[0];
+  state.region = defaultLoc.id;
+
+  // Populate region dropdown
+  const regionSel = document.getElementById("fp-region");
+  for (const loc of DATA.locations) {
+    const opt = document.createElement("option");
+    opt.value = loc.id;
+    opt.textContent = loc.name;
+    if (loc.id === state.region) opt.selected = true;
+    regionSel.appendChild(opt);
+  }
+  regionSel.addEventListener("change", e => { state.region = e.target.value; render(); });
+
+  // View mode toggle
+  document.querySelectorAll("#fp-viewmode button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      state.viewMode = btn.dataset.v;
+      document.querySelectorAll("#fp-viewmode button").forEach(b => b.classList.toggle("active", b === btn));
+      render();
+    });
+  });
+
+  // Static labels
+  document.getElementById("fp-ref-date").textContent = DATA.reference_date;
+  document.getElementById("fp-season-label").textContent = DATA.season_label;
+
+  // ---------- helpers ----------
+  function weekOfYear(dateStr) {
+    const d = new Date(dateStr + "T00:00:00Z");
+    const start = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    const diff = (d - start) / 86400000;
+    return Math.floor((diff + start.getUTCDay()) / 7) + 1;
+  }
+  function quantileInArray(arr, val) {
+    if (!arr.length) return null;
+    const sorted = [...arr].sort((a, b) => a - b);
+    let count = 0;
+    for (const x of sorted) if (x <= val) count++;
+    return Math.round((count / sorted.length) * 100);
+  }
+  function ordinal(n) {
+    if (n == null) return "—";
+    const s = ["th", "st", "nd", "rd"], v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+  }
+  function quantilesOf(values, levels) {
+    if (!values.length) return levels.map(() => null);
+    const sorted = [...values].sort((a, b) => a - b);
+    return levels.map(p => {
+      const i = p * (sorted.length - 1);
+      const lo = Math.floor(i), hi = Math.ceil(i);
+      return sorted[lo] + (sorted[hi] - sorted[lo]) * (i - lo);
+    });
+  }
+  function quantileBandsByDate(samples) {
+    // samples: [[w1,w2,...wN], ...]; returns {q025, q25, q50, q75, q975} arrays of length N
+    if (!samples.length) return null;
+    const N = samples[0].length;
+    const out = { q025: [], q25: [], q50: [], q75: [], q975: [] };
+    for (let t = 0; t < N; t++) {
+      const col = samples.map(s => s[t]);
+      const [q025, q25, q50, q75, q975] = quantilesOf(col, [0.025, 0.25, 0.5, 0.75, 0.975]);
+      out.q025.push(q025); out.q25.push(q25); out.q50.push(q50);
+      out.q75.push(q75); out.q975.push(q975);
+    }
+    return out;
+  }
+  function historicalSeasonPeaks(history) {
+    // Group observations by flu season (Aug 1 → Jul 31) and return {season, peak, date} per season.
+    if (!history || !history.length) return [];
+    const byseason = {};
+    for (const r of history) {
+      if (r.value == null) continue;
+      const y = parseInt(r.date.slice(0, 4));
+      const m = parseInt(r.date.slice(5, 7));
+      const seasonYear = m >= 8 ? y : y - 1;
+      if (seasonYear >= 2025) continue;
+      if (!(seasonYear in byseason) || r.value > byseason[seasonYear].peak) {
+        byseason[seasonYear] = { season: seasonYear, peak: r.value, date: r.date };
+      }
+    }
+    return Object.values(byseason);
+  }
+  function levelCategory(pct) {
+    // pct = percentile (0-100) of value vs same-week historical observations
+    if (pct == null) return { label: "—", color: "#64748b" };
+    if (pct >= 90) return { label: "Far above average", color: "#b91c1c" };
+    if (pct >= 66) return { label: "Above average",     color: "#c2410c" };
+    if (pct >= 33) return { label: "Average",           color: "#475569" };
+    if (pct >= 10) return { label: "Below average",     color: "#15803d" };
+    return                  { label: "Far below average", color: "#166534" };
+  }
+  function peakStatsFromSamples(samples, dates) {
+    // For each sample, find its argmax: returns {peakValues, peakDates}
+    const peakValues = [], peakDates = [];
+    for (const s of samples) {
+      let bestI = 0, best = s[0];
+      for (let i = 1; i < s.length; i++) { if (s[i] > best) { best = s[i]; bestI = i; } }
+      peakValues.push(best);
+      peakDates.push(dates[bestI]);
+    }
+    return { peakValues, peakDates };
+  }
+  function trace(name, x, y, opts = {}) {
+    return Object.assign({ type: "scatter", mode: "lines+markers", name, x, y }, opts);
+  }
+
+  // ---------- render ----------
+  function render() {
+    const loc = DATA.locations.find(l => l.id === state.region);
+    const observed = DATA.observed_current[state.region] || [];
+    const prior = DATA.observed_prior[state.region] || [];
+    const history = DATA.history[state.region] || [];
+    const forecasts = DATA.forecasts[state.region] || {};
+
+    const ensemble = forecasts.Ensemble;
+    const lastObs = observed.length ? observed[observed.length - 1].value : null;
+    const lastObsDate = observed.length ? observed[observed.length - 1].date : null;
+
+    // ---- Card 2: Epidemic level (colored categories, vs 2015-2025 same-week) ----
+    const levelCurEl = document.getElementById("fp-level-current");
+    const levelFutEl = document.getElementById("fp-level-future");
+    const levelSubEl = document.getElementById("fp-level-sub");
+    const histValuesForWeek = (wk) => history.filter(r => r.value != null && Math.abs(weekOfYear(r.date) - wk) <= 1).map(r => r.value);
+    let nSeasonsUsed = 0;
+    if (lastObs != null && lastObsDate) {
+      const wk = weekOfYear(lastObsDate);
+      const histVals = histValuesForWeek(wk);
+      nSeasonsUsed = histVals.length;
+      const p = quantileInArray(histVals, lastObs);
+      const cat = levelCategory(p);
+      levelCurEl.textContent = cat.label;
+      levelCurEl.style.color = cat.color;
+    } else {
+      levelCurEl.textContent = "—"; levelCurEl.style.color = "";
+    }
+    if (ensemble && ensemble.samples.length) {
+      const h4Idx = 3;
+      const h4Median = quantilesOf(ensemble.samples.map(s => s[h4Idx]), [0.5])[0];
+      const futureDate = ensemble.dates[h4Idx];
+      const wk = weekOfYear(futureDate);
+      const histVals = histValuesForWeek(wk);
+      const p = quantileInArray(histVals, h4Median);
+      const cat = levelCategory(p);
+      levelFutEl.textContent = cat.label;
+      levelFutEl.style.color = cat.color;
+    } else {
+      levelFutEl.textContent = "—"; levelFutEl.style.color = "";
+    }
+    levelSubEl.textContent = nSeasonsUsed
+      ? `Comparing to ${nSeasonsUsed} same-week observations from 2015-2025`
+      : "";
+
+    // ---- Card 1: Epidemic trend (P wk2>wk1, colored label + rise-count sub) ----
+    const trendLabelEl = document.getElementById("fp-trend-label");
+    const trendSubEl = document.getElementById("fp-trend-sub");
+    const fmtMd = ds => {
+      const d = new Date(ds + "T00:00:00Z");
+      return d.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
+    };
+    if (ensemble && ensemble.samples.length && ensemble.dates.length >= 2) {
+      const n = ensemble.samples.length;
+      const nUp = ensemble.samples.filter(s => s[1] > s[0]).length;
+      const pct = Math.round(nUp / n * 100);
+      let label, fg;
+      if (pct >= 85)      { label = "Increasing";        fg = "#b91c1c"; }
+      else if (pct >= 65) { label = "Likely increasing"; fg = "#c2410c"; }
+      else if (pct >= 35) { label = "Uncertain";         fg = "#475569"; }
+      else if (pct >= 15) { label = "Likely declining";  fg = "#15803d"; }
+      else                { label = "Declining";         fg = "#166534"; }
+      trendLabelEl.textContent = label;
+      trendLabelEl.style.color = fg;
+      trendSubEl.textContent = `${nUp} of ${n} trajectories rise from ${fmtMd(ensemble.dates[0])} → ${fmtMd(ensemble.dates[1])}`;
+    } else {
+      trendLabelEl.textContent = "—"; trendLabelEl.style.color = "";
+      trendSubEl.textContent = "";
+    }
+
+    // ---- Card 3 (Expected peak week) + Card 4 (Expected season peak) ----
+    const peakWeekEl = document.getElementById("fp-peak-week");
+    const peakWeekSubEl = document.getElementById("fp-peak-week-sub");
+    const peakWeekHistEl = document.getElementById("fp-peak-week-hist");
+    const peakValEl = document.getElementById("fp-peak-value");
+    const peakVsLastEl = document.getElementById("fp-peak-vs-last");
+    const peakVsLastProbEl = document.getElementById("fp-peak-vs-last-prob");
+
+    if (ensemble && ensemble.samples.length) {
+      const stats = peakStatsFromSamples(ensemble.samples, ensemble.dates);
+      const [pvLo, pvMd, pvHi] = quantilesOf(stats.peakValues, [0.25, 0.5, 0.75]);
+      const histPeaks = historicalSeasonPeaks(history);
+      const fmt = ds => {
+        const d = new Date(ds + "T00:00:00Z");
+        return d.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
+      };
+
+      // --- Card 3: peak week ---
+      const dateCounts = {};
+      for (const d of stats.peakDates) dateCounts[d] = (dateCounts[d] || 0) + 1;
+      const modeDate = Object.keys(dateCounts).reduce((a, b) => dateCounts[a] >= dateCounts[b] ? a : b);
+      const sortedPeakDates = [...stats.peakDates].sort();
+      const loIdx = Math.floor(0.25 * (sortedPeakDates.length - 1));
+      const hiIdx = Math.floor(0.75 * (sortedPeakDates.length - 1));
+      peakWeekEl.textContent = fmt(modeDate);
+      peakWeekSubEl.textContent = `50% PI: ${fmt(sortedPeakDates[loIdx])} – ${fmt(sortedPeakDates[hiIdx])}`;
+
+      if (histPeaks.length) {
+        // Normalize calendar weeks around the new year so wraparound averages correctly:
+        // late-year weeks (e.g. week 50) shift to negative (-2), Jan weeks stay positive.
+        const normalize = w => w >= 27 ? w - 52 : w;
+        const histWeeksNorm = histPeaks.map(p => normalize(weekOfYear(p.date)));
+        const meanHistWeek = histWeeksNorm.reduce((a, b) => a + b, 0) / histWeeksNorm.length;
+        const forecastWeek = normalize(weekOfYear(modeDate));
+        const diffWeeks = forecastWeek - meanHistWeek;
+        let text, color;
+        if (diffWeeks <= -2.5)        { text = `~${Math.round(Math.abs(diffWeeks))} weeks earlier than usual`; color = "#c2410c"; }
+        else if (diffWeeks <= -0.75)  { text = "Slightly earlier than usual"; color = "#c2410c"; }
+        else if (diffWeeks < 0.75)    { text = "About the same time as usual"; color = "#475569"; }
+        else if (diffWeeks < 2.5)     { text = "Slightly later than usual"; color = "#ca8a04"; }
+        else                          { text = `~${Math.round(diffWeeks)} weeks later than usual`; color = "#ca8a04"; }
+        peakWeekHistEl.textContent = text;
+        peakWeekHistEl.style.color = color;
+        peakWeekHistEl.style.fontWeight = "600";
+      } else {
+        peakWeekHistEl.textContent = "";
+      }
+
+      // --- Card 4: peak comparison (primary) + value (secondary) ---
+      const lastSeasonPeakObj = histPeaks.find(p => p.season === 2024);
+      if (lastSeasonPeakObj) {
+        const lastPk = lastSeasonPeakObj.peak;
+        const deltaPct = (pvMd - lastPk) / lastPk * 100;
+        let dirLabel, dirColor, dirWord, probDir;
+        if (deltaPct >= 0) {
+          dirWord = "higher";
+          probDir = stats.peakValues.filter(v => v > 1.20 * lastPk).length / stats.peakValues.length;
+        } else {
+          dirWord = "lower";
+          probDir = stats.peakValues.filter(v => v < 0.80 * lastPk).length / stats.peakValues.length;
+        }
+        if (Math.abs(deltaPct) <= 20) { dirLabel = "Similar to last year";  dirColor = "#475569"; }
+        else if (deltaPct > 20)       { dirLabel = "Higher than last year"; dirColor = "#b91c1c"; }
+        else                          { dirLabel = "Lower than last year";  dirColor = "#15803d"; }
+        peakVsLastEl.textContent = dirLabel;
+        peakVsLastEl.style.color = dirColor;
+        peakValEl.textContent = `Forecast peak: ${pvMd.toFixed(1)}% (last yr: ${lastPk.toFixed(1)}%)`;
+        peakVsLastProbEl.textContent = `${Math.round(probDir * 100)}% chance peak is more than 20% ${dirWord} than last year`;
+      } else {
+        peakVsLastEl.textContent = "Last season unavailable";
+        peakVsLastEl.style.color = "#94a3b8";
+        peakValEl.textContent = `Forecast peak: ${pvMd.toFixed(1)}%`;
+        peakVsLastProbEl.textContent = "";
+      }
+    } else {
+      peakWeekEl.textContent = "—"; peakWeekSubEl.textContent = ""; peakWeekHistEl.textContent = "";
+      peakValEl.textContent = "—"; peakVsLastEl.textContent = "—"; peakVsLastProbEl.textContent = "";
+    }
+
+    // ---- Chart ----
+    const traces = [];
+
+    // Observed (current season)
+    const obsX = observed.map(r => r.date);
+    const obsY = observed.map(r => r.value);
+    traces.push(trace("Observed", obsX, obsY, {
+      line: { color: "#0f172a", width: 2.5 },
+      marker: { color: "#0f172a", size: 5 },
+      showlegend: false,
+    }));
+
+    // Prior season — shift forward 52 weeks
+    if (prior.length) {
+      const priorAligned = prior
+        .filter(r => r.value != null)
+        .map(r => {
+          const d = new Date(r.date + "T00:00:00Z");
+          const shifted = new Date(d.getTime() + 52 * 7 * 86400000).toISOString().slice(0, 10);
+          return { date: shifted, value: r.value };
+        });
+      traces.push(trace("Last year", priorAligned.map(r => r.date), priorAligned.map(r => r.value), {
+        line: { color: "#94a3b8", width: 1.8 },
+        marker: { color: "#94a3b8", size: 3 },
+        showlegend: false,
+        opacity: 0.7,
+      }));
+    }
+
+    // Forecasts (per enabled model)
+    for (const m of DATA.models) {
+      if (!state.enabledModels.has(m)) continue;
+      const f = forecasts[m];
+      if (!f || !f.samples.length) continue;
+      const color = MODEL_COLORS[m];
+      const x = f.dates;
+
+      if (state.viewMode === "intervals") {
+        const bands = quantileBandsByDate(f.samples);
+        // 95% band
+        traces.push({
+          type: "scatter", mode: "lines",
+          x: [...x, ...x.slice().reverse()],
+          y: [...bands.q975, ...bands.q025.slice().reverse()],
+          fill: "toself", fillcolor: color + "26",
+          line: { color: "transparent" },
+          name: `${m} 95%`, hoverinfo: "skip", showlegend: false,
+        });
+        // 50% band
+        traces.push({
+          type: "scatter", mode: "lines",
+          x: [...x, ...x.slice().reverse()],
+          y: [...bands.q75, ...bands.q25.slice().reverse()],
+          fill: "toself", fillcolor: color + "4D",
+          line: { color: "transparent" },
+          name: `${m} 50%`, hoverinfo: "skip", showlegend: false,
+        });
+        // Median, connected to last observed point
+        let connX = x, connY = bands.q50;
+        if (lastObs != null) {
+          connX = [lastObsDate, ...x];
+          connY = [lastObs, ...bands.q50];
+        }
+        traces.push(trace(m, connX, connY, {
+          mode: "lines",
+          line: { color, width: 2.5, dash: "dash" },
+        }));
+      } else {
+        // Trajectories: draw N_TRAJ_DRAWS individual sample paths
+        const step = Math.max(1, Math.floor(f.samples.length / N_TRAJ_DRAWS));
+        const indices = [];
+        for (let i = 0; i < f.samples.length; i += step) indices.push(i);
+        indices.forEach((idx, j) => {
+          let lineX = x, lineY = f.samples[idx];
+          if (lastObs != null) {
+            lineX = [lastObsDate, ...x];
+            lineY = [lastObs, ...f.samples[idx]];
+          }
+          traces.push({
+            type: "scatter", mode: "lines",
+            x: lineX, y: lineY,
+            line: { color, width: 1 },
+            opacity: 0.25,
+            name: j === 0 ? m : `${m} draw`,
+            showlegend: j === 0,
+            hoverinfo: "skip",
+          });
+        });
+      }
+    }
+
+    const layout = {
+      margin: { t: 10, r: 20, b: 50, l: 50 },
+      xaxis: {
+        type: "date",
+        showgrid: true, gridcolor: "#eef2f7",
+        tickfont: { size: 11, color: "#64748b" },
+        title: { text: "" },
+      },
+      yaxis: {
+        title: { text: "ED Percent Flu", font: { size: 12, color: "#475569" } },
+        showgrid: true, gridcolor: "#eef2f7",
+        tickfont: { size: 11, color: "#64748b" },
+        rangemode: "tozero",
+      },
+      legend: { orientation: "h", x: 0, y: 1.12, font: { size: 11 } },
+      plot_bgcolor: "#fff",
+      paper_bgcolor: "#fff",
+      shapes: [{
+        type: "line", xref: "x", yref: "paper",
+        x0: DATA.reference_date, x1: DATA.reference_date, y0: 0, y1: 1,
+        line: { color: "#cbd5e1", width: 1, dash: "dot" },
+      }],
+      annotations: [{
+        x: DATA.reference_date, xref: "x", y: 1.02, yref: "paper",
+        text: "Forecast date", showarrow: false,
+        font: { size: 10, color: "#94a3b8" },
+      }],
+    };
+
+    Plotly.react("fp-chart", traces, layout, { displayModeBar: false, responsive: true });
+  }
+
+  // Initial labels
+  document.querySelectorAll(".fp-h-label").forEach(el => el.textContent = `${state.horizon}-week`);
+  render();
+})();
+</script>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // default icon
+          link.classList.add("external");
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions"><ul><li><a href="https://github.com/reichlab/metrocast-dashboard/edit/main/pages/forecast-prototype.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/reichlab/metrocast-dashboard/blob/main/pages/forecast-prototype.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/reichlab/metrocast-dashboard/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="https://docs.hubverse.io/en/latest/user-guide/dashboards.html">
+<p>Built with the Hubverse dashboard</p>
+</a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+<!-- Privacy-friendly analytics by Plausible -->
+<script async="" src="https://plausible.io/js/pa-DOosbUzSYYO66nV9P5iOt.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script>
+
+
+
+
+</body></html>
