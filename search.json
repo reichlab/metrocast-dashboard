@@ -1,0 +1,86 @@
+[
+  {
+    "objectID": "datapage.html",
+    "href": "datapage.html",
+    "title": "Data",
+    "section": "",
+    "text": "National Syndromic Surveillance Program (NSSP) data are collected by the U.S. Centers for Disease Control and Prevention, in collaboration with local and state health departments and private sector partners. NSSP data include surveillance data tracking the percentage of emergency department (ED) visits due to influenza-like illness, including influenza, COVID-19, and RSV. NSSP data reporting of ED visits due to influenza-like illness began in late 2022. Data are available on a weekly time scale, with data from the prior week added Friday mornings."
+  },
+  {
+    "objectID": "datapage.html#what-is-national-syndromic-surveillance-program-nssp-data",
+    "href": "datapage.html#what-is-national-syndromic-surveillance-program-nssp-data",
+    "title": "Data",
+    "section": "",
+    "text": "National Syndromic Surveillance Program (NSSP) data are collected by the U.S. Centers for Disease Control and Prevention, in collaboration with local and state health departments and private sector partners. NSSP data include surveillance data tracking the percentage of emergency department (ED) visits due to influenza-like illness, including influenza, COVID-19, and RSV. NSSP data reporting of ED visits due to influenza-like illness began in late 2022. Data are available on a weekly time scale, with data from the prior week added Friday mornings."
+  },
+  {
+    "objectID": "datapage.html#what-sub-state-level-data-are-available",
+    "href": "datapage.html#what-sub-state-level-data-are-available",
+    "title": "Data",
+    "section": "What sub-state-level data are available?",
+    "text": "What sub-state-level data are available?\nAt the sub-state level, reporting facilities can be aggregated to the level of health service area (HSA). HSAs are single- or multi-county clusters that correspond with healthcare-seeking patterns. All publicly-available county-level NSSP data are really HSA values, such that each county in the HSA will have the same value as the parent HSA.\nA list of HSAs can be downloaded here.\nNSSP surveillance data at the HSA level can be downloaded from the CDC."
+  },
+  {
+    "objectID": "datapage.html#missingness",
+    "href": "datapage.html#missingness",
+    "title": "Data",
+    "section": "Missingness",
+    "text": "Missingness\nThere is substantial missingness at the county level, especially for rural and lower-population locations.\nMissingness has varied a bit since reporting began in late 2022. As of January 2025, NSSP does not report any data at the county level for the following states: Alaska, Alabama, Arkansas, Arizona, California, Florida, Missouri, North Dakota, New Hampshire, Ohio, Pennsylvania, Rhode Island, South Dakota, and Washington.\nOf these, no county-level data is available since reporting began for Alaska, Alabama, Arkansas, Arizona, California, Florida, Missouri, North Dakota, New Hampshire, Ohio, South Dakota, and Washington.\nWe are open to working with public health partners from jurisdictions with no reported NSSP county-level data if they are able to facilitate access to an alternative source of sub-state-level data."
+  },
+  {
+    "objectID": "datapage.html#accessing-nssp-data",
+    "href": "datapage.html#accessing-nssp-data",
+    "title": "Data",
+    "section": "Accessing NSSP data",
+    "text": "Accessing NSSP data\nNSSP data can be accessed through the epidata API using epidatr (recommended) and covidcast R packages.\nA vignette for using epidatr is available on CRAN.\nlibrary(epidatr)\nlibrary(covidcast)\nAlthough the recommended way to pull data is with epidatr, we start by illustrating county-level data using the covidcast package’s plotting functionality. The following plot shows reporting counties as of Jan. 12, 2025. Recall all counties in an HSA will have the same value as the parent HSA.\nnssp_county &lt;- covidcast::covidcast_signal(\"nssp\", \"pct_ed_visits_influenza\",\n                                geo_type = \"county\",\n                                time_type = \"week\")\nplot(nssp_county, time_value = \"2025-01-12\")\n\nThe following code uses the epidatr package to return county-level data, where geo_value is the FIPS code of the county. Again, the values returned for an individual county are really those of the parent HSA.\nepidatr::pub_covidcast(source = \"nssp\", signals = \"pct_ed_visits_influenza\", geo_type = \"county\", geo_values = \"25015\", time_type = \"week\")"
+  },
+  {
+    "objectID": "datapage.html#why-use-nssp-hsa-data",
+    "href": "datapage.html#why-use-nssp-hsa-data",
+    "title": "Data",
+    "section": "Why use NSSP HSA data?",
+    "text": "Why use NSSP HSA data?\nMetro-level disease trends and forecasts may differ markedly from state and national trends. Building the capacity to forecast at the metro-level may be crucial in times of outbreak planning and response.\nNSSP HSA-level data are publicly available, making it quicker and easier to expand forecasting efforts to additional jurisdictions that report these data.\nA more detailed visual breakdown of HSAs for each state can be found here. This document also provides line plots for each state illustrating the difference between the percentage of ED visits for the state (grey line) vs. each individual HSA in that state (orange line)."
+  },
+  {
+    "objectID": "datapage.html#information-for-modelers",
+    "href": "datapage.html#information-for-modelers",
+    "title": "Data",
+    "section": "Information for Modelers",
+    "text": "Information for Modelers\nThe latest-data.csv file in the Flu MetroCast Hub target data directory provides data that modelers can use to fit a model. Latest-data is specially formatted target data that includes the most up-to-date values for all dates for which target data is available, not just dates corresponding to the subset of target_end_dates for which the Hub provides forecasts.\nLatest-data is the best source for modelers to get a single version of the target data with only the most recent observations, and including all historical data available from past seasons."
+  },
+  {
+    "objectID": "forecast.html",
+    "href": "forecast.html",
+    "title": "Flu MetroCast Hub",
+    "section": "",
+    "text": "this is replaced"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Introduction",
+    "section": "",
+    "text": "This dashboard is part of the epiENGAGE project, a CDC-funded collaboration involving over 20 research labs and public health departments dedicated to developing science-based tools and training programs that help local agencies detect, forecast, and respond to outbreaks more effectively.\nThis particular dashboard is designed for the Flu MetroCast hub, a national platform enabling collaborative, local-level forecasting of influenza-related emergency department visits and hospital admissions."
+  },
+  {
+    "objectID": "index.html#current-metro-areas",
+    "href": "index.html#current-metro-areas",
+    "title": "Introduction",
+    "section": "Current Metro Areas",
+    "text": "Current Metro Areas\n\n\n\nNew York City\n\nTarget: Percent of ED visit due to ILI (Influenza-like Illness)\nData source : New York City Department of Health and Mental Hygiene\nTarget areas: NYC (citywide)\n\n\n\n\nLocal Flu Activity Across U.S. Metro Areas\n\nTarget: Percentage of ED visits due to flu\nData Source : CDC’s Emergency Department Visits for Viral Respiratory Illness\nTarget areas: 51 metropolitan Health Service Areas (HSAs) across Colorado, Georgia, Indiana, Maine, Maryland, Massachusetts, Minnesota, South Carolina, Texas, Utah, and Virginia.\nA full list of included HSAs is available here.\nNote: These HSAs include a central city and its surrounding counties, and we include all HSAs with populations of at least 250,000 (with the exception of Massachusetts).\n\n\n\n\nNorth Carolina\n\nTarget: Percentage of ED visits due to flu\nData Source: North Carolina Division of Public Health’s (NC DPH) statewide syndromic surveillance system\nTarget areas: 7 geographic regions comprised of adjacent counties"
+  },
+  {
+    "objectID": "index.html#models-included",
+    "href": "index.html#models-included",
+    "title": "Introduction",
+    "section": "Models Included",
+    "text": "Models Included\n\nepiENGAGE-GBQR : A machine learning method that combines gradient boosting and quantile regression to predict conditional quantiles\nepiENGAGE-INFLAenza : A spatial time-series model that uses the R-INLA package for estimating forecast posterior distributions.\nepiENGAGE-Copycat : A pattern matching model that matches growth rate trends to historic growth rate curves.\nEpiforecasts-dyngam : A Bayesian hierarchical GAM with a univariate AR(1) process\nepiENGAGE-baseline : simple time series model as a reference model\nepiENGAGE-ensemble_mean : An equally weighted mean ensemble that takes the mean at each quantile level of all eligible forecasts\nepiENGAGE-log_norm : Linear pool (a.k.a. distributional mixture) ensemble of quantile forecast submissions."
+  },
+  {
+    "objectID": "index.html#information-for-modelers",
+    "href": "index.html#information-for-modelers",
+    "title": "Introduction",
+    "section": "Information for Modelers",
+    "text": "Information for Modelers\nAnyone interested in submitting a model should review the guidelines for the 2025/2026 season on the Flu MetroCast Hub repository.\nThe latest-data.csv file in the Flu MetroCast Hub target data directory provides data that modelers can use to fit a model. Latest-data is specially formatted target data that includes the most up-to-date values for all dates for which target data is available, not just dates corresponding to the subset of target_end_dates for which the Hub provides forecasts.\nLatest-data is the best source for modelers to get a single version of the target data with only the most recent observations, and including all historical data available from past seasons."
+  }
+]
