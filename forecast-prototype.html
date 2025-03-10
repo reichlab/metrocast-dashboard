@@ -1,0 +1,2299 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Influenza Forecasting – Flu MetroCast Hub</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+<!-- Bootstrap 4 -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.js"></script> -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"> -->
+<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script> -->
+
+<!-- https://www.daterangepicker.com/ -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
+
+<!-- plotly -->
+<script src="https://cdn.plot.ly/plotly-2.12.1.min.js"></script>
+
+<!-- DataTables, including ColumnControl and FixedColumns extensions -->
+<link rel="stylesheet" href="https://cdn.datatables.net/2.3.6/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/columncontrol/1.2.0/css/columnControl.bootstrap5.min.css">
+<script src="https://cdn.datatables.net/2.3.6/js/dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/2.3.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/columncontrol/1.2.0/js/dataTables.columnControl.min.js"></script>
+<script src="https://cdn.datatables.net/columncontrol/1.2.0/js/columnControl.bootstrap5.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/5.0.4/css/fixedColumns.bootstrap5.min.css">
+<script src="https://cdn.datatables.net/fixedcolumns/5.0.4/js/dataTables.fixedColumns.min.js"></script>
+<script src="https://cdn.datatables.net/fixedcolumns/5.0.4/js/fixedColumns.bootstrap5.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+
+
+<link rel="stylesheet" href="resources/css/styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Flu MetroCast Hub</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> <i class="bi bi-house" role="img">
+</i> 
+<span class="menu-text">Introduction</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./forecast.html"> <i class="bi bi-graph-up" role="img">
+</i> 
+<span class="menu-text">Forecasts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./eval.html"> <i class="bi bi-table" role="img">
+</i> 
+<span class="menu-text">Evaluation</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./datapage.html"> 
+<span class="menu-text">Data</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/reichlab/flu-metrocast"> <i class="bi bi-database" role="img">
+</i> 
+<span class="menu-text">flu-metrocast</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content column-page" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Influenza Forecasting</h1>
+</div>
+
+
+
+<div class="quarto-title-meta column-page">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!--
+Prototype page. Intentionally NOT linked from the site navbar
+(see site-config.yml — this file is omitted from the `pages:` list).
+Reach it directly at /forecast-prototype.html; append #<location id> (e.g. #texas or #austin)
+to open a given state or local area.
+-->
+<style>
+  /* Hide default Quarto page title — we render our own hero. */
+  #title-block-header { display: none; }
+  main.content { padding-top: 0 !important; }
+
+  .fp-hero {
+    background: linear-gradient(135deg, #0b1d4f 0%, #1e3a8a 60%, #2a4fb8 100%);
+    color: #fff;
+    padding: 24px 32px;
+    border-radius: 14px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .fp-hero h1 {
+    margin: 0;
+    font-size: 2.0rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #fff;
+  }
+  .fp-hero .fp-sub {
+    margin-top: 6px;
+    color: #c7d2fe;
+    font-size: 0.95rem;
+  }
+  .fp-hero .stamp { color: #c7d2fe; font-size: 0.85rem; }
+
+  /* ---- Controls: chart toggles (in the chart card) and state picker (in the map card) ---- */
+  .fp-chart-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+    margin-bottom: 8px;
+  }
+  .fp-control-label {
+    color: #475569;
+    font-size: 0.78rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .fp-select {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 0.92rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    background: #fff;
+  }
+  .fp-toggle {
+    display: inline-flex;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 7px;
+    padding: 3px;
+  }
+  .fp-toggle button {
+    background: transparent;
+    border: 0;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #475569;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .fp-toggle button.active {
+    background: #fff;
+    color: #0f172a;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  }
+  .fp-state-picker { padding-bottom: 16px; margin-bottom: 16px; border-bottom: 1px solid #e3e9f4; }
+  #fp-usmap { margin-top: 10px; }
+  #fp-usmap svg { width: 100%; height: auto; display: block; }
+  #fp-usmap path { fill: #f1f5f9; stroke: #fff; stroke-width: 0.6; }
+  /* States with forecasts are filled by their statewide trend (set in colorUsMap). */
+  /* The selected state gets a black outline (raised in drawUsMap so its whole border shows). */
+  #fp-usmap path.has-data { cursor: pointer; transition: fill 200ms; }
+  #fp-usmap path.has-data:hover, #fp-usmap path.has-data:focus {
+    stroke: #0f172a; stroke-width: 1.2; outline: none;
+  }
+  #fp-usmap path.active, #fp-usmap path.active:hover, #fp-usmap path.active:focus {
+    stroke: #000; stroke-width: 2;
+  }
+
+  /* ---- Main area: cards + chart on the left, local-area map on the right ---- */
+  .fp-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 380px;
+    gap: 20px;
+    align-items: start;
+  }
+  @media (max-width: 1000px) { .fp-main { grid-template-columns: minmax(0, 1fr); } }
+  .fp-view-head { margin-bottom: 12px; }
+  .fp-view-head h2 {
+    margin: 0;
+    font-size: 1.55rem;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.01em;
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+  .fp-view-head .sub { color: #64748b; font-size: 0.88rem; margin-top: 2px; }
+  .fp-view-head .sub a { color: #2563eb; font-weight: 600; text-decoration: none; }
+  .fp-view-head .sub a:hover { text-decoration: underline; }
+
+  .fp-cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 1300px) { .fp-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 500px) { .fp-cards { grid-template-columns: minmax(0, 1fr); } }
+  .fp-card {
+    background: linear-gradient(180deg, #ffffff 0%, #f5f9ff 100%);
+    border: 1px solid #e3e9f4;
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .fp-card-label {
+    text-transform: uppercase;
+    color: #64748b;
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .fp-card-primary {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+  .fp-card-sub {
+    color: #0f172a;
+    font-size: 0.74rem;
+    margin-top: 3px;
+    font-style: italic;
+    line-height: 1.3;
+  }
+  .fp-card-sub-strong {
+    color: #475569;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-top: 2px;
+  }
+  .fp-trend-large {
+    font-size: 1.2rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+  .fp-trend-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .fp-trend-head .fp-trend-large { margin-bottom: 0; }
+  .fp-trend-icon {
+    flex: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background: #94a3b8;
+  }
+  .fp-trend-icon:empty { display: none; }
+  .fp-trend-icon svg { width: 14px; height: 14px; }
+  .fp-trend-card { border-left-width: 4px; }
+  .fp-trend-card.trend-increasing { background: #fef2f2; border-color: #fecaca; border-left-color: #dc2626; }
+  .fp-trend-card.trend-stable     { background: #eff6ff; border-color: #bfdbfe; border-left-color: #2563eb; }
+  .fp-trend-card.trend-decreasing { background: #f0fdf4; border-color: #bbf7d0; border-left-color: #16a34a; }
+  .fp-trend-card.trend-uncertain  { background: #f5f3ff; border-color: #ddd6fe; border-left-color: #8b5cf6; }
+  .fp-level-warning {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 6px;
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fcd34d;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    cursor: help;
+  }
+  .fp-level-warning { align-self: flex-start; }
+  .fp-level-warning[hidden] { display: none; }
+  /* Level card: "Now" and "In 2 weeks" categories side by side. */
+  /* Two equal columns, so a long "Now" category can't squeeze the "In 2 weeks" column against the
+     card's edge; the right padding keeps some whitespace there. */
+  .fp-level-pair {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 10px; margin-bottom: 2px; padding-right: 6px;
+  }
+  .fp-level-pair .lbl { display: block; color: #64748b; font-size: 0.66rem; font-weight: 600; white-space: nowrap; }
+  .fp-level-pair .val { display: block; font-size: 0.86rem; font-weight: 700; line-height: 1.15; }
+
+  /* ---- Card visuals: forecast ranges against past seasons ---- */
+  .fp-card { display: flex; flex-direction: column; }
+  .fp-viz { margin-top: auto; padding-top: 6px; }
+  #fp-trend-viz { margin-top: 10px; }
+  .fp-viz svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .fp-viz .ax { stroke: #cbd5e1; stroke-width: 1; }
+  .fp-viz .tick { font-size: 10px; fill: #94a3b8; }
+  .fp-viz .col { font-size: 10px; fill: #64748b; font-weight: 600; }
+  .fp-viz .past { fill: #64748b; stroke: #fff; stroke-width: 1; }
+  .fp-viz .past-line { stroke: #64748b; stroke-width: 1.5; }
+  .fp-viz .past-lbl { font-size: 10px; fill: #475569; }
+  .fp-viz .pill-outer { fill: #dbeafe; stroke: #93c5fd; stroke-width: 1; }
+  .fp-viz .pill-inner { fill: #93c5fd; }
+  .fp-viz .pill-med { stroke: #1e3a8a; stroke-width: 2.5; stroke-linecap: round; }
+  .fp-viz .past.now { fill: #000; }
+  .fp-viz .past-line.now { stroke: #000; }
+  .fp-viz .past-lbl.now { fill: #000; font-weight: 700; }
+  /* Trend card: one line per category under the bar. */
+  .fp-trend-key { display: flex; flex-direction: column; gap: 2px; margin-top: 6px; font-size: 0.7rem; color: #475569; }
+  .fp-trend-key span { display: inline-flex; align-items: center; gap: 5px; }
+  /* Trend card: share of trajectories rising / stable / falling. */
+  .fp-trend-bar { display: flex; height: 18px; border-radius: 5px; overflow: hidden; margin-top: 4px; }
+  .fp-trend-bar > div {
+    display: flex; align-items: center; justify-content: center; min-width: 0;
+    color: #fff; font-size: 0.66rem; font-weight: 700; white-space: nowrap; overflow: hidden;
+  }
+
+  .fp-chart-card, .fp-map-card {
+    background: #fff;
+    border: 1px solid #e3e9f4;
+    border-radius: 12px;
+    padding: 18px 20px;
+  }
+  .fp-chart-head {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 12px; flex-wrap: wrap; gap: 8px;
+  }
+  .fp-chart-head h3, .fp-map-card h3 { margin: 0; font-size: 1.1rem; font-weight: 700; color: #0f172a; }
+  .fp-chart-head .sub, .fp-map-card .sub { color: #64748b; font-size: 0.84rem; margin-top: 2px; }
+  #fp-chart { width: 100%; height: 440px; }
+  /* Observed data and past seasons on the first row, the forecast on the second. */
+  .fp-legend {
+    margin-top: 12px;
+    display: flex; flex-direction: column; gap: 8px;
+    font-size: 0.82rem; color: #475569;
+  }
+  .fp-legend-row { display: flex; flex-wrap: wrap; gap: 8px 16px; }
+  .fp-legend-item { display: flex; align-items: center; gap: 7px; }
+  .fp-legend-item[hidden] { display: none; }
+  .fp-legend-swatch { width: 26px; height: 3px; border-radius: 1px; }
+  .fp-legend-swatch.band { height: 12px; border-radius: 2px; }
+  .fp-legend-swatch.dash { background: repeating-linear-gradient(90deg, currentColor 0 5px, transparent 5px 9px); height: 2px; }
+  .fp-loading .fp-cards, .fp-loading .fp-chart-card { opacity: 0.5; transition: opacity 120ms; }
+
+  /* ---- Local-area map ---- */
+  #fp-statemap { margin: 12px 0 8px 0; }
+  #fp-statemap svg { width: 100%; height: auto; display: block; }
+  #fp-statemap .fp-county { fill: #f1f5f9; stroke: #fff; stroke-width: 0.5; }
+  #fp-statemap .fp-state-outline { fill: none; stroke: #94a3b8; stroke-width: 1; }
+  #fp-statemap .fp-county-lines {
+    fill: none; stroke: #fff; stroke-width: 0.5; stroke-opacity: 0.7; pointer-events: none;
+  }
+  #fp-statemap .fp-cities { pointer-events: none; }
+  #fp-statemap .fp-cities circle { fill: #0f172a; stroke: #fff; stroke-width: 1; }
+  #fp-statemap .fp-cities text {
+    font-size: 12px; font-weight: 600; fill: #0f172a;
+    paint-order: stroke; stroke: #fff; stroke-width: 3px; stroke-linejoin: round;
+  }
+  #fp-statemap .fp-region {
+    stroke: #fff; stroke-width: 1.2; cursor: pointer;
+    transition: fill 200ms;
+  }
+  #fp-statemap .fp-region:hover, #fp-statemap .fp-region:focus { stroke: #0f172a; stroke-width: 1.5; outline: none; }
+  #fp-statemap .fp-region.selected { stroke: #0f172a; stroke-width: 2.5; }
+  /* In a local area's view, the other areas are faded; in the statewide view none are. */
+  #fp-statemap svg.has-selection .fp-region { fill-opacity: 0.4; transition: fill 200ms, fill-opacity 150ms; }
+  #fp-statemap svg.has-selection .fp-region:hover,
+  #fp-statemap svg.has-selection .fp-region:focus { fill-opacity: 0.7; }
+  #fp-statemap svg.has-selection .fp-region.selected { fill-opacity: 1; }
+  #fp-statemap .fp-msg { color: #64748b; font-size: 0.85rem; padding: 20px 0; }
+  .fp-map-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 0.78rem; color: #475569; }
+  .fp-map-legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .fp-dot { width: 10px; height: 10px; border-radius: 50%; flex: none; display: inline-block; }
+  .fp-back {
+    margin-top: 12px;
+    background: #fff; color: #1e3a8a;
+    border: 1px solid #bfdbfe; border-radius: 7px;
+    padding: 6px 12px; font-size: 0.84rem; font-weight: 600; cursor: pointer;
+  }
+  .fp-back:hover { background: #eff6ff; }
+  .fp-back[hidden] { display: none; }
+  #fp-tip {
+    position: fixed; pointer-events: none; z-index: 1000;
+    background: #0f172a; color: #fff; border-radius: 6px;
+    padding: 6px 9px; font-size: 0.78rem; line-height: 1.35; max-width: 260px;
+    box-shadow: 0 4px 12px rgba(15,23,42,0.25);
+  }
+  #fp-tip[hidden] { display: none; }
+  #fp-tip .fp-tip-counties { margin-top: 4px; color: #cbd5e1; font-size: 0.72rem; }
+</style>
+
+<div class="fp-hero">
+  <div>
+    <h1>Influenza Forecasting</h1>
+    <div class="fp-sub">Ensemble forecasts by state and local area • <span id="fp-season-label">2025-2026</span> season</div>
+  </div>
+  <div class="stamp">Reference date: <span id="fp-ref-date">—</span></div>
+</div>
+
+<div class="fp-main">
+  <div>
+    <div class="fp-view-head">
+      <h2 id="fp-view-title" class="anchored">—</h2>
+      <div class="sub" id="fp-view-sub"></div>
+    </div>
+
+    <div class="fp-cards">
+      <div class="fp-card fp-trend-card" id="fp-trend-card">
+        <div class="fp-card-label">Epidemic trend</div>
+        <div class="fp-trend-head">
+          <span class="fp-trend-icon" id="fp-trend-icon" aria-hidden="true"></span>
+          <span class="fp-trend-large" id="fp-trend-label">—</span>
+        </div>
+        <div class="fp-card-sub" id="fp-trend-sub"></div>
+        <div class="fp-viz" id="fp-trend-viz"></div>
+      </div>
+      <div class="fp-card">
+        <div class="fp-card-label">Epidemic level</div>
+        <div class="fp-level-pair">
+          <div><span class="lbl">Now</span><span class="val" id="fp-level-current">—</span></div>
+          <div><span class="lbl">In 2 weeks</span><span class="val" id="fp-level-future">—</span></div>
+        </div>
+        <div class="fp-level-warning" id="fp-level-warning" hidden="" title="Reported values in this location jump around a lot from week to week (often because of small numbers or weeks reported as zero), so the level may change quickly.">
+          ⚠ Unstable data
+        </div>
+        <div class="fp-viz" id="fp-level-viz"></div>
+      </div>
+      <div class="fp-card">
+        <div class="fp-card-label">Expected peak week</div>
+        <div class="fp-card-primary" id="fp-peak-week">—</div>
+        <div class="fp-card-sub" id="fp-peak-week-hist"></div>
+        <div class="fp-viz" id="fp-peak-week-viz"></div>
+      </div>
+      <div class="fp-card">
+        <div class="fp-card-label">Expected season peak</div>
+        <div class="fp-trend-large" id="fp-peak-vs-last">—</div>
+        <div class="fp-card-sub" id="fp-peak-vs-last-prob"></div>
+        <div class="fp-viz" id="fp-peak-viz"></div>
+      </div>
+    </div>
+
+    <div class="fp-chart-card">
+      <div class="fp-chart-head">
+        <div>
+          <h3 id="fp-chart-title" class="anchored">ED Visits Forecast</h3>
+          <div class="sub" id="fp-chart-sub"></div>
+        </div>
+      </div>
+      <div class="fp-chart-controls">
+        <div>
+          <div class="fp-control-label">Forecast window</div>
+          <div class="fp-toggle" id="fp-window">
+            <button class="active" data-v="4w">4 weeks</button>
+            <button data-v="season">Full season</button>
+          </div>
+        </div>
+        <div>
+          <div class="fp-control-label">View mode</div>
+          <div class="fp-toggle" id="fp-viewmode">
+            <button data-v="intervals">Intervals</button>
+            <button class="active" data-v="trajectories">Trajectories</button>
+            <button data-v="deciles">Deciles</button>
+          </div>
+        </div>
+        <div>
+          <div class="fp-control-label">Past seasons</div>
+          <div class="fp-toggle" id="fp-pastseasons">
+            <button data-v="last">Last year</button>
+            <button class="active" data-v="all">All</button>
+          </div>
+        </div>
+      </div>
+      <div id="fp-chart"></div>
+      <div class="fp-legend">
+        <div class="fp-legend-row">
+        <div class="fp-legend-item"><span class="fp-legend-swatch" style="background:#0f172a"></span> Observed data</div>
+        <div class="fp-legend-item"><span class="fp-legend-swatch" style="background:#64748b"></span> <span id="fp-last-year-label">Last year</span></div>
+        <div class="fp-legend-item" id="fp-older-legend"><span class="fp-legend-swatch" style="background:#a8b4c4"></span> <span id="fp-older-label">Earlier seasons</span></div>
+        </div>
+        <div class="fp-legend-row">
+        <div class="fp-legend-item" style="color:#2563eb"><span class="fp-legend-swatch dash"></span> Ensemble forecast <span id="fp-forecast-legend-detail"></span></div>
+        <!-- The 50% band is drawn over the 95% band, so its swatch is the two fills combined. -->
+        <div class="fp-legend-item fp-interval-legend" hidden=""><span class="fp-legend-swatch band" style="background:#2563eb67"></span> 50% interval</div>
+        <div class="fp-legend-item fp-interval-legend" hidden=""><span class="fp-legend-swatch band" style="background:#2563eb26"></span> 95% interval</div>
+        <div class="fp-legend-item" id="fp-smooth-legend" style="color:#ea580c" hidden=""><span class="fp-legend-swatch" style="background:#ea580c"></span> Smoothed median (3-week moving average)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- A div, not an <aside>: Quarto moves asides into the page margin. -->
+  <div class="fp-map-card">
+    <div class="fp-state-picker">
+      <div class="fp-control-label">State</div>
+      <select class="fp-select" id="fp-state" aria-label="State"></select>
+      <div class="fp-usmap-wrap">
+        <div id="fp-usmap" role="group" aria-label="Pick a state on the map"></div>
+      </div>
+    </div>
+    <h3 id="fp-map-title" class="anchored">Local areas</h3>
+    <div class="sub">Colored by each area's epidemic trend. Select an area to see its forecast.</div>
+    <div id="fp-statemap"></div>
+    <div class="fp-map-legend" id="fp-map-legend"></div>
+    <button class="fp-back" id="fp-back" hidden=""></button>
+  </div>
+</div>
+<div id="fp-tip" hidden=""></div>
+
+<script>
+(async function () {
+  // Card data is built by scripts/build_card_data.py and published to the cards/data branch, which
+  // the deployed site reads: DATA_REPO's branch on its custom domain, or <owner>/<repo>'s on
+  // <owner>.github.io/<repo>/ (e.g. a fork). A local preview reads data/cards/ next to this page,
+  // and a ?data=<url> query parameter overrides all of these.
+  const DATA_REPO = "reichlab/metrocast-dashboard";
+  function dataRoot() {
+    const override = new URLSearchParams(location.search).get("data");
+    if (override) return override.replace(/\/?$/, "/");
+    const raw = repo => `https://raw.githubusercontent.com/${repo}/refs/heads/cards/data/`;
+    if (location.protocol === "file:" || ["localhost", "127.0.0.1", "[::1]"].includes(location.hostname)) {
+      return "data/cards/";
+    }
+    const owner = location.hostname.match(/^([^.]+)\.github\.io$/);
+    const repo = location.pathname.split("/")[1];
+    return owner && repo ? raw(`${owner[1]}/${repo}`) : raw(DATA_REPO);
+  }
+  const DATA_ROOT = dataRoot();
+  async function fetchJson(path) {
+    const resp = await fetch(DATA_ROOT + path, { cache: "no-cache" });
+    if (!resp.ok) throw new Error(`Failed to load ${DATA_ROOT + path} (${resp.status})`);
+    return resp.json();
+  }
+  function showError(err) {
+    const chartEl = document.getElementById("fp-chart");
+    if (window.Plotly) Plotly.purge(chartEl);
+    chartEl.innerHTML = `<div style="padding:24px;color:#b91c1c">${err.message}. ` +
+      `If you're viewing this via file://, serve the directory over HTTP (e.g. <code>quarto preview</code>).</div>`;
+  }
+
+  // County and state shapes for the maps (TopoJSON; county ids are 5-digit FIPS codes whose first
+  // two digits are the state's id).
+  const US_ATLAS_URL = "https://cdn.jsdelivr.net/npm/us-atlas@3.0.1/counties-10m.json";
+  const topoPromise = window.d3 && window.topojson
+    ? d3.json(US_ATLAS_URL)
+    : Promise.reject(new Error("Map libraries failed to load"));
+  topoPromise.catch(() => {});
+
+  // Each location's data is fetched the first time it's needed and kept for the rest of the visit.
+  const locationCache = new Map();
+  function loadLocation(id) {
+    if (!locationCache.has(id)) {
+      const p = fetchJson(`locations/${id}.json`);
+      p.catch(() => locationCache.delete(id));  // let a failed fetch be retried
+      locationCache.set(id, p);
+    }
+    return locationCache.get(id);
+  }
+
+  // The page opens on the location named in the URL hash (#<location id>), else DEFAULT_LOCATION.
+  // Start fetching it alongside options.json rather than after it.
+  const DEFAULT_LOCATION = "texas";
+  const hashId = () => decodeURIComponent(location.hash.slice(1));
+  loadLocation(hashId() || DEFAULT_LOCATION).catch(() => {});
+  let DATA;
+  try {
+    DATA = await fetchJson("options.json");
+  } catch (err) {
+    showError(err);
+    return;
+  }
+  const FORECAST_COLOR = "#2563eb";
+
+  // Locations grouped by state: each state has a statewide location (if forecast) and local areas.
+  const LOCATIONS = new Map(DATA.locations.map(l => [l.id, l]));
+  const STATES = new Map();
+  for (const l of DATA.locations) {
+    if (!STATES.has(l.state)) STATES.set(l.state, { name: l.state, abb: l.state_abb, statewide: null, locals: [] });
+    const s = STATES.get(l.state);
+    if (l.level === "state") s.statewide = l; else s.locals.push(l);
+  }
+  const stateHome = s => (s.statewide || s.locals[0]).id;
+
+  const state = {
+    stateName: null,
+    region: null,
+    locData: null,
+    window: "4w",  // "4w" (next 4 weeks) or "season" (full season)
+    viewMode: "trajectories",
+    pastSeasons: "all",  // "last" (last season only) or "all"
+  };
+  // Epidemic trend of each location in the current state, filled in as their data arrives:
+  // undefined while loading, null if the trend can't be computed, else computeTrend()'s result.
+  const trends = new Map();
+  // Same, for each state's statewide location, keyed by state name (for the US map).
+  const stateTrends = new Map();
+
+  const N_TRAJ_DRAWS = 30;  // how many sample paths to render in trajectories view
+  const TRAJ_STYLE = { opacity: 0.25, width: 1 };        // a trajectory's usual look
+  const TRAJ_HOVER_STYLE = { opacity: 0.9, width: 2.5 };  // the trajectory under the mouse
+  // Deciles view: the trajectory closest to each of these quantile levels (see decileTrajectories),
+  // colored from DECILE_DARK at the median to DECILE_LIGHT at the outermost levels, and the median
+  // of all trajectories smoothed with a centered MEDIAN_SMOOTH_WEEKS-week moving average.
+  const DECILE_LEVELS = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];
+  const DECILE_DARK = "#1e3a8a", DECILE_LIGHT = "#93c5fd";
+  const DECILE_STYLE = { opacity: 0.9, width: 1.6 };
+  const DECILE_HOVER_STYLE = { opacity: 1, width: 3.5 };
+  // The trajectory closest to the median is drawn thicker, so it's easy to pick out.
+  const DECILE_MEDIAN_STYLE = { opacity: 1, width: 2.5 };
+  const DECILE_MEDIAN_HOVER_STYLE = { opacity: 1, width: 4.5 };
+  const MEDIAN_SMOOTH_WEEKS = 3;
+  const SMOOTH_MEDIAN_COLOR = "#ea580c";
+  const FIRST_SEASON = 2022;  // earliest past season of target data used anywhere (2022/23)
+  const MAX_HORIZON = 3;  // last horizon (weeks after the reference date) shown in the "4 weeks" window
+  const WINDOW_HISTORY_WEEKS = 16;  // weeks of observations shown before the forecast in that window
+
+  // Epidemic trend card: a trajectory counts as increasing/decreasing if it changes by at least
+  // TREND_CHANGE (relative) from the last observation; a category is reported only if at least
+  // TREND_AGREEMENT of trajectories fall in it, otherwise the trend is "Uncertain". A relative change
+  // is undefined when the last observation is 0, so then a trajectory counts as increasing if it
+  // reaches TREND_ZERO_CHANGE (percentage points; 5% of the median last observation across locations).
+  const TREND_CHANGE = 0.05;
+  const TREND_ZERO_CHANGE = 0.03;
+  const TREND_AGREEMENT = 0.65;
+  // Epidemic level card: flag a location as "unstable" if its observations are noisy, measured as
+  // the SD of log values around a centered 3-week rolling mean, or if many weeks are reported as 0.
+  const UNSTABLE_RESID_SD = 0.5;
+  const UNSTABLE_ZERO_FRAC = 0.2;
+  // Peak cards: only shown when the ensemble's trajectories run through at least this month-day
+  // in the second calendar year of the season, so the peak isn't read off a truncated forecast.
+  const PEAK_FORECAST_MIN_END = "05-01";
+  const svgIcon = path => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${path}</svg>`;
+  const TREND_CATEGORIES = {
+    increasing: { label: "Increasing", verb: "rising",    color: "#b91c1c", iconBg: "#dc2626",
+                  icon: svgIcon('<path d="M5 17 17 5"/><path d="M8 5h9v9"/>') },
+    stable:     { label: "Stable",     verb: "stable",    color: "#1d4ed8", iconBg: "#2563eb",
+                  icon: svgIcon('<path d="M4 12h15"/><path d="M13 6l6 6-6 6"/>') },
+    decreasing: { label: "Decreasing", verb: "declining", color: "#15803d", iconBg: "#16a34a",
+                  icon: svgIcon('<path d="M5 7 17 19"/><path d="M17 10v9H8"/>') },
+    uncertain:  { label: "Uncertain",  verb: null,        color: "#6d28d9", iconBg: "#8b5cf6",
+                  icon: svgIcon('<path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>') },
+  };
+  const NO_TREND_FILL = "#e2e8f0";  // map fill for areas still loading or without a trend
+  // Landmark cities on the local-area map: [name, latitude, longitude, optional label side]. Mostly
+  // each state's largest cities, skipping suburbs that would sit on top of a bigger neighbor's label.
+  const MAJOR_CITIES = {
+    "Colorado": [["Denver", 39.739, -104.990], ["Colorado Springs", 38.834, -104.821],
+      ["Fort Collins", 40.585, -105.084], ["Pueblo", 38.254, -104.609], ["Grand Junction", 39.064, -108.551]],
+    "Georgia": [["Atlanta", 33.749, -84.388], ["Augusta", 33.471, -81.975], ["Columbus", 32.461, -84.988],
+      ["Macon", 32.841, -83.632], ["Savannah", 32.081, -81.091], ["Athens", 33.951, -83.357]],
+    "Indiana": [["Indianapolis", 39.768, -86.158], ["Fort Wayne", 41.079, -85.139],
+      ["Evansville", 37.975, -87.571], ["South Bend", 41.676, -86.252]],
+    "Maine": [["Portland", 43.659, -70.257], ["Bangor", 44.801, -68.778]],
+    "Maryland": [["Baltimore", 39.290, -76.612], ["Frederick", 39.414, -77.411]],
+    "Massachusetts": [["Boston", 42.360, -71.059], ["Worcester", 42.263, -71.802],
+      ["Springfield", 42.101, -72.590], ["Lowell", 42.633, -71.316], ["New Bedford", 41.636, -70.934]],
+    "Minnesota": [["Minneapolis–St. Paul", 44.966, -93.180], ["Rochester", 44.012, -92.480],
+      ["Duluth", 46.787, -92.100], ["St. Cloud", 45.557, -94.163]],
+    "New York": [["New York City", 40.713, -74.006], ["Buffalo", 42.886, -78.878],
+      ["Rochester", 43.157, -77.616], ["Syracuse", 43.049, -76.147], ["Albany", 42.653, -73.756]],
+    "North Carolina": [["Charlotte", 35.227, -80.843], ["Raleigh", 35.780, -78.639],
+      ["Greensboro", 36.073, -79.792, "left"], ["Fayetteville", 35.053, -78.878], ["Wilmington", 34.226, -77.945],
+      ["Asheville", 35.595, -82.551]],
+    "Oregon": [["Portland", 45.515, -122.678], ["Salem", 44.943, -123.035], ["Eugene", 44.052, -123.087],
+      ["Bend", 44.058, -121.315], ["Medford", 42.327, -122.873]],
+    "South Carolina": [["Columbia", 34.000, -81.035], ["Charleston", 32.777, -79.931],
+      ["Greenville", 34.853, -82.394], ["Myrtle Beach", 33.689, -78.887]],
+    "Texas": [["Houston", 29.760, -95.370, "right"], ["San Antonio", 29.424, -98.494], ["Dallas", 32.777, -96.797, "right"],
+      ["Austin", 30.267, -97.743], ["Fort Worth", 32.755, -97.331, "left"], ["El Paso", 31.762, -106.485],
+      ["Corpus Christi", 27.801, -97.396], ["Lubbock", 33.578, -101.855], ["Laredo", 27.506, -99.507],
+      ["Amarillo", 35.222, -101.831], ["Brownsville", 25.901, -97.497]],
+    "Utah": [["Salt Lake City", 40.761, -111.891], ["Provo", 40.234, -111.659], ["Ogden", 41.223, -111.974],
+      ["Logan", 41.736, -111.834], ["St. George", 37.096, -113.568]],
+    "Virginia": [["Virginia Beach", 36.853, -75.978], ["Richmond", 37.541, -77.436],
+      ["Roanoke", 37.271, -79.941], ["Arlington", 38.880, -77.107]],
+  };
+
+  async function selectRegion(id) {
+    state.region = id;
+    document.body.classList.add("fp-loading");
+    let locData;
+    try {
+      locData = await loadLocation(id);
+    } catch (err) {
+      if (state.region === id) { document.body.classList.remove("fp-loading"); showError(err); }
+      return;
+    }
+    if (state.region !== id) return;  // another location was picked while this one loaded
+    document.body.classList.remove("fp-loading");
+    state.locData = locData;
+    render();
+  }
+
+  // ---------- navigation ----------
+  // The selected location lives in the URL hash, so views can be linked to and the browser's
+  // back button returns from a local area to its state.
+  function go(id) {
+    if (hashId() === id) route();
+    else location.hash = id;
+  }
+  function route() {
+    const hid = hashId();
+    const id = LOCATIONS.has(hid) ? hid
+      : LOCATIONS.has(DEFAULT_LOCATION) ? DEFAULT_LOCATION : DATA.locations[0].id;
+    const loc = LOCATIONS.get(id);
+    selectRegion(id);
+    if (state.stateName !== loc.state) enterState(STATES.get(loc.state));
+    updateSelection();
+  }
+  window.addEventListener("hashchange", route);
+
+  function enterState(st) {
+    state.stateName = st.name;
+    stateSel.value = st.name;
+    document.getElementById("fp-map-title").textContent = `Local areas in ${st.name}`;
+    trends.clear();
+    drawUsMap();
+    drawStateMap(st);
+    // The map needs every local area's trend, so load them all (the selected one is already loading).
+    for (const l of [st.statewide, ...st.locals].filter(Boolean)) {
+      loadLocation(l.id)
+        .then(d => computeTrend(d), () => null)
+        .then(t => {
+          if (state.stateName !== st.name) return;
+          trends.set(l.id, t);
+          colorStateMap();
+        });
+    }
+  }
+
+  function updateSelection() {
+    const loc = LOCATIONS.get(state.region);
+    const st = STATES.get(loc.state);
+    const isLocal = loc.level === "local";
+    document.getElementById("fp-view-title").textContent = loc.name;
+    const subEl = document.getElementById("fp-view-sub");
+    if (isLocal && st.statewide) {
+      subEl.innerHTML = `Local forecast • <a href="#${st.statewide.id}">&larr; Back to ${st.name} statewide</a>`;
+    } else {
+      subEl.textContent = isLocal ? "Local forecast" : "Statewide forecast";
+    }
+    const backEl = document.getElementById("fp-back");
+    backEl.hidden = !(isLocal && st.statewide);
+    if (st.statewide) backEl.textContent = `← Back to ${st.name} statewide`;
+    d3Safe(() => d3.select("#fp-statemap svg").classed("has-selection", isLocal));
+    d3Safe(() => d3.selectAll("#fp-statemap .fp-region")
+      .classed("selected", d => d.loc.id === state.region)
+      .filter(d => d.loc.id === state.region).raise());
+  }
+  const d3Safe = f => { if (window.d3) f(); };
+
+  // State dropdown
+  const stateSel = document.getElementById("fp-state");
+  for (const s of [...STATES.values()].sort((a, b) => a.name.localeCompare(b.name))) {
+    const opt = document.createElement("option");
+    opt.value = s.name;
+    opt.textContent = s.name;
+    stateSel.appendChild(opt);
+  }
+  stateSel.addEventListener("change", e => go(stateHome(STATES.get(e.target.value))));
+  document.getElementById("fp-back").addEventListener("click", () => {
+    const st = STATES.get(state.stateName);
+    if (st.statewide) go(st.statewide.id);
+  });
+
+  // Toggle buttons: each sets state[key] to the clicked button's data-v
+  function bindToggle(id, key) {
+    document.querySelectorAll(`#${id} button`).forEach(btn => {
+      btn.addEventListener("click", () => {
+        state[key] = btn.dataset.v;
+        document.querySelectorAll(`#${id} button`).forEach(b => b.classList.toggle("active", b === btn));
+        if (state.locData) render();
+      });
+    });
+  }
+  bindToggle("fp-window", "window");
+  bindToggle("fp-viewmode", "viewMode");
+  bindToggle("fp-pastseasons", "pastSeasons");
+  // The card visuals are drawn at their container's width, so redraw them when that changes. Watch
+  // the cards themselves rather than the window: the layout can change without a window resize
+  // (e.g. when a scrollbar appears), which would leave the visuals drawn at the old width.
+  let resizeTimer, lastCardWidth = null;
+  const cardEl = document.getElementById("fp-level-viz");
+  new ResizeObserver(() => {
+    const w = cardEl.clientWidth;
+    if (w === lastCardWidth) return;  // ignore height-only changes (e.g. from redrawing)
+    lastCardWidth = w;
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => { if (state.locData) render(); }, 150);
+  }).observe(cardEl);
+
+  // Static labels
+  document.getElementById("fp-ref-date").textContent = DATA.reference_date;
+  // A season is named by the years it spans, e.g. 2025/26.
+  const seasonName = s => `${s}/${String(s + 1).slice(-2)}`;
+  document.getElementById("fp-season-label").textContent = seasonName(DATA.season);
+  document.getElementById("fp-last-year-label").textContent = `Last year (${seasonName(DATA.season - 1)})`;
+
+  // ---------- helpers ----------
+  function weekOfYear(dateStr) {
+    const d = new Date(dateStr + "T00:00:00Z");
+    const start = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    const diff = (d - start) / 86400000;
+    return Math.floor((diff + start.getUTCDay()) / 7) + 1;
+  }
+  function addDays(dateStr, days) {
+    const d = new Date(dateStr + "T00:00:00Z");
+    return new Date(d.getTime() + days * 86400000).toISOString().slice(0, 10);
+  }
+  const fmtMd = ds => {
+    const d = new Date(ds + "T00:00:00Z");
+    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
+  };
+  function quantileInArray(arr, val) {
+    if (!arr.length) return null;
+    const sorted = [...arr].sort((a, b) => a - b);
+    let count = 0;
+    for (const x of sorted) if (x <= val) count++;
+    return Math.round((count / sorted.length) * 100);
+  }
+  function quantilesOf(values, levels) {
+    if (!values.length) return levels.map(() => null);
+    const sorted = [...values].sort((a, b) => a - b);
+    return levels.map(p => {
+      const i = p * (sorted.length - 1);
+      const lo = Math.floor(i), hi = Math.ceil(i);
+      return sorted[lo] + (sorted[hi] - sorted[lo]) * (i - lo);
+    });
+  }
+  function quantileBandsByDate(samples) {
+    // samples: [[w1,w2,...wN], ...]; returns {q025, q25, q50, q75, q975} arrays of length N
+    if (!samples.length) return null;
+    const N = samples[0].length;
+    const out = { q025: [], q25: [], q50: [], q75: [], q975: [] };
+    for (let t = 0; t < N; t++) {
+      const col = samples.map(s => s[t]);
+      const [q025, q25, q50, q75, q975] = quantilesOf(col, [0.025, 0.25, 0.5, 0.75, 0.975]);
+      out.q025.push(q025); out.q25.push(q25); out.q50.push(q50);
+      out.q75.push(q75); out.q975.push(q975);
+    }
+    return out;
+  }
+  function decileTrajectories(samples) {
+    // For each of DECILE_LEVELS, the trajectory closest (mean absolute difference over the weeks
+    // shown) to that level's quantile at each week: returns [{level, idx}] sorted by level. Levels
+    // are matched from the median outward, and each trajectory is used at most once, so neighboring
+    // levels don't end up drawing the same line.
+    const N = samples[0].length;
+    const curves = new Map(DECILE_LEVELS.map(level => [level, []]));
+    for (let t = 0; t < N; t++) {
+      const qs = quantilesOf(samples.map(s => s[t]), DECILE_LEVELS);
+      DECILE_LEVELS.forEach((level, k) => curves.get(level).push(qs[k]));
+    }
+    const used = new Set(), out = [];
+    for (const level of [...DECILE_LEVELS].sort((a, b) => Math.abs(a - 0.5) - Math.abs(b - 0.5))) {
+      const q = curves.get(level);
+      let best = -1, bestDist = Infinity;
+      samples.forEach((s, i) => {
+        if (used.has(i)) return;
+        const dist = s.reduce((acc, v, t) => acc + Math.abs(v - q[t]), 0) / N;
+        if (dist < bestDist) { bestDist = dist; best = i; }
+      });
+      used.add(best);
+      out.push({ level, idx: best });
+    }
+    return out.sort((a, b) => a.level - b.level);
+  }
+  function smoothed(values, width) {
+    // Centered moving average over `width` points, using whatever neighbors exist at the ends.
+    const half = Math.floor(width / 2);
+    return values.map((_, i) => {
+      const win = values.slice(Math.max(0, i - half), i + half + 1);
+      return win.reduce((a, b) => a + b, 0) / win.length;
+    });
+  }
+  function mixHex(a, b, t) {
+    // Color `t` of the way (0-1) from hex color a to hex color b.
+    const ch = (h, i) => parseInt(h.slice(1 + 2 * i, 3 + 2 * i), 16);
+    return "#" + [0, 1, 2].map(i => Math.round(ch(a, i) + (ch(b, i) - ch(a, i)) * t)
+      .toString(16).padStart(2, "0")).join("");
+  }
+  function seasonOf(dateStr) {
+    // Flu season (Aug 1 → Jul 31), identified by the year it starts in.
+    const y = parseInt(dateStr.slice(0, 4));
+    const m = parseInt(dateStr.slice(5, 7));
+    return m >= 8 ? y : y - 1;
+  }
+  function noiseStats(rows) {
+    // rows: [{date, value}, ...] sorted by date; returns {residSd, zeroFrac} (see UNSTABLE_* above).
+    const vals = rows.filter(r => r.value != null).map(r => r.value);
+    if (vals.length < 3) return null;
+    const zeroFrac = vals.filter(v => v === 0).length / vals.length;
+    const y = vals.map(v => Math.log(Math.max(v, 0.01)));
+    const resid = [];
+    for (let i = 1; i < y.length - 1; i++) resid.push(y[i] - (y[i - 1] + y[i] + y[i + 1]) / 3);
+    const mean = resid.reduce((a, b) => a + b, 0) / resid.length;
+    const residSd = Math.sqrt(resid.reduce((a, b) => a + (b - mean) ** 2, 0) / resid.length);
+    return { residSd, zeroFrac };
+  }
+  function historicalSeasonPeaks(history, beforeSeason) {
+    // Group observations by flu season and return {season, peak, date} for seasons before `beforeSeason`.
+    if (!history || !history.length) return [];
+    const byseason = {};
+    for (const r of history) {
+      if (r.value == null) continue;
+      const seasonYear = seasonOf(r.date);
+      if (seasonYear >= beforeSeason) continue;
+      if (!(seasonYear in byseason) || r.value > byseason[seasonYear].peak) {
+        byseason[seasonYear] = { season: seasonYear, peak: r.value, date: r.date };
+      }
+    }
+    return Object.values(byseason);
+  }
+  function levelCategory(pct) {
+    // pct = percentile (0-100) of value vs same-week historical observations
+    if (pct == null) return { label: "—", color: "#64748b" };
+    if (pct >= 90) return { label: "Far above average", color: "#b91c1c" };
+    if (pct >= 66) return { label: "Above average",     color: "#d97706" };  // amber, distinct from the red above
+    if (pct >= 33) return { label: "Average",           color: "#1d4ed8" };
+    if (pct >= 10) return { label: "Below average",     color: "#15803d" };
+    return                  { label: "Far below average", color: "#166534" };
+  }
+  function peakStatsFromSamples(samples, dates, observedPeak) {
+    // For each sample, the season peak is the larger of the peak observed so far this season
+    // (observedPeak: {date, value} or null) and the sample's own max: returns {peakValues, peakDates}
+    const peakValues = [], peakDates = [];
+    for (const s of samples) {
+      let bestI = 0, best = s[0];
+      for (let i = 1; i < s.length; i++) { if (s[i] > best) { best = s[i]; bestI = i; } }
+      if (observedPeak && observedPeak.value >= best) {
+        peakValues.push(observedPeak.value);
+        peakDates.push(observedPeak.date);
+      } else {
+        peakValues.push(best);
+        peakDates.push(dates[bestI]);
+      }
+    }
+    return { peakValues, peakDates };
+  }
+  function computeTrend(locData) {
+    // Epidemic trend (last observation vs. ensemble trajectories 2 weeks later; see TREND_* above):
+    // returns {key, counts, n, lastObsDate, targetDate}, or null if the data don't allow it.
+    const observed = locData.observed.filter(r => seasonOf(r.date) === DATA.season);
+    const ensemble = locData.forecasts.Ensemble;
+    if (!observed.length || !ensemble || !ensemble.samples.length) return null;
+    const { date: lastObsDate, value: lastObs } = observed[observed.length - 1];
+    const targetDate = addDays(lastObsDate, 14);
+    const idx = ensemble.dates.indexOf(targetDate);
+    if (idx < 0) return null;
+    const n = ensemble.samples.length;
+    const counts = { increasing: 0, stable: 0, decreasing: 0 };
+    // Compare in absolute terms (percentage points) so the same test covers both cases.
+    const threshold = lastObs > 0 ? TREND_CHANGE * lastObs : TREND_ZERO_CHANGE;
+    for (const s of ensemble.samples) {
+      const change = s[idx] - lastObs;
+      if (change >= threshold) counts.increasing++;
+      else if (change <= -threshold) counts.decreasing++;
+      else counts.stable++;
+    }
+    // At most one category can reach the agreement threshold (it's > 50%).
+    const key = Object.keys(counts).find(k => counts[k] / n >= TREND_AGREEMENT) || "uncertain";
+    return { key, counts, n, lastObsDate, targetDate };
+  }
+  function trendStatText(t) {
+    return t.key === "uncertain"
+      ? "Future trajectories show mixed patterns"
+      : `${Math.round(t.counts[t.key] / t.n * 100)}% of trajectories are ${TREND_CATEGORIES[t.key].verb}`;
+  }
+  // ---------- card visuals ----------
+  // Each card's visual shows the ensemble forecast as a "pill" (light: 10th-90th percentile of
+  // trajectories, dark: 25th-75th, bar: median) next to past seasons' values.
+  const PILL_LEVELS = [0.1, 0.25, 0.5, 0.75, 0.9];
+  const shortSeason = s => `${String(s).slice(-2)}/${String(s + 1).slice(-2)}`;
+  const escAttr = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const fmtPct = v => `${v >= 10 ? v.toFixed(0) : v.toFixed(1)}%`;
+  function niceTicks(lo, hi, n) {
+    const raw = (hi - lo) / n;
+    const mag = 10 ** Math.floor(Math.log10(raw));
+    const step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => s >= raw);
+    const ticks = [];
+    for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-9; v += step) ticks.push(+v.toFixed(10));
+    return { ticks, step };
+  }
+  function dodge(pos, gap, lo, hi) {
+    // Spread positions (returned in the same order) at least `gap` apart, kept within [lo, hi],
+    // moving them as little as possible: labels that would overlap form a block that is centered on
+    // its members' own positions, so the upper ones move up and the lower ones down by about as
+    // much (least squares). Blocks that then overlap merge, and so on.
+    const order = pos.map((_, i) => i).sort((a, b) => pos[a] - pos[b]);
+    // Each block: n labels at start, start + gap, ...; sum = Σ (position - offset within block).
+    const blocks = [];
+    for (const i of order) {
+      let b = { n: 1, sum: pos[i] };
+      b.start = b.sum;
+      while (blocks.length) {
+        const prev = blocks[blocks.length - 1];
+        if (prev.start + prev.n * gap <= b.start) break;
+        blocks.pop();
+        const sum = prev.sum + b.sum - b.n * prev.n * gap;
+        const n = prev.n + b.n;
+        b = { n, sum, start: sum / n };
+      }
+      blocks.push(b);
+    }
+    const out = blocks.flatMap(b => Array.from({ length: b.n }, (_, k) => b.start + k * gap))
+      .map(p => Math.min(Math.max(p, lo), hi));
+    // Blocks pushed back inside [lo, hi] may overlap their neighbors again; spread those apart.
+    for (let k = 1; k < out.length; k++) out[k] = Math.max(out[k], out[k - 1] + gap);
+    for (let k = out.length - 1; k >= 0; k--) {
+      out[k] = Math.min(out[k], k === out.length - 1 ? hi : out[k + 1] - gap);
+    }
+    for (let k = 0; k < out.length; k++) out[k] = Math.max(out[k], k === 0 ? lo : out[k - 1] + gap);
+    const res = [];
+    order.forEach((i, k) => { res[i] = out[k]; });
+    return res;
+  }
+  // Pill shades from the card's category color: a light 80% band with a mid-tone outline, a
+  // mid-tone 50% band, and a darkened median bar.
+  function pillStyles(color) {
+    return {
+      outer: `fill:${mixHex(color, "#ffffff", 0.85)};stroke:${mixHex(color, "#ffffff", 0.5)}`,
+      inner: `fill:${mixHex(color, "#ffffff", 0.45)}`,
+      med: `stroke:${mixHex(color, "#000000", 0.3)}`,
+    };
+  }
+  // Vertical pill on a % axis. qs: values at PILL_LEVELS; past: [{season, value}];
+  // now: optional current observation, drawn in black alongside the past seasons.
+  // Visuals are drawn at their container's width, so text renders at its CSS size.
+  const vizWidth = el => Math.max(Math.round(el.clientWidth), 150) || 200;
+  function pillSvg({ W, qs, past, now, pillLabel, ariaLabel, color = FORECAST_COLOR }) {
+    const ps = pillStyles(color);
+    const H = 136, top = 8, bottom = 16, axisX = 32;
+    const vals = [...qs, ...past.map(p => p.value), ...(now != null ? [now] : [])];
+    let lo = Math.min(...vals), hi = Math.max(...vals);
+    const pad = Math.max((hi - lo) * 0.1, 0.05);
+    lo = Math.max(0, lo - pad); hi += pad;
+    const y = v => top + (hi - v) / (hi - lo) * (H - top - bottom);
+    const { ticks, step } = niceTicks(lo, hi, 3);
+    const dec = step < 0.1 ? 2 : step < 1 ? 1 : 0;
+    // Leave ~52px right of the pill's past-season lines for their labels.
+    const pillX = Math.round(axisX + (W - axisX - 52) * 0.45);
+    let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${escAttr(ariaLabel)}">`;
+    s += `<line class="ax" x1="${axisX}" x2="${axisX}" y1="${top}" y2="${H - bottom}"/>`;
+    for (const t of ticks) {
+      s += `<text class="tick" x="${axisX - 4}" y="${y(t)}" text-anchor="end" dy="0.35em">${t.toFixed(dec)}%</text>`;
+    }
+    const [q10, q25, q50, q75, q90] = qs;
+    const pw = 18, px = pillX - pw / 2;
+    const tip = `<title>Forecast: median ${fmtPct(q50)}; 50% of trajectories ${fmtPct(q25)}–${fmtPct(q75)}, ` +
+      `80% ${fmtPct(q10)}–${fmtPct(q90)}</title>`;
+    s += `<g>${tip}<rect class="pill-outer" style="${ps.outer}" x="${px}" y="${y(q90)}" width="${pw}" height="${Math.max(y(q10) - y(q90), 4)}" rx="${pw / 2}"/>`;
+    s += `<rect class="pill-inner" style="${ps.inner}" x="${px + 2}" y="${y(q75)}" width="${pw - 4}" height="${Math.max(y(q25) - y(q75), 3)}" rx="${(pw - 4) / 2}"/>`;
+    s += `<line class="pill-med" style="${ps.med}" x1="${pillX - 13}" x2="${pillX + 13}" y1="${y(q50)}" y2="${y(q50)}"/></g>`;
+    s += `<text class="col" x="${pillX}" y="${H - 3}" text-anchor="middle">${pillLabel}</text>`;
+    // Past seasons (and "Now", in black): a short line at the value, with its label dodged to
+    // stay legible.
+    // Markers start a few px right of the pill (and its median bar, which reaches pillX + 13).
+    const lineX1 = pillX + 19, lineX2 = pillX + 33;
+    const markers = [...past].sort((a, b) => a.season - b.season).map(p => ({
+      value: p.value, label: shortSeason(p.season), title: `${seasonName(p.season)}: ${fmtPct(p.value)}`, cls: "",
+    }));
+    if (now != null) markers.push({ value: now, label: "Now", title: `Latest observation: ${fmtPct(now)}`, cls: " now" });
+    const labelYs = dodge(markers.map(m => y(m.value)), 12, top, H - bottom);
+    markers.forEach((m, i) => {
+      s += `<g><title>${m.title}</title>`;
+      s += `<line class="past-line${m.cls}" x1="${lineX1}" x2="${lineX2}" y1="${y(m.value)}" y2="${y(m.value)}"/>`;
+      s += `<circle class="past${m.cls}" cx="${lineX2 + 2}" cy="${y(m.value)}" r="3"/>`;
+      s += `<text class="past-lbl${m.cls}" x="${lineX2 + 9}" y="${labelYs[i]}" dy="0.35em">${m.label}</text></g>`;
+    });
+    return s + "</svg>";
+  }
+  // Days since the Aug 1 start of a date's flu season, so peak weeks compare across seasons.
+  const dayOfSeason = ds => (new Date(ds + "T00:00:00Z") - new Date(`${seasonOf(ds)}-08-01T00:00:00Z`)) / 86400000;
+  // Horizontal timeline of peak weeks. qd: days-of-season at PILL_LEVELS; past: [{season, date}].
+  function peakTimelineSvg({ W, qd, qDates, past, ariaLabel, color = FORECAST_COLOR }) {
+    const ps = pillStyles(color);
+    const H = 92, L = 8, R = 8;
+    const all = [...qd, ...past.map(p => dayOfSeason(p.date))];
+    // Fit the axis tightly around the peaks, with at least ~2 months shown.
+    let lo = Math.min(...all) - 6, hi = Math.max(...all) + 6;
+    if (hi - lo < 60) { const c = (lo + hi) / 2; lo = c - 30; hi = c + 30; }
+    const x = d => L + (d - lo) / (hi - lo) * (W - L - R);
+    const dotY = 34, pillY = 54, axisY = 68;
+    let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${escAttr(ariaLabel)}">`;
+    s += `<line class="ax" x1="${L}" x2="${W - R}" y1="${dotY}" y2="${dotY}" stroke-dasharray="2 3"/>`;
+    s += `<line class="ax" x1="${L}" x2="${W - R}" y1="${axisY}" y2="${axisY}"/>`;
+    for (let m = 0; m < 12; m++) {
+      const mon = (7 + m) % 12, yr = DATA.season + (7 + m >= 12 ? 1 : 0);
+      const ds = `${yr}-${String(mon + 1).padStart(2, "0")}-01`;
+      const d = dayOfSeason(ds);
+      if (d < lo || d > hi) continue;
+      const name = new Date(ds + "T00:00:00Z").toLocaleDateString("en-US", { month: "short", timeZone: "UTC" });
+      s += `<line class="ax" x1="${x(d)}" x2="${x(d)}" y1="${axisY}" y2="${axisY + 3}"/>`;
+      s += `<text class="tick" x="${x(d)}" y="${axisY + 13}" text-anchor="middle">${name}</text>`;
+    }
+    const sorted = [...past].sort((a, b) => a.season - b.season);
+    const xs = sorted.map(p => x(dayOfSeason(p.date)));
+    const labelXs = dodge(xs, 31, L + 14, W - R - 14);
+    sorted.forEach((p, i) => {
+      s += `<g><title>${seasonName(p.season)} peak: week ending ${fmtMd(p.date)}</title>`;
+      s += `<circle class="past" cx="${xs[i]}" cy="${dotY}" r="4"/>`;
+      s += `<text class="past-lbl" x="${labelXs[i]}" y="${dotY - 9}" text-anchor="middle">${shortSeason(p.season)}</text></g>`;
+    });
+    const [d10, d25, d50, d75, d90] = qd;
+    const tip = `<title>Forecast peak week: median ${fmtMd(qDates[2])}; 50% of trajectories ` +
+      `${fmtMd(qDates[1])}–${fmtMd(qDates[3])}, 80% ${fmtMd(qDates[0])}–${fmtMd(qDates[4])}</title>`;
+    const ph = 14;
+    s += `<g>${tip}<rect class="pill-outer" style="${ps.outer}" x="${x(d10) - 3}" y="${pillY - ph / 2}" width="${x(d90) - x(d10) + 6}" height="${ph}" rx="${ph / 2}"/>`;
+    s += `<rect class="pill-inner" style="${ps.inner}" x="${x(d25) - 2}" y="${pillY - ph / 2 + 2}" width="${x(d75) - x(d25) + 4}" height="${ph - 4}" rx="${(ph - 4) / 2}"/>`;
+    s += `<line class="pill-med" style="${ps.med}" x1="${x(d50)}" x2="${x(d50)}" y1="${pillY - 10}" y2="${pillY + 10}"/></g>`;
+    return s + "</svg>";
+  }
+  function trendBarHtml(t) {
+    const parts = [["increasing", "↑"], ["stable", "→"], ["decreasing", "↓"]];
+    const title = parts.map(([k]) => `${Math.round(t.counts[k] / t.n * 100)}% ${TREND_CATEGORIES[k].verb}`).join(", ");
+    return `<div class="fp-trend-bar" title="Share of forecast trajectories: ${title}">` +
+      parts.filter(([k]) => t.counts[k] > 0).map(([k, arrow]) => {
+        const pct = t.counts[k] / t.n * 100;
+        return `<div style="width:${pct}%;background:${TREND_CATEGORIES[k].iconBg}">` +
+          `${pct >= 18 ? `${arrow} ${Math.round(pct)}%` : ""}</div>`;
+      }).join("") + "</div>" +
+      `<div class="fp-trend-key">${parts.map(([k]) =>
+        `<span><i class="fp-dot" style="width:7px;height:7px;background:${TREND_CATEGORIES[k].iconBg}"></i>` +
+        `${{ increasing: "Rising", stable: "Stable", decreasing: "Falling" }[k]} ` +
+        `${Math.round(t.counts[k] / t.n * 100)}%</span>`).join("")}</div>`;
+  }
+
+  function trace(name, x, y, opts = {}) {
+    return Object.assign({ type: "scatter", mode: "lines+markers", name, x, y }, opts);
+  }
+
+  // ---------- maps ----------
+  const tipEl = document.getElementById("fp-tip");
+  function showTip(event, html) {
+    tipEl.innerHTML = html;
+    tipEl.hidden = false;
+    const pad = 14, r = tipEl.getBoundingClientRect();
+    const x = Math.min(event.clientX + pad, window.innerWidth - r.width - 4);
+    const y = event.clientY + pad + r.height > window.innerHeight ? event.clientY - r.height - pad : event.clientY + pad;
+    tipEl.style.left = `${x}px`;
+    tipEl.style.top = `${y}px`;
+  }
+  const hideTip = () => { tipEl.hidden = true; };
+  // Make a map shape act like a button: click or Enter/Space selects it.
+  function bindSelect(sel, idOf) {
+    sel.attr("tabindex", 0).attr("role", "button")
+      .on("click", (e, d) => go(idOf(d)))
+      .on("keydown", (e, d) => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(idOf(d)); }
+      });
+  }
+
+  async function drawUsMap() {
+    const el = document.getElementById("fp-usmap");
+    let topo;
+    try { topo = await topoPromise; } catch { el.closest(".fp-usmap-wrap").hidden = true; return; }
+    if (!el.firstChild) {
+      const W = 320, H = 200;
+      const states = topojson.feature(topo, topo.objects.states);
+      const path = d3.geoPath(d3.geoAlbersUsa().fitSize([W, H], states));
+      const paths = d3.select(el).append("svg").attr("viewBox", `0 0 ${W} ${H}`)
+        .selectAll("path").data(states.features).join("path")
+        .attr("d", path)
+        .classed("has-data", d => STATES.has(d.properties.name))
+        .attr("aria-label", d => d.properties.name);
+      paths.filter(d => !STATES.has(d.properties.name))
+        .on("mousemove", (e, d) => showTip(e, `${d.properties.name}<br><span style="color:#94a3b8">No forecasts</span>`))
+        .on("mouseleave", hideTip);
+      const withData = paths.filter(d => STATES.has(d.properties.name))
+        .on("mousemove", (e, d) => showTip(e, trendTip(d.properties.name, stateTrends.get(d.properties.name))))
+        .on("mouseleave", hideTip);
+      bindSelect(withData, d => stateHome(STATES.get(d.properties.name)));
+    }
+    d3.selectAll("#fp-usmap path").classed("active", d => d.properties.name === state.stateName)
+      .filter(".active").raise();
+    colorUsMap();
+  }
+  function colorUsMap() {
+    d3Safe(() => d3.selectAll("#fp-usmap path.has-data")
+      .style("fill", d => fillFor(stateTrends.get(d.properties.name))));
+  }
+
+  function countiesOf(loc, countyGeoms) {
+    // The county geometries making up a local area, matched by name within its state. A few names
+    // (e.g. Roanoke, VA) belong to both a county and an independent city; such a match is kept only
+    // if it touches the area's other counties, which drops a same-named city elsewhere in the state.
+    const norm = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z]/g, "");
+    const byName = d3.group(countyGeoms.map((g, i) => i), i => norm(countyGeoms[i].properties.name));
+    const chosen = new Set(), ambiguous = [];
+    for (const name of loc.counties) {
+      const matches = byName.get(norm(name)) || [];
+      if (matches.length === 1) chosen.add(matches[0]); else ambiguous.push(...matches);
+    }
+    if (ambiguous.length) {
+      const neighbors = topojson.neighbors(countyGeoms);
+      let added = true;
+      while (added) {
+        added = false;
+        for (const i of ambiguous) {
+          if (!chosen.has(i) && neighbors[i].some(j => chosen.has(j))) { chosen.add(i); added = true; }
+        }
+      }
+      if (!chosen.size) ambiguous.forEach(i => chosen.add(i));
+    }
+    return [...chosen].map(i => countyGeoms[i]);
+  }
+
+  async function drawStateMap(st) {
+    const el = document.getElementById("fp-statemap");
+    el.innerHTML = "";
+    let topo;
+    try { topo = await topoPromise; } catch (err) {
+      el.innerHTML = `<div class="fp-msg">The map couldn't be loaded (${err.message}).</div>`;
+      return;
+    }
+    if (state.stateName !== st.name) return;
+    const stateGeom = topo.objects.states.geometries.find(g => g.properties.name === st.name);
+    const countyGeoms = topo.objects.counties.geometries.filter(g => g.id.slice(0, 2) === stateGeom.id);
+    const stateFeature = topojson.feature(topo, stateGeom);
+    const W = 400, MAX_H = 440;
+    const projection = d3.geoAlbersUsa().fitWidth(W, stateFeature);
+    const path = d3.geoPath(projection);
+    let H = Math.ceil(path.bounds(stateFeature)[1][1]);
+    if (H > MAX_H) { H = MAX_H; projection.fitSize([W, H], stateFeature); }
+
+    const svg = d3.select(el).append("svg").attr("viewBox", `0 0 ${W} ${H}`)
+      .attr("role", "group").attr("aria-label", `Map of local areas in ${st.name}`);
+    svg.append("g").selectAll("path")
+      .data(topojson.feature(topo, { type: "GeometryCollection", geometries: countyGeoms }).features)
+      .join("path").attr("class", "fp-county").attr("d", path);
+    const regionOf = new Map();  // county geometry -> index of the local area it belongs to
+    const regions = st.locals.map((loc, k) => {
+      const geoms = countiesOf(loc, countyGeoms);
+      geoms.forEach(g => regionOf.set(g, k));
+      return { loc, shape: topojson.merge(topo, geoms) };
+    });
+    const regionPaths = svg.append("g").selectAll("path").data(regions).join("path")
+      .attr("class", "fp-region").attr("d", d => path(d.shape))
+      .attr("aria-label", d => `${areaLabel(d.loc)}: ${d.loc.counties.join(", ")}`)
+      .on("mousemove", (e, d) => showTip(e, regionTip(d.loc.id)))
+      .on("mouseleave", hideTip);
+    bindSelect(regionPaths, d => d.loc.id);
+    // County lines inside each local area (the areas' own edges are drawn by their outlines, and
+    // counties outside any area already show their borders).
+    svg.append("path").attr("class", "fp-county-lines")
+      .attr("d", path(topojson.mesh(topo, { type: "GeometryCollection", geometries: countyGeoms },
+        (a, b) => a !== b && regionOf.has(a) && regionOf.get(a) === regionOf.get(b))));
+    svg.append("path").attr("class", "fp-state-outline").attr("d", path(topojson.mesh(topo, stateGeom)));
+    drawCities(svg, projection, st.name, W);
+    colorStateMap();
+    updateSelection();
+  }
+  function drawCities(svg, projection, stateName, W) {
+    // Dots and names for the state's largest cities, as landmarks. They ignore the mouse, so hovering
+    // or clicking one acts on the local area underneath. Labels go on the right of the dot, or the
+    // left near the map's right edge, unless the city names a side.
+    const g = svg.append("g").attr("class", "fp-cities");
+    for (const [name, lat, lon, side] of MAJOR_CITIES[stateName] || []) {
+      const p = projection([lon, lat]);
+      if (!p) continue;
+      const left = side ? side === "left" : p[0] > W * 0.72;
+      g.append("circle").attr("cx", p[0]).attr("cy", p[1]).attr("r", 2.6);
+      g.append("text").attr("x", p[0] + (left ? -5 : 5)).attr("y", p[1])
+        .attr("text-anchor", left ? "end" : "start").attr("dy", "0.35em").text(name);
+    }
+  }
+  function trendTip(name, t, extra = "") {
+    const head = `<strong>${name}</strong>`;
+    if (t === undefined) return `${head}<br>Loading…${extra}`;
+    if (t === null) return `${head}<br>Trend not available${extra}`;
+    return `${head}<br>${TREND_CATEGORIES[t.key].label}: ${trendStatText(t)}${extra}`;
+  }
+  // On the local-area map, NCI health service areas go by their NCI ID ("HSA 405"); other local
+  // areas (NC flu regions, UT health districts) keep their names, without the state.
+  const areaLabel = loc => loc.hsa_code ? `HSA ${loc.hsa_code}` : loc.name.replace(/, [A-Z]{2}$/, "");
+  function regionTip(id) {
+    const loc = LOCATIONS.get(id);
+    const counties = [...loc.counties].sort();
+    const list = `<div class="fp-tip-counties">${counties.length} ${counties.length === 1 ? "county" : "counties"}: ` +
+      `${counties.join(", ")}</div>`;
+    return trendTip(areaLabel(loc), trends.get(id), list);
+  }
+  const fillFor = t => t ? TREND_CATEGORIES[t.key].iconBg : NO_TREND_FILL;
+  const trendFill = id => fillFor(trends.get(id));
+
+  function colorStateMap() {
+    d3Safe(() => d3.selectAll("#fp-statemap .fp-region").attr("fill", d => trendFill(d.loc.id)));
+    document.getElementById("fp-map-legend").innerHTML = Object.values(TREND_CATEGORIES)
+      .map(c => `<span><i class="fp-dot" style="background:${c.iconBg}"></i>${c.label}</span>`)
+      .join("");
+  }
+
+  // ---------- render ----------
+  function render() {
+    // history: all observations through the reference date; forecasts: {model label: {dates, samples}}
+    // Past seasons start at FIRST_SEASON (chart, level comparisons, peak cards, noise check).
+    const { forecasts } = state.locData;
+    const history = state.locData.observed.filter(r => seasonOf(r.date) >= FIRST_SEASON);
+    const refSeason = DATA.season;
+    const observed = history.filter(r => seasonOf(r.date) === refSeason);
+    const locName = LOCATIONS.get(state.region).name;
+
+    const ensemble = forecasts.Ensemble;
+    const lastObs = observed.length ? observed[observed.length - 1].value : null;
+    const lastObsDate = observed.length ? observed[observed.length - 1].date : null;
+
+    // ---- Card 2: Epidemic level (colored categories, vs same week in past seasons) ----
+    const levelCurEl = document.getElementById("fp-level-current");
+    const levelFutEl = document.getElementById("fp-level-future");
+    const levelVizEl = document.getElementById("fp-level-viz");
+    const levelWarnEl = document.getElementById("fp-level-warning");
+    // Only seasons before the forecast's season are used as the comparison set, so the current
+    // season (including the value being ranked, and any later data) never leaks in.
+    const pastHistory = history.filter(r => r.value != null && seasonOf(r.date) < refSeason);
+    const histRowsForWeek = (wk) => pastHistory.filter(r => Math.abs(weekOfYear(r.date) - wk) <= 1);
+    const histValuesForWeek = (wk) => histRowsForWeek(wk).map(r => r.value);
+    if (lastObs != null && lastObsDate) {
+      const wk = weekOfYear(lastObsDate);
+      const histVals = histValuesForWeek(wk);
+      const p = quantileInArray(histVals, lastObs);
+      const cat = levelCategory(p);
+      levelCurEl.textContent = cat.label;
+      levelCurEl.style.color = cat.color;
+    } else {
+      levelCurEl.textContent = "—"; levelCurEl.style.color = "";
+    }
+    const futureDate = lastObsDate ? addDays(lastObsDate, 14) : null;  // 2 weeks after the last observation
+    const futureIdx = ensemble && futureDate ? ensemble.dates.indexOf(futureDate) : -1;
+    if (futureIdx >= 0 && ensemble.samples.length) {
+      const futureQs = quantilesOf(ensemble.samples.map(s => s[futureIdx]), PILL_LEVELS);
+      const futureMedian = futureQs[2];
+      const wk = weekOfYear(futureDate);
+      const histVals = histValuesForWeek(wk);
+      const p = quantileInArray(histVals, futureMedian);
+      const cat = levelCategory(p);
+      levelFutEl.textContent = cat.label;
+      levelFutEl.style.color = cat.color;
+      // Each past season's value in the same week as the forecast target (shifted as in the chart).
+      const past = [];
+      for (const s of new Set(pastHistory.map(r => seasonOf(r.date)))) {
+        const shiftDays = Math.round((refSeason - s) * 365.25 / 7) * 7;
+        const row = pastHistory.find(r => r.date === addDays(futureDate, -shiftDays));
+        if (row) past.push({ season: s, value: row.value });
+      }
+      levelVizEl.innerHTML = pillSvg({
+        W: vizWidth(levelVizEl), qs: futureQs, past, now: lastObs, pillLabel: "In 2 wks", color: cat.color,
+        ariaLabel: `Latest observation ${fmtPct(lastObs)}; forecast for the week ending ${fmtMd(futureDate)} ` +
+          `${fmtPct(futureMedian)}, compared with past seasons in the same week`,
+      });
+    } else {
+      levelFutEl.textContent = "—"; levelFutEl.style.color = "";
+      levelVizEl.innerHTML = "";
+    }
+    const noise = noiseStats(history.filter(r => r.date <= DATA.reference_date));
+    levelWarnEl.hidden = !(noise && (noise.residSd > UNSTABLE_RESID_SD || noise.zeroFrac > UNSTABLE_ZERO_FRAC));
+
+    // ---- Card 1: Epidemic trend (last observation vs. ensemble trajectories 2 weeks later) ----
+    const trendCardEl = document.getElementById("fp-trend-card");
+    const trendIconEl = document.getElementById("fp-trend-icon");
+    const trendLabelEl = document.getElementById("fp-trend-label");
+    const trendVizEl = document.getElementById("fp-trend-viz");
+    const trendSubEl = document.getElementById("fp-trend-sub");
+    const trend = computeTrend(state.locData);
+    trendCardEl.classList.remove(...Object.keys(TREND_CATEGORIES).map(k => `trend-${k}`));
+    if (trend) {
+      const cat = TREND_CATEGORIES[trend.key];
+      trendCardEl.classList.add(`trend-${trend.key}`);
+      trendIconEl.innerHTML = cat.icon;
+      trendIconEl.style.background = cat.iconBg;
+      trendLabelEl.textContent = cat.label;
+      trendLabelEl.style.color = cat.color;
+      trendSubEl.textContent = `Week ending ${fmtMd(trend.lastObsDate)} → ${fmtMd(trend.targetDate)}`;
+      trendVizEl.innerHTML = trendBarHtml(trend);
+    } else {
+      trendIconEl.innerHTML = "";
+      trendLabelEl.textContent = "—"; trendLabelEl.style.color = "";
+      trendSubEl.textContent = "";
+      trendVizEl.innerHTML = "";
+    }
+
+    // ---- Card 3 (Expected peak week) + Card 4 (Expected season peak) ----
+    const peakWeekEl = document.getElementById("fp-peak-week");
+    const peakWeekHistEl = document.getElementById("fp-peak-week-hist");
+    const peakWeekVizEl = document.getElementById("fp-peak-week-viz");
+    const peakVizEl = document.getElementById("fp-peak-viz");
+    const peakVsLastEl = document.getElementById("fp-peak-vs-last");
+    const peakVsLastProbEl = document.getElementById("fp-peak-vs-last-prob");
+
+    const fullSeason = ensemble && ensemble.dates.length &&
+      ensemble.dates[ensemble.dates.length - 1] >= `${refSeason + 1}-${PEAK_FORECAST_MIN_END}`;
+    const observedPeak = observed.reduce((best, r) => (!best || r.value > best.value ? r : best), null);
+    if (fullSeason && ensemble.samples.length) {
+      const stats = peakStatsFromSamples(ensemble.samples, ensemble.dates, observedPeak);
+      const peakQs = quantilesOf(stats.peakValues, PILL_LEVELS);
+      const pvMd = peakQs[2];
+      const histPeaks = historicalSeasonPeaks(history, refSeason);
+      const pastPeaks = histPeaks.map(p => ({ ...p, value: p.peak }));
+
+      // --- Card 3: peak week ---
+      // Median peak week (taken from the sorted dates, so it is always a real forecast week and
+      // always falls inside the 50% PI, unlike the most common week).
+      const sortedPeakDates = [...stats.peakDates].sort();
+      const pick = p => sortedPeakDates[Math.floor(p * (sortedPeakDates.length - 1))];
+      const medianDate = pick(0.5);
+      peakWeekEl.textContent = fmtMd(medianDate);
+      const qDates = PILL_LEVELS.map(pick);
+      // The pills take their card's category color, or grey (like the headline) if last season is
+      // unavailable.
+      const NO_LAST_SEASON_COLOR = "#94a3b8";
+      let peakWeekColor = NO_LAST_SEASON_COLOR, peakColor = NO_LAST_SEASON_COLOR;
+
+      // Both peak cards compare against last season only.
+      const lastSeasonPeakObj = histPeaks.find(p => p.season === refSeason - 1);
+      if (lastSeasonPeakObj) {
+        // Normalize calendar weeks around the new year so weeks compare across it:
+        // late-year weeks (e.g. week 50) shift to negative (-2), Jan weeks stay positive.
+        const normalize = w => w >= 27 ? w - 52 : w;
+        const diffWeeks = normalize(weekOfYear(medianDate)) - normalize(weekOfYear(lastSeasonPeakObj.date));
+        let text, color;
+        if (diffWeeks <= -2.5)        { text = `~${Math.round(Math.abs(diffWeeks))} wks earlier than last year`; color = "#b91c1c"; }
+        else if (diffWeeks <= -0.75)  { text = "Slightly earlier than last year"; color = "#c2410c"; }
+        else if (diffWeeks < 0.75)    { text = "Same time as last year"; color = "#1d4ed8"; }
+        else if (diffWeeks < 2.5)     { text = "Slightly later than last year"; color = "#0891b2"; }
+        else                          { text = `~${Math.round(diffWeeks)} wks later than last year`; color = "#15803d"; }
+        peakWeekHistEl.textContent = text;
+        peakWeekHistEl.style.color = color;
+        peakWeekHistEl.style.fontWeight = "600";
+        peakWeekColor = color;
+      } else {
+        peakWeekHistEl.textContent = "Last season unavailable";
+        peakWeekHistEl.style.color = "#94a3b8";
+        peakWeekHistEl.style.fontWeight = "600";
+      }
+      peakWeekVizEl.innerHTML = peakTimelineSvg({
+        W: vizWidth(peakWeekVizEl), qd: qDates.map(dayOfSeason), qDates, past: pastPeaks, color: peakWeekColor,
+        ariaLabel: `Forecast peak week ${fmtMd(medianDate)} (50% of trajectories ${fmtMd(qDates[1])} to ` +
+          `${fmtMd(qDates[3])}), compared with past seasons' peak weeks`,
+      });
+
+      // --- Card 4: peak comparison (primary) + value (secondary) ---
+      if (lastSeasonPeakObj) {
+        const lastPk = lastSeasonPeakObj.peak;
+        const deltaPct = (pvMd - lastPk) / lastPk * 100;
+        // The median forecast peak picks the direction; then the share of trajectories whose season
+        // peak is on that side of last season's peak, by any amount.
+        const dirWord = pvMd >= lastPk ? "higher" : "lower";
+        const pctDir = stats.peakValues.filter(v => dirWord === "higher" ? v > lastPk : v < lastPk).length
+          / stats.peakValues.length;
+        let dirLabel, dirColor;
+        if (Math.abs(deltaPct) <= 20) { dirLabel = "Similar to last year";  dirColor = "#1d4ed8"; }
+        else if (deltaPct > 20)       { dirLabel = "Higher than last year"; dirColor = "#b91c1c"; }
+        else                          { dirLabel = "Lower than last year";  dirColor = "#15803d"; }
+        peakVsLastEl.textContent = dirLabel;
+        peakVsLastEl.style.color = dirColor;
+        peakVsLastProbEl.textContent = `${Math.round(pctDir * 100)}% of trajectories ${dirWord}`;
+        peakColor = dirColor;
+      } else {
+        peakVsLastEl.textContent = "Last season unavailable";
+        peakVsLastEl.style.color = "#94a3b8";
+        peakVsLastProbEl.textContent = "";
+      }
+      peakVizEl.innerHTML = pillSvg({
+        W: vizWidth(peakVizEl), qs: peakQs, past: pastPeaks, pillLabel: "Forecast", color: peakColor,
+        ariaLabel: `Forecast season peak ${fmtPct(pvMd)}, compared with past seasons' peaks`,
+      });
+    } else {
+      peakWeekEl.textContent = "—"; peakWeekHistEl.textContent = "";
+      peakVsLastEl.textContent = "—"; peakVsLastProbEl.textContent = "";
+      peakVsLastEl.style.color = "";
+      peakWeekVizEl.innerHTML = peakVizEl.innerHTML = "";
+      if (ensemble) {
+        peakWeekHistEl.textContent = peakVsLastProbEl.textContent =
+          "Needs a full-season forecast, which isn't available this week";
+        peakWeekHistEl.style.color = "";
+      }
+    }
+
+    // ---- Chart ----
+    // The "4 weeks" window shows forecast horizons 0 to MAX_HORIZON, after the last
+    // WINDOW_HISTORY_WEEKS weeks of this season, with the x-axis running one week past the last
+    // horizon; "Full season" shows the whole season and forecast.
+    const seasonStart = `${refSeason}-08-01`;
+    const forecastEnd = addDays(DATA.reference_date, MAX_HORIZON * 7);
+    const fourWeeks = state.window === "4w";
+    const xStart = fourWeeks
+      ? [seasonStart, addDays(DATA.reference_date, -7 * WINDOW_HISTORY_WEEKS)].sort()[1]
+      : seasonStart;
+    const xEnd = fourWeeks ? forecastEnd
+      : [`${refSeason + 1}-07-31`, ensemble ? ensemble.dates[ensemble.dates.length - 1] : ""].sort()[1];
+    const xAxisEnd = fourWeeks ? addDays(xEnd, 7) : xEnd;
+    document.getElementById("fp-chart-title").textContent = `ED Visits Forecast: ${locName}`;
+    document.getElementById("fp-chart-sub").textContent =
+      `${fourWeeks ? `Next ${MAX_HORIZON + 1} weeks` : "Full-season projection"} • Data source: NSSP`;
+
+    const traces = [];
+
+    // Past seasons, drawn under the current one. A season k years back is shifted forward by the
+    // whole number of weeks closest to k years, so weeks still end on Saturdays and land within
+    // half a week of the same time of year.
+    const LAST_SEASON_COLOR = "#64748b";
+    const pastSeasons = [...new Set(history.map(r => seasonOf(r.date)))]
+      .filter(s => s < refSeason && (state.pastSeasons === "all" || s === refSeason - 1))
+      .sort((a, b) => a - b);
+    for (const s of pastSeasons) {
+      // Cut off at the last forecast week, so past seasons don't run into the empty week the
+      // "4 weeks" window leaves after the forecast.
+      const shiftDays = Math.round((refSeason - s) * 365.25 / 7) * 7;
+      const rows = history.filter(r => seasonOf(r.date) === s && addDays(r.date, shiftDays) <= xEnd);
+      const isLast = s === refSeason - 1;
+      const label = seasonName(s);
+      traces.push(trace(label, rows.map(r => addDays(r.date, shiftDays)), rows.map(r => r.value), {
+        line: { color: isLast ? LAST_SEASON_COLOR : "#a8b4c4", width: 1.8 },
+        marker: { color: isLast ? LAST_SEASON_COLOR : "#a8b4c4", size: 4 },
+        opacity: isLast ? 0.9 : 0.85,
+        customdata: rows.map(r => r.date),
+        hovertemplate: `${label}<br>Week ending %{customdata}: %{y:.2f}%<extra></extra>`,
+        showlegend: false,
+      }));
+    }
+    const older = pastSeasons.filter(s => s < refSeason - 1);
+    document.getElementById("fp-older-legend").style.display = older.length ? "" : "none";
+    document.getElementById("fp-older-label").textContent = older.length === 1
+      ? `Earlier season (${seasonName(older[0])})`
+      : `Earlier seasons (${older.length}: ${seasonName(older[0])} to ${seasonName(older[older.length - 1])})`;
+
+    // Observed (current season)
+    const obsX = observed.map(r => r.date);
+    const obsY = observed.map(r => r.value);
+    traces.push(trace("Observed", obsX, obsY, {
+      line: { color: "#0f172a", width: 2.5 },
+      marker: { color: "#0f172a", size: 5 },
+      showlegend: false,
+    }));
+
+    // Ensemble forecast, cut to the chart's window
+    const nShown = ensemble ? ensemble.dates.filter(d => d <= xEnd).length : 0;
+    const f = ensemble && nShown && {
+      dates: ensemble.dates.slice(0, nShown),
+      samples: ensemble.samples.map(s => s.slice(0, nShown)),
+    };
+    document.getElementById("fp-forecast-legend-detail").textContent = !f || !f.samples.length ? "(not available)"
+      : state.viewMode === "intervals" ? "(median)"
+      : state.viewMode === "deciles" ? "(trajectories closest to the 10th–90th percentiles; darker nearer the median, thickest at the median)"
+      : `(${Math.min(N_TRAJ_DRAWS, f.samples.length)} of ${f.samples.length} trajectories shown)`;
+    document.getElementById("fp-smooth-legend").hidden = !(f && f.samples.length && state.viewMode === "deciles");
+    for (const el of document.querySelectorAll(".fp-interval-legend")) {
+      el.hidden = !(f && f.samples.length && state.viewMode === "intervals");
+    }
+    if (f && f.samples.length) {
+      const color = FORECAST_COLOR;
+      const x = f.dates;
+      if (state.viewMode === "intervals") {
+        const bands = quantileBandsByDate(f.samples);
+        // 95% band
+        traces.push({
+          type: "scatter", mode: "lines",
+          x: [...x, ...x.slice().reverse()],
+          y: [...bands.q975, ...bands.q025.slice().reverse()],
+          fill: "toself", fillcolor: color + "26",
+          line: { color: "transparent" },
+          name: "Ensemble 95%", hoverinfo: "skip", showlegend: false,
+        });
+        // 50% band
+        traces.push({
+          type: "scatter", mode: "lines",
+          x: [...x, ...x.slice().reverse()],
+          y: [...bands.q75, ...bands.q25.slice().reverse()],
+          fill: "toself", fillcolor: color + "4D",
+          line: { color: "transparent" },
+          name: "Ensemble 50%", hoverinfo: "skip", showlegend: false,
+        });
+        // Median, connected to last observed point. Hovering a forecast week shows its median and
+        // both interval bounds.
+        const pct = v => `${v.toFixed(2)}%`;
+        const tips = x.map((d, i) => `Ensemble forecast, week ending ${fmtMd(d)}<br>`
+          + `Median: ${pct(bands.q50[i])}<br>`
+          + `50% interval: ${pct(bands.q25[i])} – ${pct(bands.q75[i])}<br>`
+          + `95% interval: ${pct(bands.q025[i])} – ${pct(bands.q975[i])}`);
+        let connX = x, connY = bands.q50;
+        if (lastObs != null) {
+          connX = [lastObsDate, ...x];
+          connY = [lastObs, ...bands.q50];
+          // The first forecast week usually ends on the last observed date, so both points share a
+          // date there. Give the connecting point the forecast's tooltip so either one shows it.
+          tips.unshift(lastObsDate === x[0] ? tips[0]
+            : `Last observed, week ending ${fmtMd(lastObsDate)}: ${pct(lastObs)}`);
+        }
+        traces.push(trace("Ensemble", connX, connY, {
+          mode: "lines",
+          line: { color, width: 2.5, dash: "dash" },
+          text: tips,
+          hovertemplate: "%{text}<extra></extra>",
+          showlegend: false,
+        }));
+      } else if (state.viewMode === "deciles") {
+        // Deciles: the trajectory closest to each decile, shaded darker toward the median, plus the
+        // smoothed median of all trajectories
+        const conn = ys => lastObs != null ? [lastObs, ...ys] : ys;
+        const connX = lastObs != null ? [lastObsDate, ...x] : x;
+        for (const { level, idx } of decileTrajectories(f.samples)) {
+          // 0 at the median, 1 at the 10th/90th percentiles
+          const fromMiddle = Math.abs(level - 0.5) / (0.5 - DECILE_LEVELS[0]);
+          const pct = Math.round(level * 100);
+          const isMedian = level === 0.5;
+          const base = isMedian ? DECILE_MEDIAN_STYLE : DECILE_STYLE;
+          traces.push({
+            type: "scatter", mode: "lines",
+            x: connX, y: conn(f.samples[idx]),
+            line: { color: mixHex(DECILE_DARK, DECILE_LIGHT, fromMiddle), width: base.width },
+            opacity: base.opacity,
+            name: `${pct}th percentile`,
+            showlegend: false,
+            hovertemplate: `Trajectory closest to the ${isMedian ? "median" : `${pct}th percentile`}<br>%{x|%b %d}: %{y:.2f}%<extra></extra>`,
+            meta: { base, hover: isMedian ? DECILE_MEDIAN_HOVER_STYLE : DECILE_HOVER_STYLE },
+          });
+        }
+        // Smoothed over the whole forecast, then cut to the window, so the window doesn't change it.
+        const median = smoothed(quantileBandsByDate(ensemble.samples).q50, MEDIAN_SMOOTH_WEEKS).slice(0, nShown);
+        traces.push(trace("Smoothed median", connX, conn(median), {
+          mode: "lines",
+          line: { color: SMOOTH_MEDIAN_COLOR, width: 3 },
+          showlegend: false,
+          hovertemplate: "Smoothed median<br>%{x|%b %d}: %{y:.2f}%<extra></extra>",
+        }));
+      } else {
+        // Trajectories: draw N_TRAJ_DRAWS individual sample paths
+        const nDraws = Math.min(N_TRAJ_DRAWS, f.samples.length);
+        const indices = Array.from({ length: nDraws }, (_, j) => Math.floor(j * f.samples.length / nDraws));
+        for (const idx of indices) {
+          let lineX = x, lineY = f.samples[idx];
+          if (lastObs != null) {
+            lineX = [lastObsDate, ...x];
+            lineY = [lastObs, ...f.samples[idx]];
+          }
+          traces.push({
+            type: "scatter", mode: "lines",
+            x: lineX, y: lineY,
+            line: { color, width: TRAJ_STYLE.width },
+            opacity: TRAJ_STYLE.opacity,
+            name: "Ensemble",
+            showlegend: false,
+            hoverinfo: "none",  // no tooltip, but hover events still fire (see highlightTrajectories)
+            meta: { base: TRAJ_STYLE, hover: TRAJ_HOVER_STYLE },
+          });
+        }
+      }
+    }
+
+    // Plotly's autorange would fit the y-axis to every past season, so fit it to what's in view.
+    let yMax = 0;
+    for (const t of traces) {
+      t.x.forEach((xi, i) => { if (xi >= xStart && xi <= xEnd && t.y[i] > yMax) yMax = t.y[i]; });
+    }
+    const pad = fourWeeks ? 3 : 7;  // days of space beyond the first/last point
+
+    const layout = {
+      margin: { t: 50, r: 20, b: 50, l: 50 },  // room above the plot for the toolbar, then the forecast date label
+      xaxis: {
+        type: "date",
+        range: [addDays(xStart, -pad), addDays(xAxisEnd, pad)],
+        showgrid: true, gridcolor: "#eef2f7",
+        tickfont: { size: 11, color: "#64748b" },
+        title: { text: "" },
+      },
+      yaxis: {
+        title: { text: "ED Percent Flu", font: { size: 12, color: "#475569" } },
+        showgrid: true, gridcolor: "#eef2f7",
+        tickfont: { size: 11, color: "#64748b" },
+        range: [0, (yMax || 1) * 1.08],
+      },
+      showlegend: false,
+      plot_bgcolor: "#fff",
+      paper_bgcolor: "#fff",
+      shapes: [{
+        type: "line", xref: "x", yref: "paper",
+        x0: DATA.reference_date, x1: DATA.reference_date, y0: 0, y1: 1,
+        line: { color: "#64748b", width: 1.5, dash: "dot" },
+      }],
+      annotations: [{
+        x: DATA.reference_date, xref: "x", y: 1, yref: "paper", yanchor: "bottom",
+        text: "Forecast date", showarrow: false,
+        font: { size: 10, color: "#64748b" },
+      }],
+    };
+
+    // Plotly's toolbar (shown on hover), without the buttons the original dashboard's chart also
+    // drops. Plotly's own reset returns to the first range it drew, even after a switch between "4
+    // weeks" and "Full season", so its home button and double-click are replaced with ones that
+    // return to the window being shown. (Autoscaling would fit the axes to every past season.)
+    // Copies, since Plotly changes the layout's range arrays in place when the chart is zoomed.
+    chartHome = { x: [...layout.xaxis.range], y: [...layout.yaxis.range] };
+    Plotly.react("fp-chart", traces, layout, {
+      responsive: true,
+      modeBarButtonsToRemove: ["lasso2d", "autoScale2d", "resetScale2d"],
+      modeBarButtonsToAdd: [{ name: "Reset axes", title: "Reset axes", icon: Plotly.Icons.home, click: resetChartView }],
+      doubleClick: false,
+    });
+    highlightTrajectories();
+  }
+
+  // The axis ranges of the window being shown, set each time the chart is drawn.
+  let chartHome = null;
+  function resetChartView() {
+    if (chartHome) Plotly.relayout("fp-chart", { "xaxis.range": [...chartHome.x], "yaxis.range": [...chartHome.y] });
+  }
+
+  // Trajectories and deciles views: the trajectory under the mouse switches from its usual style to
+  // its hover style (both kept in the trace's meta) until the mouse leaves it. The listeners stay on
+  // the chart across re-renders, so they're added only once.
+  let trajHighlightBound = false;
+  function highlightTrajectories() {
+    if (trajHighlightBound) return;
+    trajHighlightBound = true;
+    const chartEl = document.getElementById("fp-chart");
+    const restyle = (e, which) => {
+      for (const p of e.points) {
+        const style = p.data.meta && p.data.meta[which];
+        if (style) Plotly.restyle(chartEl, { opacity: style.opacity, "line.width": style.width }, [p.curveNumber]);
+      }
+    };
+    chartEl.on("plotly_hover", e => restyle(e, "hover"));
+    chartEl.on("plotly_unhover", e => restyle(e, "base"));
+    chartEl.on("plotly_doubleclick", resetChartView);
+  }
+
+  route();
+  // The US map is colored by each state's statewide trend, so load every statewide location.
+  for (const s of STATES.values()) {
+    if (!s.statewide) { stateTrends.set(s.name, null); continue; }
+    loadLocation(s.statewide.id)
+      .then(d => computeTrend(d), () => null)
+      .then(t => { stateTrends.set(s.name, t); colorUsMap(); });
+  }
+})();
+</script>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // default icon
+          link.classList.add("external");
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions"><ul><li><a href="https://github.com/reichlab/metrocast-dashboard/edit/main/pages/forecast-prototype.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/reichlab/metrocast-dashboard/blob/main/pages/forecast-prototype.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/reichlab/metrocast-dashboard/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="https://docs.hubverse.io/en/latest/user-guide/dashboards.html">
+<p>Built with the Hubverse dashboard</p>
+</a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+<!-- Privacy-friendly analytics by Plausible -->
+<script async="" src="https://plausible.io/js/pa-DOosbUzSYYO66nV9P5iOt.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script>
+
+
+
+
+</body></html>
