@@ -1,0 +1,23 @@
+[
+  {
+    "objectID": "eval.html",
+    "href": "eval.html",
+    "title": "Flu Metrocast Website",
+    "section": "",
+    "text": "this is replaced"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Introduction",
+    "section": "",
+    "text": "View The Latest Forecasts\n\nThis dashboard is designed for the Flu Metrocast hub.\nThe target data for the Flu Metrocast includes ILI ED visits and Flu ED visits percentages. Both datasets are publicly available through New York City Department of Health and Mental Hygiene or CDC’s Emergency Department Visits for Viral Respiratory Illness.\n\n\n\n\n\n\nNote\n\n\n\nLook at this note!"
+  },
+  {
+    "objectID": "forecast.html",
+    "href": "forecast.html",
+    "title": "Flu Metrocast Website",
+    "section": "",
+    "text": "this is replaced"
+  }
+]
