@@ -1,6 +1,6 @@
 ---
-hub: "cdcepi/FluSight-forecast-hub/"
-title: "Example Hub Dashboard Website"
+hub: "reichlab/flu-metrocast"
+title: "Flu Metrocast Website"
 pages:
   - "about.md"
 
