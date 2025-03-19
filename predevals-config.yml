@@ -9,7 +9,7 @@ targets:
   relative_metrics:
   - wis
   - ae_median
-  baseline: EpiENGAGE-baseline
+  baseline: epiENGAGE-baseline
   disaggregate_by:
   - location
   - reference_date
