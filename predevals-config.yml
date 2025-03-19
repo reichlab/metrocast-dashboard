@@ -1,0 +1,59 @@
+schema_version: https://raw.githubusercontent.com/hubverse-org/hubPredEvalsData/main/inst/schema/v1.0.0/config_schema.json
+targets:
+- target_id: ILI ED visits
+  metrics:
+  - wis
+  - ae_median
+  - interval_coverage_50
+  - interval_coverage_95
+  relative_metrics:
+  - wis
+  - ae_median
+  baseline: EpiENGAGE-baseline
+  disaggregate_by:
+  - location
+  - reference_date
+  - horizon
+  - target_end_date
+eval_sets:
+- eval_set_name: Full season
+  round_filters:
+    min: '2024-11-30'
+  task_filters:
+    location:
+    - "Bronx"
+    - "Brooklyn"
+    - "Manhattan"
+    - "Queens"
+    - "Staten Island"
+    - "NYC"
+    horizon:
+    - 0
+    - 1
+    - 2
+    - 3
+- eval_set_name: Last 4 weeks
+  round_filters:
+    min: '2024-11-30'
+    n_last: 5
+  task_filters:
+    location:
+    - "Bronx"
+    - "Brooklyn"
+    - "Manhattan"
+    - "Queens"
+    - "Staten Island"
+    - "NYC"
+    horizon:
+    - 0
+    - 1
+    - 2
+    - 3
+task_id_text:
+  location:
+    'Bronx': Bronx
+    'Brooklyn': Brooklyn
+    'Manhattan': Manhattan
+    'Queens': Queens
+    'Staten Island': Staten Island
+    'NYC': New York City
