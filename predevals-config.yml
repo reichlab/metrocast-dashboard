@@ -18,7 +18,7 @@ targets:
 eval_sets:
 - eval_set_name: Full season
   round_filters:
-    min: '2024-11-30'
+    min: '2025-01-25'
   task_filters:
     location:
     - "Bronx"
@@ -34,7 +34,7 @@ eval_sets:
     - 3
 - eval_set_name: Last 4 weeks
   round_filters:
-    min: '2024-11-30'
+    min: '2025-01-25'
     n_last: 5
   task_filters:
     location:
