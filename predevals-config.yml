@@ -9,7 +9,7 @@ targets:
   relative_metrics:
   - wis
   - ae_median
-  baseline: EpiENGAGE-baseline
+  baseline: epiENGAGE-baseline
   disaggregate_by:
   - location
   - reference_date
@@ -18,42 +18,8 @@ targets:
 eval_sets:
 - eval_set_name: Full season
   round_filters:
-    min: '2024-11-30'
-  task_filters:
-    location:
-    - "Bronx"
-    - "Brooklyn"
-    - "Manhattan"
-    - "Queens"
-    - "Staten Island"
-    - "NYC"
-    horizon:
-    - 0
-    - 1
-    - 2
-    - 3
+    min: '2025-02-15'
 - eval_set_name: Last 4 weeks
   round_filters:
-    min: '2024-11-30'
+    min: '2025-02-15'
     n_last: 5
-  task_filters:
-    location:
-    - "Bronx"
-    - "Brooklyn"
-    - "Manhattan"
-    - "Queens"
-    - "Staten Island"
-    - "NYC"
-    horizon:
-    - 0
-    - 1
-    - 2
-    - 3
-task_id_text:
-  location:
-    'Bronx': Bronx
-    'Brooklyn': Brooklyn
-    'Manhattan': Manhattan
-    'Queens': Queens
-    'Staten Island': Staten Island
-    'NYC': New York City
