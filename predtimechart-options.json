@@ -63,6 +63,7 @@
         "epiENGAGE-Copycat",
         "epiENGAGE-GBQR",
         "epiENGAGE-INFLAenza",
+        "epiENGAGE-baseline",
         "epiENGAGE-ensemble_mean",
         "epiENGAGE-lop_norm",
         "epiforecasts-dyngam"
