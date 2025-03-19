@@ -10,10 +10,10 @@ title: "Introduction"
 :::
 
 
-This Dashboard is build with Quarto. 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+This dashboard is designed for the [Flu Metrocast hub](https://github.com/reichlab/flu-metrocast/tree/main).
 
-Authors can use $\LaTeX$ to write equations and even put in callouts:
+The target data for the Flu Metrocast includes ILI ED visits and Flu ED visits percentages. Both datasets are publicly available through [New York City Department of Health and Mental Hygiene](https://a816-health.nyc.gov/hdi/epiquery/visualizations?PageType=ps&PopulationSource=Syndromic) or CDC's [Emergency Department Visits for Viral Respiratory Illness](https://www.cdc.gov/respiratory-viruses/data/activity-levels.html).
+
 
 :::{.callout-note}
 
