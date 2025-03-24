@@ -10,7 +10,33 @@ title: "Introduction"
 :::
 
 
-This dashboard is designed for the [Flu Metrocast hub](https://github.com/reichlab/flu-metrocast/tree/main).
+This dashboard is designed for the [Flu Metrocast hub](https://github.com/reichlab/flu-metrocast/tree/main), a national platform enabling collaborative, city-level forecasting of influenza-related emergency department visits and hospital admissions.
+
+Currently, the project focuses on two regions: 
+- New York city
+  - Target: ILI (Influenza-like Illness) ED visit counts
+  - Data source : [New York City Department of Health and Mental Hygiene](https://a816-health.nyc.gov/hdi/epiquery/visualizations?PageType=ps&PopulationSource=Syndromic)
+  - Target areas: Manhattan, Bronx, Brooklyn, Staten Island, Queens, NYC (citywide)
+
+- Texas Metro Areas
+  - Target: Percentage of ED visits due to flu
+  - Data Source : CDC's [Emergency Department Visits for Viral Respiratory Illness](https://www.cdc.gov/respiratory-viruses/data/activity-levels.html)
+  - Target areas: These metro areas include both the named city and surrounding counties:
+    - Austin: Bastrop, Burnet, Lee, Llano, Travis, Williamson
+    - Houston: Austin, Chambers, Fort Bend, Harris, Liberty, Montgomery, San Jacinto, Waller
+    - Dallas: Collin, Dallas, Ellis, Hopkins, Hunt, Kaufman, Rains, Rockwall
+    - El Paso: Culberson, El Paso, Hudspeth, Loving
+    - San Antonio: Atascosa, Bandera, Bexar, Frio, Gonzales, Guadalupe, Kendall, La Salle, McMullen, Medina, Wilson, Zavala
+    
+- Models Included
+  - epiENGAGE-GBQR : A machine learning method that combines gradient boosting and quantile regression to predict conditional quantiles
+  - epiENGAGE-INFLAenza : A spatial time-series model that uses the R-INLA package for estimating forecast posterior distributions.
+  - epiENGAGE-Copycat :  A pattern matching model that matches growth rate trends to historic growth rate curves.
+  - Epiforecasts-dyngam : A Bayesian hierarchical GAM with a univariate AR(1) process
+  - epiENGAGE-baseline : simple time series model as a reference model
+  - epiENGAGE-ensemble_mean : An equally weighted mean ensemble that takes the mean at each quantile level of all eligible forecasts
+  - epiENGAGE-log_norm : Linear pool (a.k.a. distributional mixture) ensemble of quantile forecast submissions.
+
 
 The target data for the Flu Metrocast includes ILI ED visits and Flu ED visits percentages. Both datasets are publicly available through [New York City Department of Health and Mental Hygiene](https://a816-health.nyc.gov/hdi/epiquery/visualizations?PageType=ps&PopulationSource=Syndromic) or CDC's [Emergency Department Visits for Viral Respiratory Illness](https://www.cdc.gov/respiratory-viruses/data/activity-levels.html).
 
