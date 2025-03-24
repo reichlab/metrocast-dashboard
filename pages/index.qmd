@@ -29,7 +29,7 @@ Currently, the project focuses on two regions:
     - El Paso: Culberson, El Paso, Hudspeth, Loving
     - San Antonio: Atascosa, Bandera, Bexar, Frio, Gonzales, Guadalupe, Kendall, La Salle, McMullen, Medina, Wilson, Zavala
     
-### Models Included
+Models Included
 - epiENGAGE-GBQR : A machine learning method that combines gradient boosting and quantile regression to predict conditional quantiles
 - epiENGAGE-INFLAenza : A spatial time-series model that uses the R-INLA package for estimating forecast posterior distributions.
 - epiENGAGE-Copycat :  A pattern matching model that matches growth rate trends to historic growth rate curves.
