@@ -54,11 +54,12 @@
             "2025-03-01",
             "2025-03-08",
             "2025-03-15",
-            "2025-03-22"
+            "2025-03-22",
+            "2025-03-29"
         ]
     },
-    "initial_as_of": "2025-03-22",
-    "current_date": "2025-03-22",
+    "initial_as_of": "2025-03-29",
+    "current_date": "2025-03-29",
     "models": [
         "epiENGAGE-Copycat",
         "epiENGAGE-GBQR",
@@ -69,10 +70,7 @@
         "epiforecasts-dyngam"
     ],
     "initial_checked_models": [
-        "epiENGAGE-Copycat",
-        "epiENGAGE-GBQR",
-        "epiENGAGE-INFLAenza",
-        "epiforecasts-dyngam"
+        "epiENGAGE-ensemble_mean"
     ],
     "initial_xaxis_range": null
 }
