@@ -15,6 +15,21 @@ targets:
   - reference_date
   - horizon
   - target_end_date
+- target_id: Flu ED visits pct
+  metrics:
+  - wis
+  - ae_median
+  - interval_coverage_50
+  - interval_coverage_95
+  relative_metrics:
+  - wis
+  - ae_median
+  baseline: epiENGAGE-baseline
+  disaggregate_by:
+  - location
+  - reference_date
+  - horizon
+  - target_end_date
 eval_sets:
 - eval_set_name: Full season
   round_filters:
