@@ -4,36 +4,67 @@
             "value": "ILI ED visits",
             "text": "ED visits due to ILI",
             "plot_text": "ED visits due to ILI"
+        },
+        {
+            "value": "Flu ED visits pct",
+            "text": "Percentage of ED visits due to influenza",
+            "plot_text": "Percentage of ED visits due to influenza"
         }
     ],
     "initial_target_var": "ILI ED visits",
     "task_ids": {
-        "location": [
-            {
-                "value": "NYC",
-                "text": "NYC"
-            },
-            {
-                "value": "Bronx",
-                "text": "Bronx"
-            },
-            {
-                "value": "Brooklyn",
-                "text": "Brooklyn"
-            },
-            {
-                "value": "Manhattan",
-                "text": "Manhattan"
-            },
-            {
-                "value": "Queens",
-                "text": "Queens"
-            },
-            {
-                "value": "Staten Island",
-                "text": "Staten Island"
-            }
-        ]
+        "ILI ED visits": {
+            "location": [
+                {
+                    "value": "NYC",
+                    "text": "NYC"
+                },
+                {
+                    "value": "Bronx",
+                    "text": "Bronx"
+                },
+                {
+                    "value": "Brooklyn",
+                    "text": "Brooklyn"
+                },
+                {
+                    "value": "Manhattan",
+                    "text": "Manhattan"
+                },
+                {
+                    "value": "Queens",
+                    "text": "Queens"
+                },
+                {
+                    "value": "Staten Island",
+                    "text": "Staten Island"
+                }
+            ]
+        },
+        "Flu ED visits pct": {
+            "location": [
+                {
+                    "value": "Austin",
+                    "text": "Austin"
+                },
+                {
+                    "value": "Houston",
+                    "text": "Houston"
+                },
+                {
+                    "value": "Dallas",
+                    "text": "Dallas"
+                },
+                {
+                    "value": "El Paso",
+                    "text": "El Paso"
+                },
+                {
+                    "value": "San Antonio",
+                    "text": "San Antonio"
+                }
+            ]
+        }
     },
     "initial_task_ids": {
         "location": "NYC"
@@ -56,11 +87,25 @@
             "2025-03-15",
             "2025-03-22",
             "2025-03-29",
-            "2025-04-05"
+            "2025-04-05",
+            "2025-04-12"
+        ],
+        "Flu ED visits pct": [
+            "2025-02-01",
+            "2025-02-08",
+            "2025-02-15",
+            "2025-02-22",
+            "2025-03-01",
+            "2025-03-08",
+            "2025-03-15",
+            "2025-03-22",
+            "2025-03-29",
+            "2025-04-05",
+            "2025-04-12"
         ]
     },
-    "initial_as_of": "2025-04-05",
-    "current_date": "2025-04-05",
+    "initial_as_of": "2025-04-12",
+    "current_date": "2025-04-12",
     "models": [
         "epiENGAGE-Copycat",
         "epiENGAGE-GBQR",
@@ -73,5 +118,6 @@
     "initial_checked_models": [
         "epiENGAGE-ensemble_mean"
     ],
+    "disclaimer": "Observed counts are aggregated by week and predictions are made for each week. Dates associated with specific data points reflect the last day (Saturday) of the week.",
     "initial_xaxis_range": null
 }
