@@ -5,4 +5,4 @@ target_date_col_name: 'target_end_date'
 horizon_col_name: 'horizon'
 initial_checked_models: [ 'epiENGAGE-ensemble_mean' ]
 #target_data_file_name:  # this hub uses the default time-series target data: "target-data/time-series.csv"
-disclaimer: 'The date shown on hover reflects the last day (Saturday) of the corresponding MMWR week.'
+disclaimer: 'Observed counts are aggregated by week and predictions are made for each week. Dates associated with specific data points reflect the last day (Saturday) of the week.'
