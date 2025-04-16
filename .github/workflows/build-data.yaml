@@ -36,7 +36,7 @@ permissions:
 
 jobs:
   site:
-    uses: hubverse-org/hub-dashboard-control-room/.github/workflows/generate-data.yaml@main
+    uses: hubverse-org/hub-dashboard-control-room/.github/workflows/generate-data.yaml@znk/integration-test/ptc-v.2.1.0
     with:
       owner: '${{ github.event.repository.owner.login }}'
       name: '${{ github.event.repository.name }}'
