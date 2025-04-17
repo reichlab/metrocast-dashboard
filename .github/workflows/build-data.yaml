@@ -36,7 +36,7 @@ permissions:
 
 jobs:
   echo:
-    uses: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - run: echo '${{ inputs }}'
   site:
