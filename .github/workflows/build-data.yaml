@@ -38,7 +38,7 @@ jobs:
   echo:
     runs-on: ubuntu-latest
     steps:
-      - run: echo '${{ inputs }}'
+      - run: echo '${{ toJSON(inputs) }}'
   site:
     uses: hubverse-org/hub-dashboard-control-room/.github/workflows/generate-data.yaml@znk/integration-test/ptc-v.2.1.0
     with:
