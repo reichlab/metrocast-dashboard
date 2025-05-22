@@ -93,7 +93,8 @@
             "2025-04-26",
             "2025-05-03",
             "2025-05-10",
-            "2025-05-17"
+            "2025-05-17",
+            "2025-05-24"
         ],
         "Flu ED visits pct": [
             "2025-02-01",
@@ -111,11 +112,12 @@
             "2025-04-26",
             "2025-05-03",
             "2025-05-10",
-            "2025-05-17"
+            "2025-05-17",
+            "2025-05-24"
         ]
     },
-    "initial_as_of": "2025-05-17",
-    "current_date": "2025-05-17",
+    "initial_as_of": "2025-05-24",
+    "current_date": "2025-05-24",
     "models": [
         "epiENGAGE-Copycat",
         "epiENGAGE-GBQR",
@@ -129,5 +131,8 @@
         "epiENGAGE-ensemble_mean"
     ],
     "disclaimer": "Observed counts are aggregated by week and predictions are made for each week. Dates associated with specific data points reflect the last day (Saturday) of the week.",
-    "initial_xaxis_range": null
+    "initial_xaxis_range": [
+        "2024-08-01",
+        "2025-07-01"
+    ]
 }
