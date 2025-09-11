@@ -130,6 +130,15 @@
     "initial_checked_models": [
         "epiENGAGE-ensemble_mean"
     ],
+    "model_urls": {
+        "epiENGAGE-GBQR": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-GBQR.yml",
+        "epiENGAGE-Copycat": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-Copycat.yml",
+        "epiforecasts-dyngam": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiforecasts-dyngam.yml",
+        "epiENGAGE-INFLAenza": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-INFLAenza.yml",
+        "epiENGAGE-baseline": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-baseline.yml",
+        "epiENGAGE-ensemble_mean": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-ensemble_mean.yml",
+        "epiENGAGE-lop_norm": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-lop_norm.yml"
+    },
     "disclaimer": "Observed counts are aggregated by week and predictions are made for each week. Dates associated with specific data points reflect the last day (Saturday) of the week.",
     "initial_xaxis_range": [
         "2024-08-01",
