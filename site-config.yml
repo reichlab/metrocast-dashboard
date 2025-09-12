@@ -2,5 +2,4 @@
 hub: "reichlab/flu-metrocast"
 title: "Flu MetroCast Hub" 
 pages:
-  - "index.qmd"
   - "data.qmd"
