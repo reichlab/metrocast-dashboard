@@ -62,9 +62,451 @@ Metro-level disease trends and forecasts may differ markedly from state and nati
 
 NSSP HSA-level data are **publicly available**, making it quicker and easier to expand forecasting efforts to additional jurisdictions that report these data. 
 
-A more detailed visual breakdown of HSAs for each state can be found [here](https://raw.githubusercontent.com/mmkerr/draft/main/all_states_faceted.pdf). This document also provides line plots for each state illustrating the difference between the percentage of ED visits for the state (grey line) vs. each individual HSA in that state (orange line). 
+Below is a more detailed visual breakdown of HSAs for each state. These images provide line plots of trends for each state illustrating the difference between the percentage of ED visits for the state (grey line) vs. each individual HSA in that state (orange line), a map of HSAs within the state, and a list of HSAs with the counties included and population size. 
 
+## Colorado
 
+### Trends
+![Trends](img/colorado/all_states_faceted-001.png)
 
+### HSA Map
+![HSA Map](img/colorado/all_states_faceted-002.png)
 
+### HSAs
+![HSAs](img/colorado/all_states_faceted-003.png)
 
+## Connecticut
+
+### Trends
+![Trends](img/connecticut/all_states_faceted-004.png)
+
+### HSA Map
+![HSA Map](img/connecticut/all_states_faceted-005.png)
+
+### HSAs
+![HSAs](img/connecticut/all_states_faceted-006.png))
+
+## Delaware
+
+### Trends
+![Trends](img/delaware/all_states_faceted-007.png)
+
+### HSA Map
+![HSA Map](img/delaware/all_states_faceted-008.png)
+
+### HSAs
+![HSAs](img/delaware/all_states_faceted-009.png)
+
+## District of Columbia
+
+### Trends
+![Trends](img/district-of-columbia/all_states_faceted-010.png)
+
+### HSA Map
+![HSA Map](img/district-of-columbia/all_states_faceted-011.png)
+
+### HSAs
+![HSAs](img/district-of-columbia/all_states_faceted-012.png)
+
+## Georgia
+
+### Trends
+![Trends 1](img/georgia/all_states_faceted-013.png)
+![Trends 2](img/georgia/all_states_faceted-014.png)
+![Trends 3](img/georgia/all_states_faceted-015.png)
+
+### HSA Map
+![HSA Map](img/georgia/all_states_faceted-016.png)
+
+### HSAs
+![HSAs 1](img/georgia/all_states_faceted-017.png)
+![HSAs 2](img/georgia/all_states_faceted-018.png)
+
+## Hawaii
+
+### Trends
+![Trends](img/hawaii/all_states_faceted-019.png)
+
+### HSA Map
+![HSA Map](img/hawaii/all_states_faceted-020.png)
+
+### HSAs
+![HSAs](img/hawaii/all_states_faceted-021.png)
+
+## Idaho
+
+### Trends
+![Trends](img/idaho/all_states_faceted-022.png)
+
+### HSA Map
+![HSA Map](img/idaho/all_states_faceted-023.png)
+
+### HSAs
+![HSAs](img/idaho/all_states_faceted-024.png)
+
+## Illinois
+
+### Trends
+![Trends 1](img/illinois/all_states_faceted-025.png)
+![Trends 2](img/illinois/all_states_faceted-026.png)
+![Trends 3](img/illinois/all_states_faceted-027.png)
+
+### HSA Map
+![HSA Map](img/illinois/all_states_faceted-028.png)
+
+### HSAs
+![HSAs 1](img/illinois/all_states_faceted-029.png)
+![HSAs 2](img/illinois/all_states_faceted-030.png)
+
+## Indiana
+
+### Trends
+![Trends 1](img/indiana/all_states_faceted-031.png)
+![Trends 2](img/indiana/all_states_faceted-032.png)
+![Trends 3](img/indiana/all_states_faceted-033.png)
+
+### HSA Map
+![HSA Map](img/indiana/all_states_faceted-034.png)
+
+### HSAs
+![HSAs](img/indiana/all_states_faceted-035.png)
+
+## Iowa
+
+### Trends
+![Trends 1](img/iowa/all_states_faceted-036.png)
+![Trends 2](img/iowa/all_states_faceted-037.png)
+![Trends 3](img/iowa/all_states_faceted-038.png)
+
+### HSA Map
+![HSA Map](img/iowa/all_states_faceted-039.png)
+
+### HSAs
+![HSAs 1](img/iowa/all_states_faceted-040.png)
+![HSAs 2](img/iowa/all_states_faceted-041.png)
+
+## Kansas
+
+### Trends
+![Trends 1](img/kansas/all_states_faceted-042.png)
+![Trends 2](img/kansas/all_states_faceted-043.png)
+![Trends 3](img/kansas/all_states_faceted-044.png)
+
+### HSA Map
+![HSA Map](img/kansas/all_states_faceted-045.png)
+
+### HSAs
+![HSAs 1](img/kansas/all_states_faceted-046.png)
+![HSAs 2](img/kansas/all_states_faceted-047.png)
+
+## Kentucky
+
+### Trends
+![Trends 1](img/kentucky/all_states_faceted-048.png)
+![Trends 2](img/kentucky/all_states_faceted-049.png)
+![Trends 3](img/kentucky/all_states_faceted-050.png)
+
+### HSA Map
+![HSA Map](img/kentucky/all_states_faceted-051.png)
+
+### HSAs
+![HSAs](img/kentucky/all_states_faceted-052.png)
+
+## Louisiana
+
+### Trends
+![Trends 1](img/louisiana/all_states_faceted-053.png)
+![Trends 2](img/louisiana/all_states_faceted-054.png)
+
+### HSA Map
+![HSA Map](img/louisiana/all_states_faceted-055.png)
+
+### HSAs
+![HSAs](img/louisiana/all_states_faceted-056.png)
+
+## Maine
+
+### Trends
+![Trends](img/maine/all_states_faceted-057.png)
+
+### HSA Map
+![HSA Map](img/maine/all_states_faceted-058.png)
+
+### HSAs
+![HSAs](img/maine/all_states_faceted-059.png)
+
+## Maryland
+
+### Trends
+![Trends](img/maryland/all_states_faceted-060.png)
+
+### HSA Map
+![HSA Map](img/maryland/all_states_faceted-061.png)
+
+### HSAs
+![HSAs](img/maryland/all_states_faceted-062.png)
+
+## Massachusetts
+
+### Trends
+![Trends](img/massachusetts/all_states_faceted-063.png)
+
+### HSA Map
+![HSA Map](img/massachusetts/all_states_faceted-064.png)
+
+### HSAs
+![HSAs](img/massachusetts/all_states_faceted-065.png)
+
+## Michigan
+
+### Trends
+![Trends 1](img/michigan/all_states_faceted-066.png)
+![Trends 2](img/michigan/all_states_faceted-067.png)
+
+### HSA Map
+![HSA Map](img/michigan/all_states_faceted-068.png)
+
+### HSAs
+![HSAs](img/michigan/all_states_faceted-069.png)
+
+## Minnesota
+
+### Trends
+![Trends 1](img/minnesota/all_states_faceted-070.png)
+![Trends 2](img/minnesota/all_states_faceted-071.png)
+
+### HSA Map
+![HSA Map](img/minnesota/all_states_faceted-072.png)
+
+### HSAs
+![HSAs](img/minnesota/all_states_faceted-073.png)
+
+## Mississippi
+
+### Trends
+![Trends 1](img/mississippi/all_states_faceted-074.png)
+![Trends 2](img/mississippi/all_states_faceted-075.png)
+
+### HSA Map
+![HSA Map](img/mississippi/all_states_faceted-076.png)
+
+### HSAs
+![HSAs](img/mississippi/all_states_faceted-077.png)
+![HSAs](img/mississippi/all_states_faceted-078.png)
+
+## Montana
+
+### Trends
+![Trends 1](img/montana/all_states_faceted-079.png)
+![Trends 2](img/montana/all_states_faceted-080.png)
+
+### HSA Map
+![HSA Map](img/montana/all_states_faceted-081.png)
+
+### HSAs
+![HSAs](img/montana/all_states_faceted-082.png)
+
+## Nebraska
+
+### Trends
+![Trends 1](img/nebraska/all_states_faceted-083.png)
+![Trends 2](img/nebraska/all_states_faceted-084.png)
+
+### HSA Map
+![HSA Map](img/nebraska/all_states_faceted-085.png)
+
+### HSAs
+![HSAs](img/nebraska/all_states_faceted-086.png)
+
+## Nevada
+
+### Trends
+![Trends](img/nevada/all_states_faceted-087.png)
+
+### HSA Map
+![HSA Map](img/nevada/all_states_faceted-088.png)
+
+### HSAs
+![HSAs](img/nevada/all_states_faceted-089.png)
+
+## New Jersey
+
+### Trends
+![Trends](img/new-jersey/all_states_faceted-090.png)
+
+### HSA Map
+![HSA Map](img/new-jersey/all_states_faceted-091.png)
+
+### HSAs
+![HSAs](img/new-jersey/all_states_faceted-092.png)
+
+## New Mexico
+
+### Trends
+![Trends](img/new-mexico/all_states_faceted-093.png)
+
+### HSA Map
+![HSA Map](img/new-mexico/all_states_faceted-094.png)
+
+### HSAs
+![HSAs](img/new-mexico/all_states_faceted-095.png)
+
+## New York
+
+### Trends
+![Trends 1](img/new-york/all_states_faceted-096.png)
+![Trends 2](img/new-york/all_states_faceted-097.png)
+
+### HSA Map
+![HSA Map](img/new-york/all_states_faceted-098.png)
+
+### HSAs
+![HSAs](img/new-york/all_states_faceted-099.png)
+
+## North Carolina
+
+### Trends
+![Trends 1](img/north-carolina/all_states_faceted-100.png)
+![Trends 2](img/north-carolina/all_states_faceted-101.png)
+![Trends 3](img/north-carolina/all_states_faceted-102.png)
+
+### HSA Map
+![HSA Map](img/north-carolina/all_states_faceted-103.png)
+
+### HSAs
+![HSAs](img/north-carolina/all_states_faceted-104.png)
+
+## Oklahoma
+
+### Trends
+![Trends](img/oklahoma/all_states_faceted-105.png)
+
+### HSA Map
+![HSA Map](img/oklahoma/all_states_faceted-106.png)
+
+### HSAs
+![HSAs](img/oklahoma/all_states_faceted-107.png)
+
+## Oregon
+
+### Trends
+![Trends 1](img/oregon/all_states_faceted-108.png)
+![Trends 2](img/oregon/all_states_faceted-109.png)
+
+### HSA Map
+![HSA Map](img/oregon/all_states_faceted-110.png)
+
+### HSAs
+![HSAs](img/oregon/all_states_faceted-111.png)
+## Tennessee
+
+## South Carolina
+
+### Trends
+![Trends 1](img/south-carolina/all_states_faceted-112.png)
+![Trends 2](img/south-carolina/all_states_faceted-113.png)
+
+### HSA Map
+![HSA Map](img/south-carolina/all_states_faceted-114.png)
+
+### HSAs
+![HSAs](img/south-carolina/all_states_faceted-115.png)
+
+## Tennessee
+
+### Trends
+![Trends 1](img/tennessee/all_states_faceted-116.png)
+![Trends 2](img/tennessee/all_states_faceted-117.png)
+![Trends 3](img/tennessee/all_states_faceted-118.png)
+
+### HSA Map
+![HSA Map](img/tennessee/all_states_faceted-119.png)
+
+### HSAs
+![HSAs](img/tennessee/all_states_faceted-120.png)
+
+## Texas
+
+### Trends
+![Trends 1](img/texas/all_states_faceted-121.png)
+![Trends 2](img/texas/all_states_faceted-122.png)
+![Trends 3](img/texas/all_states_faceted-123.png)
+![Trends 4](img/texas/all_states_faceted-124.png)
+![Trends 5](img/texas/all_states_faceted-125.png)
+
+### HSA Map
+![HSA Map](img/texas/all_states_faceted-126.png)
+
+### HSAs
+![HSAs 1](img/texas/all_states_faceted-127.png)
+![HSAs 2](img/texas/all_states_faceted-128.png)
+
+## Utah
+
+### Trends
+![Trends](img/utah/all_states_faceted-129.png)
+
+### HSA Map
+![HSA Map](img/utah/all_states_faceted-130.png)
+
+### HSAs
+![HSAs](img/utah/all_states_faceted-131.png)
+
+## Vermont
+
+### Trends
+![Trends](img/vermont/all_states_faceted-132.png)
+
+### HSA Map
+![HSA Map](img/vermont/all_states_faceted-133.png)
+
+### HSAs
+![HSAs](img/vermont/all_states_faceted-134.png)
+
+## Virgina
+
+### Trends
+![Trends 1](img/virginia/all_states_faceted-135.png)
+![Trends 2](img/virginia/all_states_faceted-136.png)
+
+### HSA Map
+![HSA Map](img/virginia/all_states_faceted-137.png)
+
+### HSAs
+![HSAs](img/virginia/all_states_faceted-138.png)
+
+## West Virginia
+
+### Trends
+![Trends 1](img/west-virginia/all_states_faceted-139.png)
+![Trends 2](img/west-virginia/all_states_faceted-140.png)
+
+### HSA Map
+![HSA Map](img/west-virginia/all_states_faceted-141.png)
+
+### HSAs
+![HSAs](img/west-virginia/all_states_faceted-142.png)
+
+## Wisconsin
+
+### Trends
+![Trends 1](img/wisconsin/all_states_faceted-143.png)
+![Trends 2](img/wisconsin/all_states_faceted-144.png)
+![Trends 3](img/wisconsin/all_states_faceted-145.png)
+
+### HSA Map
+![HSA Map](img/wisconsin/all_states_faceted-146.png)
+
+### HSAs
+![HSAs](img/wisconsin/all_states_faceted-147.png)
+
+## Wyoming
+
+### Trends
+![Trends 1](img/wyoming/all_states_faceted-148.png)
+
+### HSA Map
+![HSA Map](img/wyoming/all_states_faceted-149.png)
+
+### HSAs
+![HSAs](img/wyoming/all_states_faceted-150.png)
