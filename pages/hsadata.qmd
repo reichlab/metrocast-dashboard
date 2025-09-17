@@ -2,6 +2,8 @@
 title: "Data"
 format: 
   html: 
+    execute:
+    freeze: auto
     code-overflow: wrap
     embed-resources: true
     self-contained-math: true
@@ -33,26 +35,26 @@ NSSP data can be accessed through the [epidata API](https://cmu-delphi.github.io
 
 A vignette for using `epidatr` is available on [CRAN](https://cran.r-project.org/web/packages/epidatr/vignettes/epidatr.html).
 
-##```{r, message = FALSE}
+```{r, message = FALSE}
 library(epidatr)
 library(covidcast)
 ```
 
 Although the recommended way to pull data is with `epidatr`, we start by illustrating county-level data using the `covidcast` package's plotting functionality. The following plot shows reporting counties as of Jan. 12, 2025. Recall all counties in an HSA will have the same value as the parent HSA. 
 
-##```{r}
+```{r}
 nssp_county <- covidcast::covidcast_signal("nssp", "pct_ed_visits_influenza",
                                 geo_type = "county",
                                 time_type = "week")
 ```
 
-##```{r}
+```{r}
 plot(nssp_county, time_value = "2025-01-12")
 ```
 
 The following code uses the `epidatr` package to return county-level data, where `geo_value` is the FIPS code of the county. Again, the values returned for an individual county are really those of the parent HSA.
 
-##```{r, message = FALSE}
+```{r, message = FALSE}
 epidatr::pub_covidcast(source = "nssp", signals = "pct_ed_visits_influenza", geo_type = "county", geo_values = "25015", time_type = "week")
 ```
 
