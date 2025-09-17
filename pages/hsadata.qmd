@@ -40,19 +40,19 @@ library(covidcast)
 
 Although the recommended way to pull data is with `epidatr`, we start by illustrating county-level data using the `covidcast` package's plotting functionality. The following plot shows reporting counties as of Jan. 12, 2025. Recall all counties in an HSA will have the same value as the parent HSA. 
 
-```{r}
+##```{r}
 nssp_county <- covidcast::covidcast_signal("nssp", "pct_ed_visits_influenza",
                                 geo_type = "county",
                                 time_type = "week")
 ```
 
-```{r}
+##```{r}
 plot(nssp_county, time_value = "2025-01-12")
 ```
 
 The following code uses the `epidatr` package to return county-level data, where `geo_value` is the FIPS code of the county. Again, the values returned for an individual county are really those of the parent HSA.
 
-```{r, message = FALSE}
+##```{r, message = FALSE}
 epidatr::pub_covidcast(source = "nssp", signals = "pct_ed_visits_influenza", geo_type = "county", geo_values = "25015", time_type = "week")
 ```
 
@@ -62,7 +62,7 @@ Metro-level disease trends and forecasts may differ markedly from state and nati
 
 NSSP HSA-level data are **publicly available**, making it quicker and easier to expand forecasting efforts to additional jurisdictions that report these data. 
 
-A more detailed visual breakdown of HSAs for each state can be found [here](https://raw.githubusercontent.com/mmkerr/draft/main/all_states_faceted.pdf). This document also provides line plots for each state illustrating the difference between the percentage of ED visits for the state (grey line) vs. each individual HSA in that state (orange line). 
+A more detailed visual breakdown of HSAs for each state can be found [here](img/all_states.pdf). This document also provides line plots for each state illustrating the difference between the percentage of ED visits for the state (grey line) vs. each individual HSA in that state (orange line). 
 
 
 
