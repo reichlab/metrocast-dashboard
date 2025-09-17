@@ -33,7 +33,7 @@ NSSP data can be accessed through the [epidata API](https://cmu-delphi.github.io
 
 A vignette for using `epidatr` is available on [CRAN](https://cran.r-project.org/web/packages/epidatr/vignettes/epidatr.html).
 
-```{r, message = FALSE}
+##```{r, message = FALSE}
 library(epidatr)
 library(covidcast)
 ```
