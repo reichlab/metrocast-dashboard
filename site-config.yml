@@ -3,5 +3,4 @@ hub: "reichlab/flu-metrocast"
 title: "Flu MetroCast Hub"
 pages:
   - "datapage.qmd"
-include-files:
-  - files/**
+
