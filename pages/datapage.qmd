@@ -16,7 +16,7 @@ National Syndromic Surveillance Program (NSSP) data are collected by the U.S. Ce
 
 At the sub-state level, reporting facilities can be aggregated to the level of health service area (HSA). HSAs are single- or multi-county clusters that correspond with healthcare-seeking patterns. All publicly-available county-level NSSP data are really HSA values, such that each county in the HSA will have the same value as the parent HSA. 
 
-A list of HSAs can be downloaded [here](files/hsas.xls).
+A list of HSAs can be downloaded [here](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fmmkerr%2Fdraft%2Frefs%2Fheads%2Fmain%2FHealth.Service.Areas.xls&wdOrigin=BROWSELINK).
 
 ## Missingness
 
@@ -65,4 +65,7 @@ Metro-level disease trends and forecasts may differ markedly from state and nati
 
 NSSP HSA-level data are **publicly available**, making it quicker and easier to expand forecasting efforts to additional jurisdictions that report these data. 
 
-A more detailed visual breakdown of HSAs for each state can be found [here](files/states.pdf). This document also provides line plots for each state illustrating the difference between the percentage of ED visits for the state (grey line) vs. each individual HSA in that state (orange line).
+A more detailed visual breakdown of HSAs for each state can be found [here](https://raw.githubusercontent.com/mmkerr/draft/main/all_states_faceted.pdf). This document also provides line plots for each state illustrating the difference between the percentage of ED visits for the state (grey line) vs. each individual HSA in that state (orange line).
+
+
+
