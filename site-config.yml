@@ -1,4 +1,6 @@
 ---
 hub: "reichlab/flu-metrocast"
-title: "Flu MetroCast Hub" 
+title: "Flu MetroCast Hub"
+pages:
+  - "datapage.qmd"
 
