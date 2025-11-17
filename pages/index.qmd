@@ -5,7 +5,7 @@ title: "Introduction"
 
 This dashboard is part of the [epiENGAGE](https://epiengage.org) project, a CDC-funded collaboration involving over 20 research labs and public health departments dedicated to developing science-based tools and training programs that help local agencies detect, forecast, and respond to outbreaks more effectively. 
 
-This particular dashboard is designed for the [Flu Metrocast hub](https://github.com/reichlab/flu-metrocast/tree/main), a national platform enabling collaborative, city-level forecasting of influenza-related emergency department visits and hospital admissions.
+This particular dashboard is designed for the [Flu Metrocast hub](https://github.com/reichlab/flu-metrocast/tree/main), a national platform enabling collaborative, local-level forecasting of influenza-related emergency department visits and hospital admissions.
 
 ::: {style='display:flex; align-items: center; justify-content: center'}
 
@@ -25,15 +25,15 @@ This particular dashboard is designed for the [Flu Metrocast hub](https://github
 :::
 
 ::: column
-- Texas Metro Areas
-  - Target: Percentage of ED visits due to flu
-  - Data Source : CDC's [Emergency Department Visits for Viral Respiratory Illness](https://www.cdc.gov/respiratory-viruses/data/activity-levels.html)
-  - Target areas: These metro areas include both the named city and surrounding counties:
-    - Austin: Bastrop, Burnet, Lee, Llano, Travis, Williamson
-    - Houston: Austin, Chambers, Fort Bend, Harris, Liberty, Montgomery, San Jacinto, Waller
-    - Dallas: Collin, Dallas, Ellis, Hopkins, Hunt, Kaufman, Rains, Rockwall
-    - El Paso: Culberson, El Paso, Hudspeth, Loving
-    - San Antonio: Atascosa, Bandera, Bexar, Frio, Gonzales, Guadalupe, Kendall, La Salle, McMullen, Medina, Wilson, Zavala
+- Local Flu Activity Across U.S. Metro Regions
+  - Target: Percentage of ED visits due to flu  
+  - Data source: CDC's [Emergency Department Visits for Viral Respiratory Illness](https://www.cdc.gov/respiratory-viruses/data/activity-levels.html)
+  - Target areas: 51 metropolitan Health Service Areas (HSAs) across Colorado, Georgia, Indiana, Maine, Maryland, Massachusetts, Minnesota, South Carolina, Texas, Utah, and Virginia.  
+  A full list of included HSAs is available [here](https://github.com/reichlab/flu-metrocast/blob/main/auxiliary-data/locations.csv).
+    - Note: These HSAs include a central city and its surrounding counties, and we include all HSAs with populations of at least 250,000 (with the exception of Massachusetts).
+
+
+
     
 :::
 :::
