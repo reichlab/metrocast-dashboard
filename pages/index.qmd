@@ -14,7 +14,7 @@ This particular dashboard is designed for the [Flu Metrocast hub](https://github
 :::
 
 
-## Current Metro Areas
+## Metro Areas for the 2025–26 Season
 ::: columns
 ::: column
 - New York city
