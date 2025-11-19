@@ -1,9 +1,9 @@
 {
     "target_variables": [
         {
-            "value": "ILI ED visits",
-            "text": "ED visits due to ILI",
-            "plot_text": "ED visits due to ILI"
+            "value": "ILI ED visits pct",
+            "text": "Percentage of ED visits due to ILI",
+            "plot_text": "Percentage of ED visits due to ILI"
         },
         {
             "value": "Flu ED visits pct",
@@ -11,63 +11,271 @@
             "plot_text": "Percentage of ED visits due to influenza"
         }
     ],
-    "initial_target_var": "ILI ED visits",
+    "initial_target_var": "ILI ED visits pct",
     "task_ids": {
-        "ILI ED visits": {
+        "ILI ED visits pct": {
             "location": [
                 {
-                    "value": "NYC",
-                    "text": "NYC"
-                },
-                {
-                    "value": "Bronx",
-                    "text": "Bronx"
-                },
-                {
-                    "value": "Brooklyn",
-                    "text": "Brooklyn"
-                },
-                {
-                    "value": "Manhattan",
-                    "text": "Manhattan"
-                },
-                {
-                    "value": "Queens",
-                    "text": "Queens"
-                },
-                {
-                    "value": "Staten Island",
-                    "text": "Staten Island"
+                    "value": "nyc",
+                    "text": "nyc"
                 }
             ]
         },
         "Flu ED visits pct": {
             "location": [
                 {
-                    "value": "Austin",
-                    "text": "Austin"
+                    "value": "denver",
+                    "text": "denver"
                 },
                 {
-                    "value": "Houston",
-                    "text": "Houston"
+                    "value": "mesa",
+                    "text": "mesa"
                 },
                 {
-                    "value": "Dallas",
-                    "text": "Dallas"
+                    "value": "colorado-springs",
+                    "text": "colorado-springs"
                 },
                 {
-                    "value": "El Paso",
-                    "text": "El Paso"
+                    "value": "weld",
+                    "text": "weld"
                 },
                 {
-                    "value": "San Antonio",
-                    "text": "San Antonio"
+                    "value": "boulder",
+                    "text": "boulder"
+                },
+                {
+                    "value": "larimer",
+                    "text": "larimer"
+                },
+                {
+                    "value": "colorado",
+                    "text": "colorado"
+                },
+                {
+                    "value": "savannah",
+                    "text": "savannah"
+                },
+                {
+                    "value": "floyd",
+                    "text": "floyd"
+                },
+                {
+                    "value": "hall",
+                    "text": "hall"
+                },
+                {
+                    "value": "marietta",
+                    "text": "marietta"
+                },
+                {
+                    "value": "macon",
+                    "text": "macon"
+                },
+                {
+                    "value": "henry",
+                    "text": "henry"
+                },
+                {
+                    "value": "cherokee",
+                    "text": "cherokee"
+                },
+                {
+                    "value": "athens",
+                    "text": "athens"
+                },
+                {
+                    "value": "south-augusta",
+                    "text": "south-augusta"
+                },
+                {
+                    "value": "columbus",
+                    "text": "columbus"
+                },
+                {
+                    "value": "la-grange",
+                    "text": "la-grange"
+                },
+                {
+                    "value": "georgia",
+                    "text": "georgia"
+                },
+                {
+                    "value": "indianapolis",
+                    "text": "indianapolis"
+                },
+                {
+                    "value": "indiana",
+                    "text": "indiana"
+                },
+                {
+                    "value": "bangor",
+                    "text": "bangor"
+                },
+                {
+                    "value": "portland",
+                    "text": "portland"
+                },
+                {
+                    "value": "maine",
+                    "text": "maine"
+                },
+                {
+                    "value": "baltimore",
+                    "text": "baltimore"
+                },
+                {
+                    "value": "frederick",
+                    "text": "frederick"
+                },
+                {
+                    "value": "montgomery",
+                    "text": "montgomery"
+                },
+                {
+                    "value": "harford",
+                    "text": "harford"
+                },
+                {
+                    "value": "maryland",
+                    "text": "maryland"
+                },
+                {
+                    "value": "worcester",
+                    "text": "worcester"
+                },
+                {
+                    "value": "pittsfield",
+                    "text": "pittsfield"
+                },
+                {
+                    "value": "boston",
+                    "text": "boston"
+                },
+                {
+                    "value": "springfield",
+                    "text": "springfield"
+                },
+                {
+                    "value": "new-bedford",
+                    "text": "new-bedford"
+                },
+                {
+                    "value": "lynn",
+                    "text": "lynn"
+                },
+                {
+                    "value": "massachusetts",
+                    "text": "massachusetts"
+                },
+                {
+                    "value": "st-paul",
+                    "text": "st-paul"
+                },
+                {
+                    "value": "duluth",
+                    "text": "duluth"
+                },
+                {
+                    "value": "minneapolis",
+                    "text": "minneapolis"
+                },
+                {
+                    "value": "st-cloud",
+                    "text": "st-cloud"
+                },
+                {
+                    "value": "rochester",
+                    "text": "rochester"
+                },
+                {
+                    "value": "minnesota",
+                    "text": "minnesota"
+                },
+                {
+                    "value": "columbia",
+                    "text": "columbia"
+                },
+                {
+                    "value": "greenville",
+                    "text": "greenville"
+                },
+                {
+                    "value": "florence",
+                    "text": "florence"
+                },
+                {
+                    "value": "charleston",
+                    "text": "charleston"
+                },
+                {
+                    "value": "rock-hill",
+                    "text": "rock-hill"
+                },
+                {
+                    "value": "horry",
+                    "text": "horry"
+                },
+                {
+                    "value": "south-carolina",
+                    "text": "south-carolina"
+                },
+                {
+                    "value": "houston",
+                    "text": "houston"
+                },
+                {
+                    "value": "san-antonio",
+                    "text": "san-antonio"
+                },
+                {
+                    "value": "beaumont",
+                    "text": "beaumont"
+                },
+                {
+                    "value": "el-paso",
+                    "text": "el-paso"
+                },
+                {
+                    "value": "austin",
+                    "text": "austin"
+                },
+                {
+                    "value": "dallas",
+                    "text": "dallas"
+                },
+                {
+                    "value": "texas",
+                    "text": "texas"
+                },
+                {
+                    "value": "provo",
+                    "text": "provo"
+                },
+                {
+                    "value": "salt-lake-city",
+                    "text": "salt-lake-city"
+                },
+                {
+                    "value": "ogden",
+                    "text": "ogden"
+                },
+                {
+                    "value": "utah",
+                    "text": "utah"
+                },
+                {
+                    "value": "roanoke",
+                    "text": "roanoke"
+                },
+                {
+                    "value": "virginia",
+                    "text": "virginia"
                 }
             ]
         }
     },
     "initial_task_ids": {
-        "location": "NYC"
+        "location": "nyc"
     },
     "intervals": [
         "0%",
@@ -76,48 +284,15 @@
     ],
     "initial_interval": "95%",
     "available_as_ofs": {
-        "ILI ED visits": [
-            "2025-01-25",
-            "2025-02-01",
-            "2025-02-08",
-            "2025-02-15",
-            "2025-02-22",
-            "2025-03-01",
-            "2025-03-08",
-            "2025-03-15",
-            "2025-03-22",
-            "2025-03-29",
-            "2025-04-05",
-            "2025-04-12",
-            "2025-04-19",
-            "2025-04-26",
-            "2025-05-03",
-            "2025-05-10",
-            "2025-05-17",
-            "2025-05-24"
+        "ILI ED visits pct": [
+            "2025-11-22"
         ],
         "Flu ED visits pct": [
-            "2025-02-01",
-            "2025-02-08",
-            "2025-02-15",
-            "2025-02-22",
-            "2025-03-01",
-            "2025-03-08",
-            "2025-03-15",
-            "2025-03-22",
-            "2025-03-29",
-            "2025-04-05",
-            "2025-04-12",
-            "2025-04-19",
-            "2025-04-26",
-            "2025-05-03",
-            "2025-05-10",
-            "2025-05-17",
-            "2025-05-24"
+            "2025-11-22"
         ]
     },
-    "initial_as_of": "2025-05-24",
-    "current_date": "2025-05-24",
+    "initial_as_of": "2025-11-22",
+    "current_date": "2025-11-22",
     "models": [
         "epiENGAGE-Copycat",
         "epiENGAGE-GBQR",
