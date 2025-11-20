@@ -294,6 +294,7 @@
     "initial_as_of": "2025-11-22",
     "current_date": "2025-11-22",
     "models": [
+        "VTSanghani-PRIME",
         "epiENGAGE-Copycat",
         "epiENGAGE-GBQR",
         "epiENGAGE-INFLAenza",
@@ -307,6 +308,7 @@
     ],
     "model_urls": {
         "epiENGAGE-ensemble_mean": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-ensemble_mean.yml",
+        "VTSanghani-PRIME": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/VTSanghani-PRIME.yml",
         "epiENGAGE-baseline": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-baseline.yml",
         "epiENGAGE-lop_norm": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-lop_norm.yml",
         "epiforecasts-dyngam": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiforecasts-dyngam.yml",
