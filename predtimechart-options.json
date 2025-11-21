@@ -17,7 +17,7 @@
             "location": [
                 {
                     "value": "nyc",
-                    "text": "nyc"
+                    "text": "NYC"
                 }
             ]
         },
@@ -25,251 +25,283 @@
             "location": [
                 {
                     "value": "denver",
-                    "text": "denver"
+                    "text": "Denver, CO"
                 },
                 {
                     "value": "mesa",
-                    "text": "mesa"
+                    "text": "Mesa, CO"
                 },
                 {
                     "value": "colorado-springs",
-                    "text": "colorado-springs"
+                    "text": "Colorado Springs, CO"
                 },
                 {
                     "value": "weld",
-                    "text": "weld"
+                    "text": "Weld, CO"
                 },
                 {
                     "value": "boulder",
-                    "text": "boulder"
+                    "text": "Boulder, CO"
                 },
                 {
                     "value": "larimer",
-                    "text": "larimer"
+                    "text": "Larimer, CO"
                 },
                 {
                     "value": "colorado",
-                    "text": "colorado"
+                    "text": "Colorado"
                 },
                 {
                     "value": "savannah",
-                    "text": "savannah"
+                    "text": "Savannah, GA"
                 },
                 {
                     "value": "floyd",
-                    "text": "floyd"
+                    "text": "Floyd, GA"
                 },
                 {
                     "value": "hall",
-                    "text": "hall"
+                    "text": "Hall, GA"
                 },
                 {
                     "value": "marietta",
-                    "text": "marietta"
+                    "text": "Marietta, GA"
                 },
                 {
                     "value": "macon",
-                    "text": "macon"
+                    "text": "Macon, GA"
                 },
                 {
                     "value": "henry",
-                    "text": "henry"
+                    "text": "Henry, GA"
                 },
                 {
                     "value": "cherokee",
-                    "text": "cherokee"
+                    "text": "Cherokee, GA"
                 },
                 {
                     "value": "athens",
-                    "text": "athens"
+                    "text": "Athens, GA"
                 },
                 {
                     "value": "south-augusta",
-                    "text": "south-augusta"
+                    "text": "South Augusta, GA"
                 },
                 {
                     "value": "columbus",
-                    "text": "columbus"
+                    "text": "Columbus, GA"
                 },
                 {
                     "value": "la-grange",
-                    "text": "la-grange"
+                    "text": "La Grange, GA"
                 },
                 {
                     "value": "georgia",
-                    "text": "georgia"
+                    "text": "Georgia"
                 },
                 {
                     "value": "indianapolis",
-                    "text": "indianapolis"
+                    "text": "Indianapolis, IN"
                 },
                 {
                     "value": "indiana",
-                    "text": "indiana"
+                    "text": "Indiana"
                 },
                 {
                     "value": "bangor",
-                    "text": "bangor"
+                    "text": "Bangor, ME"
                 },
                 {
                     "value": "portland",
-                    "text": "portland"
+                    "text": "Portland, ME"
                 },
                 {
                     "value": "maine",
-                    "text": "maine"
+                    "text": "Maine"
                 },
                 {
                     "value": "baltimore",
-                    "text": "baltimore"
+                    "text": "Baltimore, MD"
                 },
                 {
                     "value": "frederick",
-                    "text": "frederick"
+                    "text": "Frederick, MD"
                 },
                 {
                     "value": "montgomery",
-                    "text": "montgomery"
+                    "text": "Montgomery, MD"
                 },
                 {
                     "value": "harford",
-                    "text": "harford"
+                    "text": "Harford, MD"
                 },
                 {
                     "value": "maryland",
-                    "text": "maryland"
+                    "text": "Maryland"
                 },
                 {
                     "value": "worcester",
-                    "text": "worcester"
+                    "text": "Worcester, MA"
                 },
                 {
                     "value": "pittsfield",
-                    "text": "pittsfield"
+                    "text": "Pittsfield, MA"
                 },
                 {
                     "value": "boston",
-                    "text": "boston"
+                    "text": "Boston, MA"
                 },
                 {
                     "value": "springfield",
-                    "text": "springfield"
+                    "text": "Springfield, MA"
                 },
                 {
                     "value": "new-bedford",
-                    "text": "new-bedford"
+                    "text": "New Bedford, MA"
                 },
                 {
                     "value": "lynn",
-                    "text": "lynn"
+                    "text": "Lynn, MA"
                 },
                 {
                     "value": "massachusetts",
-                    "text": "massachusetts"
+                    "text": "Massachusetts"
                 },
                 {
                     "value": "st-paul",
-                    "text": "st-paul"
+                    "text": "St. Paul, MN"
                 },
                 {
                     "value": "duluth",
-                    "text": "duluth"
+                    "text": "Duluth, MN"
                 },
                 {
                     "value": "minneapolis",
-                    "text": "minneapolis"
+                    "text": "Minneapolis, MN"
                 },
                 {
                     "value": "st-cloud",
-                    "text": "st-cloud"
+                    "text": "St. Cloud, MN"
                 },
                 {
                     "value": "rochester",
-                    "text": "rochester"
+                    "text": "Rochester, MN"
                 },
                 {
                     "value": "minnesota",
-                    "text": "minnesota"
+                    "text": "Minnesota"
                 },
                 {
                     "value": "columbia",
-                    "text": "columbia"
+                    "text": "Columbia, SC"
                 },
                 {
                     "value": "greenville",
-                    "text": "greenville"
+                    "text": "Greenville, SC"
                 },
                 {
                     "value": "florence",
-                    "text": "florence"
+                    "text": "Florence, SC"
                 },
                 {
                     "value": "charleston",
-                    "text": "charleston"
+                    "text": "Charleston, SC"
                 },
                 {
                     "value": "rock-hill",
-                    "text": "rock-hill"
+                    "text": "Rock Hill, SC"
                 },
                 {
                     "value": "horry",
-                    "text": "horry"
+                    "text": "Horry, SC"
                 },
                 {
                     "value": "south-carolina",
-                    "text": "south-carolina"
+                    "text": "South Carolina"
                 },
                 {
                     "value": "houston",
-                    "text": "houston"
+                    "text": "Houston, TX"
                 },
                 {
                     "value": "san-antonio",
-                    "text": "san-antonio"
+                    "text": "San Antonio, TX"
                 },
                 {
                     "value": "beaumont",
-                    "text": "beaumont"
+                    "text": "Beaumont, TX"
                 },
                 {
                     "value": "el-paso",
-                    "text": "el-paso"
+                    "text": "El Paso, TX"
                 },
                 {
                     "value": "austin",
-                    "text": "austin"
+                    "text": "Austin, TX"
                 },
                 {
                     "value": "dallas",
-                    "text": "dallas"
+                    "text": "Dallas, TX"
                 },
                 {
                     "value": "texas",
-                    "text": "texas"
+                    "text": "Texas"
                 },
                 {
                     "value": "provo",
-                    "text": "provo"
+                    "text": "Provo, UT"
                 },
                 {
                     "value": "salt-lake-city",
-                    "text": "salt-lake-city"
+                    "text": "Salt Lake City, UT"
                 },
                 {
                     "value": "ogden",
-                    "text": "ogden"
+                    "text": "Ogden, UT"
                 },
                 {
                     "value": "utah",
-                    "text": "utah"
+                    "text": "Utah"
                 },
                 {
                     "value": "roanoke",
-                    "text": "roanoke"
+                    "text": "Roanoke, VA"
                 },
                 {
                     "value": "virginia",
-                    "text": "virginia"
+                    "text": "Virginia"
+                },
+                {
+                    "value": "nenc",
+                    "text": "Northeastern, NC"
+                },
+                {
+                    "value": "senc",
+                    "text": "Southeastern, NC"
+                },
+                {
+                    "value": "fay-area",
+                    "text": "Fayetteville Area, NC"
+                },
+                {
+                    "value": "rtp-area",
+                    "text": "Research Triangle Park Area, NC"
+                },
+                {
+                    "value": "triad-area",
+                    "text": "Triad Area, NC"
+                },
+                {
+                    "value": "wnc",
+                    "text": "Western, NC"
+                },
+                {
+                    "value": "clt-area",
+                    "text": "Charolette Area, NC"
+                },
+                {
+                    "value": "north-carolina",
+                    "text": "North Carolina"
                 }
             ]
         }
@@ -318,7 +350,7 @@
     },
     "disclaimer": "Observed counts are aggregated by week and predictions are made for each week. Dates associated with specific data points reflect the last day (Saturday) of the week.",
     "initial_xaxis_range": [
-        "2024-08-01",
-        "2025-07-01"
+        "2025-08-01",
+        "2026-07-01"
     ]
 }
