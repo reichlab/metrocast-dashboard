@@ -71,9 +71,9 @@ A more detailed visual breakdown of HSAs for each state can be found [here](http
 
 ## Information for Modelers
 
-The [latest-data.csv file in the Flu MetroCast Hub repository](https://github.com/reichlab/flu-metrocast/blob/main/target-data/latest-data.csv) provides data that modelers can use to fit a model. Latest-data is specially formatted target data that includes the most up-to-date values for all dates for which target data is available, not just dates corresponding to the subset of target_end_dates for which the Hub provides forecasts.
+The `latest-data.csv` file in the [Flu MetroCast Hub target data directory](https://github.com/reichlab/flu-metrocast/blob/main/target-data/latest-data.csv) provides data that modelers can use to fit a model. `Latest-data` is specially formatted target data that includes the most up-to-date values for all dates for which target data is available, not just dates corresponding to the subset of target_end_dates for which the Hub provides forecasts.
 
-Latest-data is the best source for modelers to get a single version of the target data with only the most recent observations, and including all historical data available from past seasons.
+`Latest-data` is the best source for modelers to get a single version of the target data with only the most recent observations, and including all historical data available from past seasons.
 
 
 
