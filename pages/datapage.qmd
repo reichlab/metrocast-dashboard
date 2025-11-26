@@ -18,6 +18,8 @@ At the sub-state level, reporting facilities can be aggregated to the level of h
 
 A list of HSAs can be downloaded [here](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fmmkerr%2Fdraft%2Frefs%2Fheads%2Fmain%2FHealth.Service.Areas.xls&wdOrigin=BROWSELINK).
 
+NSSP surveillance data at the HSA level can be [downloaded from the CDC](https://data.cdc.gov/Public-Health-Surveillance/NSSP-Emergency-Department-Visit-Trajectories-by-St/rdmq-nq56/about_data). 
+
 ## Missingness
 
 There is substantial missingness at the county level, especially for rural and lower-population locations.
@@ -66,6 +68,12 @@ Metro-level disease trends and forecasts may differ markedly from state and nati
 NSSP HSA-level data are **publicly available**, making it quicker and easier to expand forecasting efforts to additional jurisdictions that report these data. 
 
 A more detailed visual breakdown of HSAs for each state can be found [here](https://raw.githubusercontent.com/mmkerr/draft/main/all_states_faceted.pdf). This document also provides line plots for each state illustrating the difference between the percentage of ED visits for the state (grey line) vs. each individual HSA in that state (orange line).
+
+## Information for Modelers
+
+The `latest-data.csv` file in the [Flu MetroCast Hub target data directory](https://github.com/reichlab/flu-metrocast/blob/main/target-data/latest-data.csv) provides data that modelers can use to fit a model. `Latest-data` is specially formatted target data that includes the most up-to-date values for all dates for which target data is available, not just dates corresponding to the subset of target_end_dates for which the Hub provides forecasts.
+
+`Latest-data` is the best source for modelers to get a single version of the target data with only the most recent observations, and including all historical data available from past seasons.
 
 
 

@@ -5,7 +5,7 @@ title: "Introduction"
 
 This dashboard is part of the [epiENGAGE](https://epiengage.org) project, a CDC-funded collaboration involving over 20 research labs and public health departments dedicated to developing science-based tools and training programs that help local agencies detect, forecast, and respond to outbreaks more effectively. 
 
-This particular dashboard is designed for the [Flu Metrocast hub](https://github.com/reichlab/flu-metrocast/tree/main), a national platform enabling collaborative, local-level forecasting of influenza-related emergency department visits and hospital admissions.
+This particular dashboard is designed for the [Flu MetroCast hub](https://github.com/reichlab/flu-metrocast/tree/main), a national platform enabling collaborative, local-level forecasting of influenza-related emergency department visits and hospital admissions.
 
 ::: {style='display:flex; align-items: center; justify-content: center'}
 
@@ -17,7 +17,7 @@ This particular dashboard is designed for the [Flu Metrocast hub](https://github
 ## Current Metro Areas
 ::: columns
 ::: column
-- New York city
+- New York City
   - Target: Percent of ED visit due to ILI (Influenza-like Illness) 
   - Data source : [New York City Department of Health and Mental Hygiene](https://a816-health.nyc.gov/hdi/epiquery/visualizations?PageType=ps&PopulationSource=Syndromic)
   - Target areas: NYC (citywide)
@@ -27,12 +27,20 @@ This particular dashboard is designed for the [Flu Metrocast hub](https://github
 ::: column
 - Local Flu Activity Across U.S. Metro Areas
   - Target: Percentage of ED visits due to flu
-  - Data Source : CDC's [Emergency Department Visits for Viral Respiratory Illness](https://www.cdc.gov/respiratory-viruses/data/activity-levels.html)
+  - Data Source : CDC's [Emergency Department Visits for Viral Respiratory Illness](https://data.cdc.gov/Public-Health-Surveillance/NSSP-Emergency-Department-Visit-Trajectories-by-St/rdmq-nq56/about_data)
   - Target areas:  51 metropolitan Health Service Areas (HSAs) across Colorado, Georgia, Indiana, Maine, Maryland, Massachusetts, Minnesota, South Carolina, Texas, Utah, and Virginia.  
   A full list of included HSAs is available [here](https://github.com/reichlab/flu-metrocast/blob/main/auxiliary-data/locations.csv).
   - Note: These HSAs include a central city and its surrounding counties, and we include all HSAs with populations of at least 250,000 (with the exception of Massachusetts).
     
 :::
+
+::: column
+- North Carolina
+  - Target: Percentage of ED visits due to flu
+  - Data Source: [North Carolina Division of Public Health's (NC DPH) statewide syndromic surveillance system](https://www.dph.ncdhhs.gov/)
+  - Target areas: 7 geographic regions comprised of adjacent counties
+:::
+
 :::
     
 ##  Models Included
@@ -45,4 +53,10 @@ This particular dashboard is designed for the [Flu Metrocast hub](https://github
 - epiENGAGE-ensemble_mean : An equally weighted mean ensemble that takes the mean at each quantile level of all eligible forecasts
 - epiENGAGE-log_norm : Linear pool (a.k.a. distributional mixture) ensemble of quantile forecast submissions.
 
+## Information for Modelers
 
+Anyone interested in submitting a model should review the guidelines for the 2025/2026 season on the [Flu MetroCast Hub repository](https://github.com/reichlab/flu-metrocast). 
+
+The `latest-data.csv` file in the [Flu MetroCast Hub target data directory](https://github.com/reichlab/flu-metrocast/blob/main/target-data/latest-data.csv) provides data that modelers can use to fit a model. `Latest-data` is specially formatted target data that includes the most up-to-date values for all dates for which target data is available, not just dates corresponding to the subset of target_end_dates for which the Hub provides forecasts.
+
+`Latest-data` is the best source for modelers to get a single version of the target data with only the most recent observations, and including all historical data available from past seasons.
