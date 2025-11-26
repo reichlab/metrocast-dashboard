@@ -27,7 +27,7 @@ This particular dashboard is designed for the [Flu Metrocast hub](https://github
 ::: column
 - Local Flu Activity Across U.S. Metro Areas
   - Target: Percentage of ED visits due to flu
-  - Data Source : CDC's [Emergency Department Visits for Viral Respiratory Illness](https://www.cdc.gov/respiratory-viruses/data/activity-levels.html)
+  - Data Source : CDC's [Emergency Department Visits for Viral Respiratory Illness](https://data.cdc.gov/Public-Health-Surveillance/NSSP-Emergency-Department-Visit-Trajectories-by-St/rdmq-nq56/about_data)
   - Target areas:  51 metropolitan Health Service Areas (HSAs) across Colorado, Georgia, Indiana, Maine, Maryland, Massachusetts, Minnesota, South Carolina, Texas, Utah, and Virginia.  
   A full list of included HSAs is available [here](https://github.com/reichlab/flu-metrocast/blob/main/auxiliary-data/locations.csv).
   - Note: These HSAs include a central city and its surrounding counties, and we include all HSAs with populations of at least 250,000 (with the exception of Massachusetts).
