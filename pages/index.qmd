@@ -17,7 +17,7 @@ This particular dashboard is designed for the [Flu Metrocast hub](https://github
 ## Current Metro Areas
 ::: columns
 ::: column
-- New York city
+- New York City
   - Target: Percent of ED visit due to ILI (Influenza-like Illness) 
   - Data source : [New York City Department of Health and Mental Hygiene](https://a816-health.nyc.gov/hdi/epiquery/visualizations?PageType=ps&PopulationSource=Syndromic)
   - Target areas: NYC (citywide)
@@ -33,6 +33,14 @@ This particular dashboard is designed for the [Flu Metrocast hub](https://github
   - Note: These HSAs include a central city and its surrounding counties, and we include all HSAs with populations of at least 250,000 (with the exception of Massachusetts).
     
 :::
+
+::: column
+- North Carolina
+  - Target: Percentage of ED visits due to flu
+  - Data Source: [North Carolina Division of Public Health's (NC DPH) statewide syndromic surveillance system](https://www.dph.ncdhhs.gov/)
+  - Target areas: 7 geographic regions comprised of adjacent counties
+:::
+
 :::
     
 ##  Models Included
