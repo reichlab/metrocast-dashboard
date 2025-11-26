@@ -18,6 +18,8 @@ At the sub-state level, reporting facilities can be aggregated to the level of h
 
 A list of HSAs can be downloaded [here](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Fmmkerr%2Fdraft%2Frefs%2Fheads%2Fmain%2FHealth.Service.Areas.xls&wdOrigin=BROWSELINK).
 
+NSSP surveillance data at the HSA level can be [downloaded from the CDC](https://data.cdc.gov/Public-Health-Surveillance/NSSP-Emergency-Department-Visit-Trajectories-by-St/rdmq-nq56/about_data). 
+
 ## Missingness
 
 There is substantial missingness at the county level, especially for rural and lower-population locations.
