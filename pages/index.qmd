@@ -5,7 +5,7 @@ title: "Introduction"
 
 This dashboard is part of the [epiENGAGE](https://epiengage.org) project, a CDC-funded collaboration involving over 20 research labs and public health departments dedicated to developing science-based tools and training programs that help local agencies detect, forecast, and respond to outbreaks more effectively. 
 
-This particular dashboard is designed for the [Flu Metrocast hub](https://github.com/reichlab/flu-metrocast/tree/main), a national platform enabling collaborative, local-level forecasting of influenza-related emergency department visits and hospital admissions.
+This particular dashboard is designed for the [Flu MetroCast hub](https://github.com/reichlab/flu-metrocast/tree/main), a national platform enabling collaborative, local-level forecasting of influenza-related emergency department visits and hospital admissions.
 
 ::: {style='display:flex; align-items: center; justify-content: center'}
 
@@ -53,4 +53,10 @@ This particular dashboard is designed for the [Flu Metrocast hub](https://github
 - epiENGAGE-ensemble_mean : An equally weighted mean ensemble that takes the mean at each quantile level of all eligible forecasts
 - epiENGAGE-log_norm : Linear pool (a.k.a. distributional mixture) ensemble of quantile forecast submissions.
 
+## Information for Modelers
 
+Anyone interested in submitting a model should review our guideline for the 2025/2025 season the [Flu MetroCast Hub repository](https://github.com/reichlab/flu-metrocast). 
+
+The [latest-data.csv file in the Flu MetroCast Hub repository](https://github.com/reichlab/flu-metrocast/blob/main/target-data/latest-data.csv) provides data that modelers can use to fit a model. Latest-data is specially formatted target data that includes the most up-to-date values for all dates for which target data is available, not just dates corresponding to the subset of target_end_dates for which the Hub provides forecasts.
+
+Latest-data is the best source for modelers to get a single version of the target data with only the most recent observations, and including all historical data available from past seasons.
