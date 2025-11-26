@@ -55,7 +55,7 @@ This particular dashboard is designed for the [Flu MetroCast hub](https://github
 
 ## Information for Modelers
 
-Anyone interested in submitting a model should review our guidelines for the 2025/2025 season on the [Flu MetroCast Hub repository](https://github.com/reichlab/flu-metrocast). 
+Anyone interested in submitting a model should review the guidelines for the 2025/2026 season on the [Flu MetroCast Hub repository](https://github.com/reichlab/flu-metrocast). 
 
 The `latest-data.csv` file in the [Flu MetroCast Hub target data directory](https://github.com/reichlab/flu-metrocast/blob/main/target-data/latest-data.csv) provides data that modelers can use to fit a model. `Latest-data` is specially formatted target data that includes the most up-to-date values for all dates for which target data is available, not just dates corresponding to the subset of target_end_dates for which the Hub provides forecasts.
 
