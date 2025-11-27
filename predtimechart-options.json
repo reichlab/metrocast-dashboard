@@ -317,14 +317,16 @@
     "initial_interval": "95%",
     "available_as_ofs": {
         "ILI ED visits pct": [
-            "2025-11-22"
+            "2025-11-22",
+            "2025-11-29"
         ],
         "Flu ED visits pct": [
-            "2025-11-22"
+            "2025-11-22",
+            "2025-11-29"
         ]
     },
-    "initial_as_of": "2025-11-22",
-    "current_date": "2025-11-22",
+    "initial_as_of": "2025-11-29",
+    "current_date": "2025-11-29",
     "models": [
         "VTSanghani-PRIME",
         "epiENGAGE-Copycat",
