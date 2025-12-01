@@ -328,12 +328,12 @@
     "initial_as_of": "2025-11-29",
     "current_date": "2025-11-29",
     "models": [
+        "epiENGAGE-ensemble_mean",
         "VTSanghani-PRIME",
         "epiENGAGE-Copycat",
         "epiENGAGE-GBQR",
         "epiENGAGE-INFLAenza",
         "epiENGAGE-baseline",
-        "epiENGAGE-ensemble_mean",
         "epiENGAGE-lop_norm",
         "epiforecasts-dyngam"
     ],
