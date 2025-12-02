@@ -78,7 +78,7 @@ task_id_text:
     "rtp-area": "Research Triangle Park Area, NC"
     "triad-area": "Triad Area, NC"
     "wnc": "Western, NC"
-    "clt-area": "Charolette Area, NC"
+    "clt-area": "Charlotte Area, NC"
     "north-carolina": "North Carolina"
 
 #target_data_file_name:  # this hub uses the default time-series target data: "target-data/time-series.csv"
