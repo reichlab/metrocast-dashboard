@@ -337,6 +337,7 @@
         "epiENGAGE-ensemble_mean",
         "UMass-SAR",
         "UMass-alloy",
+        "UT-GBQR",
         "VTSanghani-PRIME",
         "epiENGAGE-Copycat",
         "epiENGAGE-GBQR",
@@ -356,6 +357,7 @@
         "epiforecasts-dyngam": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiforecasts-dyngam.yml",
         "UMass-SAR": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/UMass-SAR.yml",
         "epiENGAGE-INFLAenza": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-INFLAenza.yml",
+        "UT-GBQR": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/UT-GBQR.yml",
         "UMass-alloy": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/UMass-alloy.yml",
         "epiENGAGE-GBQR": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-GBQR.yml",
         "epiENGAGE-Copycat": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-Copycat.yml"
