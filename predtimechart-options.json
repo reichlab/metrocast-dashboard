@@ -302,6 +302,30 @@
                 {
                     "value": "north-carolina",
                     "text": "North Carolina"
+                },
+                {
+                    "value": "portland-or",
+                    "text": "portland-or"
+                },
+                {
+                    "value": "salem",
+                    "text": "salem"
+                },
+                {
+                    "value": "deschutes",
+                    "text": "deschutes"
+                },
+                {
+                    "value": "eugene",
+                    "text": "eugene"
+                },
+                {
+                    "value": "medford",
+                    "text": "medford"
+                },
+                {
+                    "value": "oregon",
+                    "text": "oregon"
                 }
             ]
         }
@@ -324,7 +348,8 @@
             "2025-12-20",
             "2025-12-27",
             "2026-01-03",
-            "2026-01-10"
+            "2026-01-10",
+            "2026-01-17"
         ],
         "Flu ED visits pct": [
             "2025-11-22",
@@ -334,11 +359,12 @@
             "2025-12-20",
             "2025-12-27",
             "2026-01-03",
-            "2026-01-10"
+            "2026-01-10",
+            "2026-01-17"
         ]
     },
-    "initial_as_of": "2026-01-10",
-    "current_date": "2026-01-10",
+    "initial_as_of": "2026-01-17",
+    "current_date": "2026-01-17",
     "models": [
         "epiENGAGE-ensemble_mean",
         "NAU-Copycat",
