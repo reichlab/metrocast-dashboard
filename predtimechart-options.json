@@ -192,6 +192,62 @@
                     "text": "Minnesota"
                 },
                 {
+                    "value": "nenc",
+                    "text": "Northeastern, NC"
+                },
+                {
+                    "value": "senc",
+                    "text": "Southeastern, NC"
+                },
+                {
+                    "value": "fay-area",
+                    "text": "Fayetteville Area, NC"
+                },
+                {
+                    "value": "rtp-area",
+                    "text": "Research Triangle Park Area, NC"
+                },
+                {
+                    "value": "triad-area",
+                    "text": "Triad Area, NC"
+                },
+                {
+                    "value": "wnc",
+                    "text": "Western, NC"
+                },
+                {
+                    "value": "clt-area",
+                    "text": "Charlotte Area, NC"
+                },
+                {
+                    "value": "north-carolina",
+                    "text": "North Carolina"
+                },
+                {
+                    "value": "portland-or",
+                    "text": "portland-or"
+                },
+                {
+                    "value": "salem",
+                    "text": "salem"
+                },
+                {
+                    "value": "deschutes",
+                    "text": "deschutes"
+                },
+                {
+                    "value": "eugene",
+                    "text": "eugene"
+                },
+                {
+                    "value": "medford",
+                    "text": "medford"
+                },
+                {
+                    "value": "oregon",
+                    "text": "oregon"
+                },
+                {
                     "value": "columbia",
                     "text": "Columbia, SC"
                 },
@@ -270,62 +326,6 @@
                 {
                     "value": "virginia",
                     "text": "Virginia"
-                },
-                {
-                    "value": "nenc",
-                    "text": "Northeastern, NC"
-                },
-                {
-                    "value": "senc",
-                    "text": "Southeastern, NC"
-                },
-                {
-                    "value": "fay-area",
-                    "text": "Fayetteville Area, NC"
-                },
-                {
-                    "value": "rtp-area",
-                    "text": "Research Triangle Park Area, NC"
-                },
-                {
-                    "value": "triad-area",
-                    "text": "Triad Area, NC"
-                },
-                {
-                    "value": "wnc",
-                    "text": "Western, NC"
-                },
-                {
-                    "value": "clt-area",
-                    "text": "Charlotte Area, NC"
-                },
-                {
-                    "value": "north-carolina",
-                    "text": "North Carolina"
-                },
-                {
-                    "value": "portland-or",
-                    "text": "Portland, OR"
-                },
-                {
-                    "value": "salem",
-                    "text": "Salem, OR"
-                },
-                {
-                    "value": "deschutes",
-                    "text": "Deschutes, OR"
-                },
-                {
-                    "value": "eugene",
-                    "text": "Eugene, OR"
-                },
-                {
-                    "value": "medford",
-                    "text": "Medford, OR"
-                },
-                {
-                    "value": "oregon",
-                    "text": "Oregon"
                 }
             ]
         }
