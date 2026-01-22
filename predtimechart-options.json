@@ -225,27 +225,27 @@
                 },
                 {
                     "value": "portland-or",
-                    "text": "portland-or"
+                    "text": "Portland, OR"
                 },
                 {
                     "value": "salem",
-                    "text": "salem"
+                    "text": "Salem, OR"
                 },
                 {
                     "value": "deschutes",
-                    "text": "deschutes"
+                    "text": "Deschutes, OR"
                 },
                 {
                     "value": "eugene",
-                    "text": "eugene"
+                    "text": "Eugene, OR"
                 },
                 {
                     "value": "medford",
-                    "text": "medford"
+                    "text": "Medford, OR"
                 },
                 {
                     "value": "oregon",
-                    "text": "oregon"
+                    "text": "Oregon"
                 },
                 {
                     "value": "columbia",
@@ -349,7 +349,8 @@
             "2025-12-27",
             "2026-01-03",
             "2026-01-10",
-            "2026-01-17"
+            "2026-01-17",
+            "2026-01-24"
         ],
         "Flu ED visits pct": [
             "2025-11-22",
@@ -360,13 +361,15 @@
             "2025-12-27",
             "2026-01-03",
             "2026-01-10",
-            "2026-01-17"
+            "2026-01-17",
+            "2026-01-24"
         ]
     },
-    "initial_as_of": "2026-01-17",
-    "current_date": "2026-01-17",
+    "initial_as_of": "2026-01-24",
+    "current_date": "2026-01-24",
     "models": [
         "epiENGAGE-ensemble_mean",
+        "MOBS-EpyStrain_Flu",
         "NAU-Copycat",
         "NAU-INFLAenza",
         "UMass-SAR",
@@ -388,6 +391,7 @@
         "VTSanghani-PRIME": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/VTSanghani-PRIME.yml",
         "epiENGAGE-baseline": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-baseline.yml",
         "epiENGAGE-lop_norm": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-lop_norm.yml",
+        "MOBS-EpyStrain_Flu": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/MOBS-EpyStrain_Flu.yml",
         "epiforecasts-dyngam": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiforecasts-dyngam.yml",
         "UMass-SAR": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/UMass-SAR.yml",
         "epiENGAGE-INFLAenza": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-INFLAenza.yml",
