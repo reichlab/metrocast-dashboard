@@ -350,7 +350,8 @@
             "2026-01-03",
             "2026-01-10",
             "2026-01-17",
-            "2026-01-24"
+            "2026-01-24",
+            "2026-01-31"
         ],
         "Flu ED visits pct": [
             "2025-11-22",
@@ -362,13 +363,15 @@
             "2026-01-03",
             "2026-01-10",
             "2026-01-17",
-            "2026-01-24"
+            "2026-01-24",
+            "2026-01-31"
         ]
     },
-    "initial_as_of": "2026-01-24",
-    "current_date": "2026-01-24",
+    "initial_as_of": "2026-01-31",
+    "current_date": "2026-01-31",
     "models": [
         "epiENGAGE-ensemble_mean",
+        "ACCIDDA-InfluPaint",
         "MOBS-EpyStrain_Flu",
         "NAU-Copycat",
         "NAU-INFLAenza",
@@ -400,6 +403,7 @@
         "UMass-alloy": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/UMass-alloy.yml",
         "epiENGAGE-GBQR": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-GBQR.yml",
         "NAU-INFLAenza": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/NAU-INFLAenza.yml",
+        "ACCIDDA-InfluPaint": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/ACCIDDA-InfluPaint.yml",
         "epiENGAGE-Copycat": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-Copycat.yml"
     },
     "disclaimer": "Observed counts are aggregated by week and predictions are made for each week. Dates associated with specific data points reflect the last day (Saturday) of the week.",
