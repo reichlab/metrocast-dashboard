@@ -352,7 +352,8 @@
             "2026-01-17",
             "2026-01-24",
             "2026-01-31",
-            "2026-02-07"
+            "2026-02-07",
+            "2026-02-14"
         ],
         "Flu ED visits pct": [
             "2025-11-22",
@@ -366,11 +367,12 @@
             "2026-01-17",
             "2026-01-24",
             "2026-01-31",
-            "2026-02-07"
+            "2026-02-07",
+            "2026-02-14"
         ]
     },
-    "initial_as_of": "2026-02-07",
-    "current_date": "2026-02-07",
+    "initial_as_of": "2026-02-14",
+    "current_date": "2026-02-14",
     "models": [
         "epiENGAGE-ensemble_mean",
         "ACCIDDA-InfluPaint",
@@ -393,20 +395,20 @@
     ],
     "model_urls": {
         "epiENGAGE-ensemble_mean": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-ensemble_mean.yml",
+        "UT-GBQR": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/UT-GBQR.yml",
+        "epiENGAGE-INFLAenza": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-INFLAenza.yml",
+        "epiENGAGE-GBQR": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-GBQR.yml",
+        "UMass-alloy": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/UMass-alloy.yml",
+        "epiENGAGE-Copycat": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-Copycat.yml",
+        "NAU-INFLAenza": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/NAU-INFLAenza.yml",
         "VTSanghani-PRIME": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/VTSanghani-PRIME.yml",
-        "epiENGAGE-baseline": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-baseline.yml",
+        "ACCIDDA-InfluPaint": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/ACCIDDA-InfluPaint.yml",
+        "UMass-SAR": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/UMass-SAR.yml",
         "epiENGAGE-lop_norm": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-lop_norm.yml",
         "MOBS-EpyStrain_Flu": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/MOBS-EpyStrain_Flu.yml",
+        "epiENGAGE-baseline": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-baseline.yml",
         "epiforecasts-dyngam": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiforecasts-dyngam.yml",
-        "UMass-SAR": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/UMass-SAR.yml",
-        "epiENGAGE-INFLAenza": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-INFLAenza.yml",
-        "NAU-Copycat": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/NAU-Copycat.yml",
-        "UT-GBQR": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/UT-GBQR.yml",
-        "UMass-alloy": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/UMass-alloy.yml",
-        "epiENGAGE-GBQR": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-GBQR.yml",
-        "NAU-INFLAenza": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/NAU-INFLAenza.yml",
-        "ACCIDDA-InfluPaint": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/ACCIDDA-InfluPaint.yml",
-        "epiENGAGE-Copycat": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-Copycat.yml"
+        "NAU-Copycat": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/NAU-Copycat.yml"
     },
     "disclaimer": "Observed counts are aggregated by week and predictions are made for each week. Dates associated with specific data points reflect the last day (Saturday) of the week.",
     "initial_xaxis_range": [
