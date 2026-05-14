@@ -365,7 +365,8 @@
             "2026-04-18",
             "2026-04-25",
             "2026-05-02",
-            "2026-05-09"
+            "2026-05-09",
+            "2026-05-16"
         ],
         "Flu ED visits pct": [
             "2025-11-22",
@@ -392,11 +393,12 @@
             "2026-04-18",
             "2026-04-25",
             "2026-05-02",
-            "2026-05-09"
+            "2026-05-09",
+            "2026-05-16"
         ]
     },
-    "initial_as_of": "2026-05-09",
-    "current_date": "2026-05-09",
+    "initial_as_of": "2026-05-16",
+    "current_date": "2026-05-16",
     "models": [
         "epiENGAGE-ensemble_mean",
         "ACCIDDA-InfluPaint",
@@ -419,22 +421,22 @@
         "epiENGAGE-ensemble_mean"
     ],
     "model_urls": {
+        "epiENGAGE-Copycat": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-Copycat.yml",
+        "MOBS-EpyStrain_Flu": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/MOBS-EpyStrain_Flu.yml",
+        "UMass-alloy": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/UMass-alloy.yml",
+        "epiENGAGE-INFLAenza": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-INFLAenza.yml",
+        "epiENGAGE-baseline": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-baseline.yml",
+        "epiforecasts-dyngam": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiforecasts-dyngam.yml",
+        "epiENGAGE-GBQR": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-GBQR.yml",
+        "UT-GBQR": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/UT-GBQR.yml",
+        "NAU-Copycat": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/NAU-Copycat.yml",
+        "VTSanghani-PRIME": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/VTSanghani-PRIME.yml",
+        "epiENGAGE-ensemble_mean": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-ensemble_mean.yml",
         "ACCIDDA-InfluPaint": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/ACCIDDA-InfluPaint.yml",
         "FluSight-ensemble": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/FluSight-ensemble.yml",
-        "epiENGAGE-INFLAenza": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-INFLAenza.yml",
-        "epiENGAGE-Copycat": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-Copycat.yml",
-        "NAU-Copycat": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/NAU-Copycat.yml",
-        "epiENGAGE-baseline": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-baseline.yml",
-        "NAU-INFLAenza": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/NAU-INFLAenza.yml",
-        "epiENGAGE-GBQR": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-GBQR.yml",
         "UMass-SAR": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/UMass-SAR.yml",
         "epiENGAGE-lop_norm": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-lop_norm.yml",
-        "epiforecasts-dyngam": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiforecasts-dyngam.yml",
-        "epiENGAGE-ensemble_mean": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/epiENGAGE-ensemble_mean.yml",
-        "UT-GBQR": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/UT-GBQR.yml",
-        "UMass-alloy": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/UMass-alloy.yml",
-        "MOBS-EpyStrain_Flu": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/MOBS-EpyStrain_Flu.yml",
-        "VTSanghani-PRIME": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/VTSanghani-PRIME.yml"
+        "NAU-INFLAenza": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/NAU-INFLAenza.yml"
     },
     "disclaimer": "Observed counts are aggregated by week and predictions are made for each week. Dates associated with specific data points reflect the last day (Saturday) of the week.",
     "initial_xaxis_range": [
