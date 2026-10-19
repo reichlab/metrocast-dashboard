@@ -15,30 +15,34 @@ This particular dashboard is designed for the [Flu MetroCast hub](https://github
 
 
 ## Current Metro Areas
+### Target: Percentage of emergency department visits due to influenza
 ::: columns
+
+::: column
+- Health Service Areas across the U.S. 
+  - Data Source : CDC's [Emergency Department Visits for Viral Respiratory Illness](https://data.cdc.gov/Public-Health-Surveillance/NSSP-Emergency-Department-Visit-Trajectories-by-St/rdmq-nq56/about_data)
+  - Target areas:  51 metropolitan Health Service Areas (HSAs) across Colorado, Georgia, Indiana, Oregon, Maine, Maryland, Massachusetts, Minnesota, South Carolina, Texas, and Virginia.  
+  A full list of included HSAs is available [here](https://github.com/reichlab/flu-metrocast/blob/main/auxiliary-data/locations.csv).
+  - Note: These HSAs include a central city and its surrounding counties, and we include all HSAs with populations of at least 250,000 (with the exception of Massachusetts). 
+:::
+
 ::: column
 - New York City
-  - Target: Percent of ED visit due to ILI (Influenza-like Illness) 
-  - Data source : [New York City Department of Health and Mental Hygiene](https://a816-health.nyc.gov/hdi/epiquery/visualizations?PageType=ps&PopulationSource=Syndromic)
+  - Data source : [New York City Department of Health and Mental Hygiene](https://github.com/nychealth/respiratory-illness-data/blob/main/data/ED_data_influenza.csv)
   - Target areas: NYC (citywide)
 
 :::
 
 ::: column
-- Local Flu Activity Across U.S. Metro Areas
-  - Target: Percentage of ED visits due to flu
-  - Data Source : CDC's [Emergency Department Visits for Viral Respiratory Illness](https://data.cdc.gov/Public-Health-Surveillance/NSSP-Emergency-Department-Visit-Trajectories-by-St/rdmq-nq56/about_data)
-  - Target areas:  51 metropolitan Health Service Areas (HSAs) across Colorado, Georgia, Indiana, Maine, Maryland, Massachusetts, Minnesota, South Carolina, Texas, Utah, and Virginia.  
-  A full list of included HSAs is available [here](https://github.com/reichlab/flu-metrocast/blob/main/auxiliary-data/locations.csv).
-  - Note: These HSAs include a central city and its surrounding counties, and we include all HSAs with populations of at least 250,000 (with the exception of Massachusetts).
-    
+- North Carolina
+  - Data Source: [North Carolina Division of Public Health's (NC DPH) statewide syndromic surveillance system](https://www.dph.ncdhhs.gov/)
+  - Target areas: 7 geographic regions comprised of adjacent counties
 :::
 
 ::: column
-- North Carolina
-  - Target: Percentage of ED visits due to flu
-  - Data Source: [North Carolina Division of Public Health's (NC DPH) statewide syndromic surveillance system](https://www.dph.ncdhhs.gov/)
-  - Target areas: 7 geographic regions comprised of adjacent counties
+- Utah
+  - Data Source: [Utah Department of Health and Human Service's statewide syndromic surveillance system](https://dhhs.utah.gov/)
+  - Target areas: 13 geographic regions comprised of adjacent counties
 :::
 
 :::
@@ -55,7 +59,7 @@ This particular dashboard is designed for the [Flu MetroCast hub](https://github
 
 ## Information for Modelers
 
-Anyone interested in submitting a model should review the guidelines for the 2025/2026 season on the [Flu MetroCast Hub repository](https://github.com/reichlab/flu-metrocast). 
+Anyone interested in submitting a model should review the guidelines for the 2026/2027 season on the [Flu MetroCast Hub repository](https://github.com/reichlab/flu-metrocast). 
 
 The `latest-data.csv` file in the [Flu MetroCast Hub target data directory](https://github.com/reichlab/flu-metrocast/blob/main/target-data/latest-data.csv) provides data that modelers can use to fit a model. `Latest-data` is specially formatted target data that includes the most up-to-date values for all dates for which target data is available, not just dates corresponding to the subset of target_end_dates for which the Hub provides forecasts.
 
