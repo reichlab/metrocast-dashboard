@@ -413,6 +413,7 @@
         "UMass-alloy",
         "UT-GBQR",
         "VTSanghani-PRIME",
+        "docxology-panelcopula",
         "epiENGAGE-Copycat",
         "epiENGAGE-GBQR",
         "epiENGAGE-INFLAenza",
@@ -426,6 +427,7 @@
     "model_urls": {
         "NAU-Copycat": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/NAU-Copycat.yml",
         "UT-GBQR": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/UT-GBQR.yml",
+        "docxology-panelcopula": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/docxology-panelcopula.yml",
         "ACCIDDA-InfluPaint": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/ACCIDDA-InfluPaint.yml",
         "UMass-SAR": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/UMass-SAR.yml",
         "NAU-INFLAenza": "https://github.com/reichlab/flu-metrocast/blob/main/model-metadata/NAU-INFLAenza.yml",
