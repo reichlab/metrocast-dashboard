@@ -12,9 +12,9 @@ Predicting how many people will visit the emergency department for flu helps us 
 
 Looking at metro areas helps us:
 
-Spot local trends that state-level forecasts can miss, so decisions can be more accurate and timely.
-Get ready for the future by building the tools, data, and expertise needed to respond to future outbreaks.
-Share useful insights that public health officials, healthcare systems, and community leaders can put to work.
+* Spot local trends that state-level forecasts can miss, so decisions can be more accurate and timely.
+* Get ready for the future by building the tools, data, and expertise needed to respond to future outbreaks.
+* Share useful insights that public health officials, healthcare systems, and community leaders can put to work.
 
 **The 2026–27 forecasting season**
 
