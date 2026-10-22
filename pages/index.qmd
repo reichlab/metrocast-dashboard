@@ -4,7 +4,7 @@ title: "Introduction"
 
 **What is the Flu MetroCast Hub?**
 
-The Flu MetroCast Hub brings together modeling teams from across the country to share weekly forecasts of flu activity in U.S. cities and metro areas. It is led by the epiENGAGE team at the University of Texas at Austin and the University of Massachusetts Amherst.
+The Flu MetroCast Hub brings together modeling teams from across the country to share weekly forecasts of flu activity in U.S. cities and metro areas. It is led by the [epiENGAGE](https://epiengage.org) team at the University of Texas at Austin and the University of Massachusetts Amherst.
 
 **Why forecast flu at the metro level?**
 
