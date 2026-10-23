@@ -11,12 +11,15 @@ import csv
 import json
 import math
 import random
+import zlib
 from collections import defaultdict
 from datetime import date, timedelta
 from pathlib import Path
 
-HUB = Path("/Users/nick/Documents/research-versioned/flu-metrocast")
-OUT = Path("/Users/nick/Documents/research-versioned/metrocast-dashboard/pages/data/forecast_prototype_data.json")
+# Assumes the flu-metrocast hub is cloned next to this dashboard repo.
+REPO = Path(__file__).resolve().parents[1]
+HUB = REPO.parent / "flu-metrocast"
+OUT = REPO / "pages" / "data" / "forecast_prototype_data.json"
 
 # Early-season reference date. Matches the predevals-config min eval round.
 REFERENCE_DATE = "2025-11-22"
@@ -25,7 +28,8 @@ PRIOR_SEASON_START = "2024-08-01"
 PRIOR_SEASON_END = "2025-07-31"
 HISTORY_START = "2015-01-01"
 
-INCLUDE_LOCATIONS = {"texas", "houston", "massachusetts", "denver"}
+# duluth is included as a noisy, small-population example for the "unstable data" warning.
+INCLUDE_LOCATIONS = {"texas", "houston", "massachusetts", "denver", "duluth"}
 
 N_SAMPLES = 100
 # Simulate through end of June 2026 (~31 weeks from Nov 22).
@@ -145,7 +149,8 @@ def simulate_all_models(seed_value, base_growth, loc_id):
     """Return {model: {dates: [...], samples: [[w1, w2, ...wN], ...]}}."""
     out = {}
     for model, params in MODEL_PARAMS.items():
-        rng = random.Random(hash((RNG_SEED, loc_id, model)) & 0xFFFFFFFF)
+        # crc32 rather than hash(): str hashing is randomized per process, so hash() isn't reproducible.
+        rng = random.Random(zlib.crc32(f"{RNG_SEED}|{loc_id}|{model}".encode()))
         samples = [simulate(seed_value, base_growth, params, rng) for _ in range(N_SAMPLES)]
         out[model] = {
             "target": "Flu ED visits pct",
@@ -168,7 +173,7 @@ def main():
     history_for_percentiles = {}
     forecasts = {}
 
-    for loc_id in keep_ids:
+    for loc_id in sorted(keep_ids):
         target = "Flu ED visits pct"
         rows = observed_all[loc_id].get(target, [])
         if not rows:
