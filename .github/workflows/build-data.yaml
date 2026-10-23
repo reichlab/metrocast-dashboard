@@ -9,6 +9,7 @@ on:
     paths:
       - predtimechart-config.yml
       - predevals-config.yml
+      - scripts/build_card_data.py
   workflow_dispatch:
     inputs:
       regenerate:
@@ -48,3 +49,32 @@ jobs:
     secrets:
       id: 'none'
       key: ${{ secrets.GITHUB_TOKEN }}
+
+  # Model-card data for forecast-prototype.qmd, built from the hub's sample trajectories and
+  # published to the cards/data branch (the page reads it from there at view time).
+  cards:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get hub repository name
+        id: hub
+        run: echo "repo=$(yq '.hub' site-config.yml)" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ steps.hub.outputs.repo }}
+          path: hub
+      - uses: astral-sh/setup-uv@v6
+      - name: Build card data
+        run: uv run scripts/build_card_data.py --hub hub --out out
+      - name: Publish to cards/data branch
+        if: ${{ inputs.publish || github.event_name == 'schedule' || github.event_name == 'push' }}
+        working-directory: out
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git init -q -b cards/data
+          git add -A
+          git -c user.name="github-actions[bot]" \
+              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit -q -m "Update model card data for $(jq -r .reference_date options.json)"
+          git push --force "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git" cards/data

@@ -7,8 +7,6 @@ format:
     include-in-header:
       - text: |
           <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
-resources:
-  - data/forecast_prototype_data.json
 listing: false
 ---
 
@@ -333,6 +331,7 @@ Reach it directly at /forecast-prototype.html.
   .fp-legend-swatch { width: 26px; height: 3px; border-radius: 1px; }
   .fp-legend-swatch.dash { background: repeating-linear-gradient(90deg, currentColor 0 5px, transparent 5px 9px); height: 2px; }
   .fp-legend-swatch.shade { height: 10px; opacity: 0.25; }
+  .fp-loading .fp-cards, .fp-loading .fp-chart-card { opacity: 0.5; transition: opacity 120ms; }
 </style>
 
 <div class="fp-hero">
@@ -406,32 +405,75 @@ Reach it directly at /forecast-prototype.html.
   <div class="fp-chart-head">
     <div>
       <h3>ED Visits Forecast</h3>
-      <div class="sub"><span class="fp-h-label">4-week</span> ahead projection • Data source: NSSP</div>
+      <div class="sub">Full-season projection • Data source: NSSP</div>
     </div>
     <div class="stamp">Reference date: <span id="fp-ref-date">—</span></div>
   </div>
   <div id="fp-chart"></div>
   <div class="fp-legend">
     <div class="fp-legend-item"><span class="fp-legend-swatch" style="background:#0f172a"></span> Observed data through current week</div>
-    <div class="fp-legend-item"><span class="fp-legend-swatch" style="background:#94a3b8"></span> Last year (2024-2025)</div>
-    <div class="fp-legend-item" style="color:#2563eb"><span class="fp-legend-swatch dash"></span> Ensemble forecast (100 simulated trajectories)</div>
+    <div class="fp-legend-item"><span class="fp-legend-swatch" style="background:#94a3b8"></span> <span id="fp-last-year-label">Last year</span></div>
+    <div class="fp-legend-item" style="color:#2563eb"><span class="fp-legend-swatch dash"></span> Ensemble forecast <span id="fp-forecast-legend-detail"></span></div>
   </div>
 </div>
 
 <script>
 (async function () {
-  const resp = await fetch("data/forecast_prototype_data.json", { cache: "no-cache" });
-  if (!resp.ok) {
-    document.getElementById("fp-chart").innerHTML =
-      `<div style="padding:24px;color:#b91c1c">Failed to load forecast data (${resp.status}). ` +
+  // Card data is built by scripts/build_card_data.py and published to the cards/data branch, which
+  // the deployed site reads: DATA_REPO's branch on its custom domain, or <owner>/<repo>'s on
+  // <owner>.github.io/<repo>/ (e.g. a fork). A local preview reads data/cards/ next to this page,
+  // and a ?data=<url> query parameter overrides all of these.
+  const DATA_REPO = "reichlab/metrocast-dashboard";
+  function dataRoot() {
+    const override = new URLSearchParams(location.search).get("data");
+    if (override) return override.replace(/\/?$/, "/");
+    const raw = repo => `https://raw.githubusercontent.com/${repo}/refs/heads/cards/data/`;
+    if (location.protocol === "file:" || ["localhost", "127.0.0.1", "[::1]"].includes(location.hostname)) {
+      return "data/cards/";
+    }
+    const owner = location.hostname.match(/^([^.]+)\.github\.io$/);
+    const repo = location.pathname.split("/")[1];
+    return owner && repo ? raw(`${owner[1]}/${repo}`) : raw(DATA_REPO);
+  }
+  const DATA_ROOT = dataRoot();
+  async function fetchJson(path) {
+    const resp = await fetch(DATA_ROOT + path, { cache: "no-cache" });
+    if (!resp.ok) throw new Error(`Failed to load ${DATA_ROOT + path} (${resp.status})`);
+    return resp.json();
+  }
+  function showError(err) {
+    const chartEl = document.getElementById("fp-chart");
+    if (window.Plotly) Plotly.purge(chartEl);
+    chartEl.innerHTML = `<div style="padding:24px;color:#b91c1c">${err.message}. ` +
       `If you're viewing this via file://, serve the directory over HTTP (e.g. <code>quarto preview</code>).</div>`;
+  }
+
+  // Each location's data is fetched the first time it's selected and kept for the rest of the visit.
+  const locationCache = new Map();
+  function loadLocation(id) {
+    if (!locationCache.has(id)) {
+      const p = fetchJson(`locations/${id}.json`);
+      p.catch(() => locationCache.delete(id));  // let a failed fetch be retried
+      locationCache.set(id, p);
+    }
+    return locationCache.get(id);
+  }
+
+  // Start fetching the default location alongside options.json rather than after it.
+  const DEFAULT_LOCATION = "texas";
+  loadLocation(DEFAULT_LOCATION).catch(() => {});
+  let DATA;
+  try {
+    DATA = await fetchJson("options.json");
+  } catch (err) {
+    showError(err);
     return;
   }
-  const DATA = await resp.json();
-  const MODEL_COLORS = { Ensemble: "#2563eb", GAM: "#9333ea", Baseline: "#0d9488" };
+  const MODEL_COLORS = { Ensemble: "#2563eb" };
 
   const state = {
     region: null,
+    locData: null,
     viewMode: "trajectories",
     enabledModels: new Set(["Ensemble"]),
   };
@@ -448,6 +490,9 @@ Reach it directly at /forecast-prototype.html.
   // the SD of log values around a centered 3-week rolling mean, or if many weeks are reported as 0.
   const UNSTABLE_RESID_SD = 0.5;
   const UNSTABLE_ZERO_FRAC = 0.2;
+  // Peak cards: only shown when the ensemble's trajectories run through at least this month-day
+  // in the second calendar year of the season, so the peak isn't read off a truncated forecast.
+  const PEAK_FORECAST_MIN_END = "05-01";
   const svgIcon = path => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${path}</svg>`;
   const TREND_CATEGORIES = {
     increasing: { label: "Increasing", verb: "rising",    color: "#b91c1c", iconBg: "#dc2626",
@@ -460,9 +505,25 @@ Reach it directly at /forecast-prototype.html.
                   icon: svgIcon('<path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>') },
   };
 
-  // Default region: prefer Texas if present, else first.
-  const defaultLoc = DATA.locations.find(l => l.id === "texas") || DATA.locations[0];
+  // Default region: prefer DEFAULT_LOCATION if present, else first.
+  const defaultLoc = DATA.locations.find(l => l.id === DEFAULT_LOCATION) || DATA.locations[0];
   state.region = defaultLoc.id;
+
+  async function selectRegion(id) {
+    state.region = id;
+    document.body.classList.add("fp-loading");
+    let locData;
+    try {
+      locData = await loadLocation(id);
+    } catch (err) {
+      if (state.region === id) { document.body.classList.remove("fp-loading"); showError(err); }
+      return;
+    }
+    if (state.region !== id) return;  // another location was picked while this one loaded
+    document.body.classList.remove("fp-loading");
+    state.locData = locData;
+    render();
+  }
 
   // Populate region dropdown
   const regionSel = document.getElementById("fp-region");
@@ -473,20 +534,21 @@ Reach it directly at /forecast-prototype.html.
     if (loc.id === state.region) opt.selected = true;
     regionSel.appendChild(opt);
   }
-  regionSel.addEventListener("change", e => { state.region = e.target.value; render(); });
+  regionSel.addEventListener("change", e => selectRegion(e.target.value));
 
   // View mode toggle
   document.querySelectorAll("#fp-viewmode button").forEach(btn => {
     btn.addEventListener("click", () => {
       state.viewMode = btn.dataset.v;
       document.querySelectorAll("#fp-viewmode button").forEach(b => b.classList.toggle("active", b === btn));
-      render();
+      if (state.locData) render();
     });
   });
 
   // Static labels
   document.getElementById("fp-ref-date").textContent = DATA.reference_date;
   document.getElementById("fp-season-label").textContent = DATA.season_label;
+  document.getElementById("fp-last-year-label").textContent = `Last year (${DATA.season - 1}-${DATA.season})`;
 
   // ---------- helpers ----------
   function weekOfYear(dateStr) {
@@ -574,14 +636,20 @@ Reach it directly at /forecast-prototype.html.
     if (pct >= 10) return { label: "Below average",     color: "#15803d" };
     return                  { label: "Far below average", color: "#166534" };
   }
-  function peakStatsFromSamples(samples, dates) {
-    // For each sample, find its argmax: returns {peakValues, peakDates}
+  function peakStatsFromSamples(samples, dates, observedPeak) {
+    // For each sample, the season peak is the larger of the peak observed so far this season
+    // (observedPeak: {date, value} or null) and the sample's own max: returns {peakValues, peakDates}
     const peakValues = [], peakDates = [];
     for (const s of samples) {
       let bestI = 0, best = s[0];
       for (let i = 1; i < s.length; i++) { if (s[i] > best) { best = s[i]; bestI = i; } }
-      peakValues.push(best);
-      peakDates.push(dates[bestI]);
+      if (observedPeak && observedPeak.value >= best) {
+        peakValues.push(observedPeak.value);
+        peakDates.push(observedPeak.date);
+      } else {
+        peakValues.push(best);
+        peakDates.push(dates[bestI]);
+      }
     }
     return { peakValues, peakDates };
   }
@@ -591,11 +659,11 @@ Reach it directly at /forecast-prototype.html.
 
   // ---------- render ----------
   function render() {
-    const loc = DATA.locations.find(l => l.id === state.region);
-    const observed = DATA.observed_current[state.region] || [];
-    const prior = DATA.observed_prior[state.region] || [];
-    const history = DATA.history[state.region] || [];
-    const forecasts = DATA.forecasts[state.region] || {};
+    // history: all observations through the reference date; forecasts: {model label: {dates, samples}}
+    const { observed: history, forecasts } = state.locData;
+    const refSeason = DATA.season;
+    const observed = history.filter(r => seasonOf(r.date) === refSeason);
+    const prior = history.filter(r => seasonOf(r.date) === refSeason - 1);
 
     const ensemble = forecasts.Ensemble;
     const lastObs = observed.length ? observed[observed.length - 1].value : null;
@@ -608,7 +676,6 @@ Reach it directly at /forecast-prototype.html.
     const levelWarnEl = document.getElementById("fp-level-warning");
     // Only seasons before the forecast's season are used as the comparison set, so the current
     // season (including the value being ranked, and any later data) never leaks in.
-    const refSeason = seasonOf(DATA.reference_date);
     const pastHistory = history.filter(r => r.value != null && seasonOf(r.date) < refSeason);
     const histRowsForWeek = (wk) => pastHistory.filter(r => Math.abs(weekOfYear(r.date) - wk) <= 1);
     const histValuesForWeek = (wk) => histRowsForWeek(wk).map(r => r.value);
@@ -624,13 +691,13 @@ Reach it directly at /forecast-prototype.html.
     } else {
       levelCurEl.textContent = "—"; levelCurEl.style.color = "";
     }
-    if (ensemble && ensemble.samples.length) {
-      const h4Idx = 3;
-      const h4Median = quantilesOf(ensemble.samples.map(s => s[h4Idx]), [0.5])[0];
-      const futureDate = ensemble.dates[h4Idx];
+    const futureDate = lastObsDate ? addDays(lastObsDate, 28) : null;
+    const futureIdx = ensemble && futureDate ? ensemble.dates.indexOf(futureDate) : -1;
+    if (futureIdx >= 0 && ensemble.samples.length) {
+      const futureMedian = quantilesOf(ensemble.samples.map(s => s[futureIdx]), [0.5])[0];
       const wk = weekOfYear(futureDate);
       const histVals = histValuesForWeek(wk);
-      const p = quantileInArray(histVals, h4Median);
+      const p = quantileInArray(histVals, futureMedian);
       const cat = levelCategory(p);
       levelFutEl.textContent = cat.label;
       levelFutEl.style.color = cat.color;
@@ -693,8 +760,11 @@ Reach it directly at /forecast-prototype.html.
     const peakVsLastEl = document.getElementById("fp-peak-vs-last");
     const peakVsLastProbEl = document.getElementById("fp-peak-vs-last-prob");
 
-    if (ensemble && ensemble.samples.length) {
-      const stats = peakStatsFromSamples(ensemble.samples, ensemble.dates);
+    const fullSeason = ensemble && ensemble.dates.length &&
+      ensemble.dates[ensemble.dates.length - 1] >= `${refSeason + 1}-${PEAK_FORECAST_MIN_END}`;
+    const observedPeak = observed.reduce((best, r) => (!best || r.value > best.value ? r : best), null);
+    if (fullSeason && ensemble.samples.length) {
+      const stats = peakStatsFromSamples(ensemble.samples, ensemble.dates, observedPeak);
       const [pvLo, pvMd, pvHi] = quantilesOf(stats.peakValues, [0.25, 0.5, 0.75]);
       const histPeaks = historicalSeasonPeaks(history, refSeason);
       const fmt = ds => {
@@ -762,6 +832,11 @@ Reach it directly at /forecast-prototype.html.
     } else {
       peakWeekEl.textContent = "—"; peakWeekSubEl.textContent = ""; peakWeekHistEl.textContent = "";
       peakValEl.textContent = "—"; peakVsLastEl.textContent = "—"; peakVsLastProbEl.textContent = "";
+      peakVsLastEl.style.color = "";
+      if (ensemble) {
+        peakWeekSubEl.textContent = peakVsLastProbEl.textContent =
+          "Needs a full-season forecast, which isn't available this week";
+      }
     }
 
     // ---- Chart ----
@@ -792,6 +867,10 @@ Reach it directly at /forecast-prototype.html.
         opacity: 0.7,
       }));
     }
+
+    document.getElementById("fp-forecast-legend-detail").textContent = !ensemble ? "(not available)"
+      : state.viewMode === "intervals" ? "(median, 50% and 95% intervals)"
+      : `(${Math.min(N_TRAJ_DRAWS, ensemble.samples.length)} of ${ensemble.samples.length} trajectories shown)`;
 
     // Forecasts (per enabled model)
     for (const m of DATA.models) {
@@ -833,9 +912,8 @@ Reach it directly at /forecast-prototype.html.
         }));
       } else {
         // Trajectories: draw N_TRAJ_DRAWS individual sample paths
-        const step = Math.max(1, Math.floor(f.samples.length / N_TRAJ_DRAWS));
-        const indices = [];
-        for (let i = 0; i < f.samples.length; i += step) indices.push(i);
+        const nDraws = Math.min(N_TRAJ_DRAWS, f.samples.length);
+        const indices = Array.from({ length: nDraws }, (_, j) => Math.floor(j * f.samples.length / nDraws));
         indices.forEach((idx, j) => {
           let lineX = x, lineY = f.samples[idx];
           if (lastObs != null) {
@@ -887,9 +965,7 @@ Reach it directly at /forecast-prototype.html.
     Plotly.react("fp-chart", traces, layout, { displayModeBar: false, responsive: true });
   }
 
-  // Initial labels
-  document.querySelectorAll(".fp-h-label").forEach(el => el.textContent = `${state.horizon}-week`);
-  render();
+  selectRegion(state.region);
 })();
 </script>
 ```
