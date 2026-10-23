@@ -172,6 +172,37 @@ Reach it directly at /forecast-prototype.html.
     margin-bottom: 10px;
     letter-spacing: -0.01em;
   }
+  .fp-trend-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .fp-trend-head .fp-trend-large { margin-bottom: 0; }
+  .fp-trend-icon {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background: #94a3b8;
+  }
+  .fp-trend-icon:empty { display: none; }
+  .fp-trend-icon svg { width: 20px; height: 20px; }
+  .fp-trend-stat {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .fp-trend-card { border-left-width: 5px; }
+  .fp-trend-card.trend-increasing { background: #fef2f2; border-color: #fecaca; border-left-color: #dc2626; }
+  .fp-trend-card.trend-stable     { background: #fefce8; border-color: #fde68a; border-left-color: #eab308; }
+  .fp-trend-card.trend-decreasing { background: #eff6ff; border-color: #bfdbfe; border-left-color: #2563eb; }
+  .fp-trend-card.trend-uncertain  { background: #f8fafc; border-color: #e2e8f0; border-left-color: #94a3b8; }
+  .fp-trend-card .fp-card-sub { color: #64748b; }
   .fp-trend-medium {
     font-size: 1.05rem;
     font-weight: 700;
@@ -193,6 +224,21 @@ Reach it directly at /forecast-prototype.html.
     font-weight: 700;
     line-height: 1.15;
   }
+  .fp-level-warning {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 8px;
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fcd34d;
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    cursor: help;
+  }
+  .fp-level-warning[hidden] { display: none; }
 
   .fp-controls {
     background: #fff;
@@ -317,9 +363,13 @@ Reach it directly at /forecast-prototype.html.
 </div>
 
 <div class="fp-cards">
-  <div class="fp-card">
+  <div class="fp-card fp-trend-card" id="fp-trend-card">
     <div class="fp-card-label">Epidemic trend</div>
-    <div class="fp-trend-large" id="fp-trend-label">—</div>
+    <div class="fp-trend-head">
+      <span class="fp-trend-icon" id="fp-trend-icon" aria-hidden="true"></span>
+      <span class="fp-trend-large" id="fp-trend-label">—</span>
+    </div>
+    <div class="fp-trend-stat" id="fp-trend-stat"></div>
     <div class="fp-card-sub" id="fp-trend-sub"></div>
   </div>
   <div class="fp-card">
@@ -333,6 +383,10 @@ Reach it directly at /forecast-prototype.html.
       <span class="val" id="fp-level-future">—</span>
     </div>
     <div class="fp-card-sub" id="fp-level-sub"></div>
+    <div class="fp-level-warning" id="fp-level-warning" hidden
+         title="Reported values in this location jump around a lot from week to week (often because of small numbers or weeks reported as zero), so the level may change quickly.">
+      &#9888; Warning: unstable data
+    </div>
   </div>
   <div class="fp-card">
     <div class="fp-card-label">Expected peak week</div>
@@ -385,6 +439,27 @@ Reach it directly at /forecast-prototype.html.
   const QUANTILE_LEVELS = [0.025, 0.25, 0.5, 0.75, 0.975];
   const N_TRAJ_DRAWS = 30;  // how many sample paths to render in trajectories view
 
+  // Epidemic trend card: a trajectory counts as increasing/decreasing if it changes by at least
+  // TREND_CHANGE (relative) from the last observation; a category is reported only if at least
+  // TREND_AGREEMENT of trajectories fall in it, otherwise the trend is "Uncertain".
+  const TREND_CHANGE = 0.05;
+  const TREND_AGREEMENT = 0.65;
+  // Epidemic level card: flag a location as "unstable" if its observations are noisy, measured as
+  // the SD of log values around a centered 3-week rolling mean, or if many weeks are reported as 0.
+  const UNSTABLE_RESID_SD = 0.5;
+  const UNSTABLE_ZERO_FRAC = 0.2;
+  const svgIcon = path => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${path}</svg>`;
+  const TREND_CATEGORIES = {
+    increasing: { label: "Increasing", verb: "rising",    color: "#b91c1c", iconBg: "#dc2626",
+                  icon: svgIcon('<path d="M5 17 17 5"/><path d="M8 5h9v9"/>') },
+    stable:     { label: "Stable",     verb: "stable",    color: "#a16207", iconBg: "#eab308",
+                  icon: svgIcon('<path d="M4 12h15"/><path d="M13 6l6 6-6 6"/>') },
+    decreasing: { label: "Decreasing", verb: "declining", color: "#1d4ed8", iconBg: "#2563eb",
+                  icon: svgIcon('<path d="M5 7 17 19"/><path d="M17 10v9H8"/>') },
+    uncertain:  { label: "Uncertain",  verb: null,        color: "#475569", iconBg: "#94a3b8",
+                  icon: svgIcon('<path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>') },
+  };
+
   // Default region: prefer Texas if present, else first.
   const defaultLoc = DATA.locations.find(l => l.id === "texas") || DATA.locations[0];
   state.region = defaultLoc.id;
@@ -420,6 +495,10 @@ Reach it directly at /forecast-prototype.html.
     const diff = (d - start) / 86400000;
     return Math.floor((diff + start.getUTCDay()) / 7) + 1;
   }
+  function addDays(dateStr, days) {
+    const d = new Date(dateStr + "T00:00:00Z");
+    return new Date(d.getTime() + days * 86400000).toISOString().slice(0, 10);
+  }
   function quantileInArray(arr, val) {
     if (!arr.length) return null;
     const sorted = [...arr].sort((a, b) => a - b);
@@ -454,16 +533,32 @@ Reach it directly at /forecast-prototype.html.
     }
     return out;
   }
-  function historicalSeasonPeaks(history) {
-    // Group observations by flu season (Aug 1 → Jul 31) and return {season, peak, date} per season.
+  function seasonOf(dateStr) {
+    // Flu season (Aug 1 → Jul 31), identified by the year it starts in.
+    const y = parseInt(dateStr.slice(0, 4));
+    const m = parseInt(dateStr.slice(5, 7));
+    return m >= 8 ? y : y - 1;
+  }
+  function noiseStats(rows) {
+    // rows: [{date, value}, ...] sorted by date; returns {residSd, zeroFrac} (see UNSTABLE_* above).
+    const vals = rows.filter(r => r.value != null).map(r => r.value);
+    if (vals.length < 3) return null;
+    const zeroFrac = vals.filter(v => v === 0).length / vals.length;
+    const y = vals.map(v => Math.log(Math.max(v, 0.01)));
+    const resid = [];
+    for (let i = 1; i < y.length - 1; i++) resid.push(y[i] - (y[i - 1] + y[i] + y[i + 1]) / 3);
+    const mean = resid.reduce((a, b) => a + b, 0) / resid.length;
+    const residSd = Math.sqrt(resid.reduce((a, b) => a + (b - mean) ** 2, 0) / resid.length);
+    return { residSd, zeroFrac };
+  }
+  function historicalSeasonPeaks(history, beforeSeason) {
+    // Group observations by flu season and return {season, peak, date} for seasons before `beforeSeason`.
     if (!history || !history.length) return [];
     const byseason = {};
     for (const r of history) {
       if (r.value == null) continue;
-      const y = parseInt(r.date.slice(0, 4));
-      const m = parseInt(r.date.slice(5, 7));
-      const seasonYear = m >= 8 ? y : y - 1;
-      if (seasonYear >= 2025) continue;
+      const seasonYear = seasonOf(r.date);
+      if (seasonYear >= beforeSeason) continue;
       if (!(seasonYear in byseason) || r.value > byseason[seasonYear].peak) {
         byseason[seasonYear] = { season: seasonYear, peak: r.value, date: r.date };
       }
@@ -506,16 +601,22 @@ Reach it directly at /forecast-prototype.html.
     const lastObs = observed.length ? observed[observed.length - 1].value : null;
     const lastObsDate = observed.length ? observed[observed.length - 1].date : null;
 
-    // ---- Card 2: Epidemic level (colored categories, vs 2015-2025 same-week) ----
+    // ---- Card 2: Epidemic level (colored categories, vs same week in past seasons) ----
     const levelCurEl = document.getElementById("fp-level-current");
     const levelFutEl = document.getElementById("fp-level-future");
     const levelSubEl = document.getElementById("fp-level-sub");
-    const histValuesForWeek = (wk) => history.filter(r => r.value != null && Math.abs(weekOfYear(r.date) - wk) <= 1).map(r => r.value);
+    const levelWarnEl = document.getElementById("fp-level-warning");
+    // Only seasons before the forecast's season are used as the comparison set, so the current
+    // season (including the value being ranked, and any later data) never leaks in.
+    const refSeason = seasonOf(DATA.reference_date);
+    const pastHistory = history.filter(r => r.value != null && seasonOf(r.date) < refSeason);
+    const histRowsForWeek = (wk) => pastHistory.filter(r => Math.abs(weekOfYear(r.date) - wk) <= 1);
+    const histValuesForWeek = (wk) => histRowsForWeek(wk).map(r => r.value);
     let nSeasonsUsed = 0;
     if (lastObs != null && lastObsDate) {
       const wk = weekOfYear(lastObsDate);
       const histVals = histValuesForWeek(wk);
-      nSeasonsUsed = histVals.length;
+      nSeasonsUsed = new Set(histRowsForWeek(wk).map(r => seasonOf(r.date))).size;
       const p = quantileInArray(histVals, lastObs);
       const cat = levelCategory(p);
       levelCurEl.textContent = cat.label;
@@ -537,31 +638,50 @@ Reach it directly at /forecast-prototype.html.
       levelFutEl.textContent = "—"; levelFutEl.style.color = "";
     }
     levelSubEl.textContent = nSeasonsUsed
-      ? `Comparing to ${nSeasonsUsed} same-week observations from 2015-2025`
+      ? `Compared with the same time of year in ${nSeasonsUsed} past season${nSeasonsUsed === 1 ? "" : "s"}`
       : "";
+    const noise = noiseStats(history.filter(r => r.date <= DATA.reference_date));
+    levelWarnEl.hidden = !(noise && (noise.residSd > UNSTABLE_RESID_SD || noise.zeroFrac > UNSTABLE_ZERO_FRAC));
 
-    // ---- Card 1: Epidemic trend (P wk2>wk1, colored label + rise-count sub) ----
+    // ---- Card 1: Epidemic trend (last observation vs. ensemble trajectories 2 weeks later) ----
+    const trendCardEl = document.getElementById("fp-trend-card");
+    const trendIconEl = document.getElementById("fp-trend-icon");
     const trendLabelEl = document.getElementById("fp-trend-label");
+    const trendStatEl = document.getElementById("fp-trend-stat");
     const trendSubEl = document.getElementById("fp-trend-sub");
     const fmtMd = ds => {
       const d = new Date(ds + "T00:00:00Z");
       return d.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
     };
-    if (ensemble && ensemble.samples.length && ensemble.dates.length >= 2) {
+    const trendTargetDate = lastObsDate ? addDays(lastObsDate, 14) : null;
+    const trendIdx = ensemble && trendTargetDate ? ensemble.dates.indexOf(trendTargetDate) : -1;
+    trendCardEl.classList.remove(...Object.keys(TREND_CATEGORIES).map(k => `trend-${k}`));
+    if (trendIdx >= 0 && lastObs > 0 && ensemble.samples.length) {
       const n = ensemble.samples.length;
-      const nUp = ensemble.samples.filter(s => s[1] > s[0]).length;
-      const pct = Math.round(nUp / n * 100);
-      let label, fg;
-      if (pct >= 85)      { label = "Increasing";        fg = "#b91c1c"; }
-      else if (pct >= 65) { label = "Likely increasing"; fg = "#c2410c"; }
-      else if (pct >= 35) { label = "Uncertain";         fg = "#475569"; }
-      else if (pct >= 15) { label = "Likely declining";  fg = "#15803d"; }
-      else                { label = "Declining";         fg = "#166534"; }
-      trendLabelEl.textContent = label;
-      trendLabelEl.style.color = fg;
-      trendSubEl.textContent = `${nUp} of ${n} trajectories rise from ${fmtMd(ensemble.dates[0])} → ${fmtMd(ensemble.dates[1])}`;
+      const counts = { increasing: 0, stable: 0, decreasing: 0 };
+      for (const s of ensemble.samples) {
+        const change = s[trendIdx] / lastObs - 1;
+        if (change >= TREND_CHANGE) counts.increasing++;
+        else if (change <= -TREND_CHANGE) counts.decreasing++;
+        else counts.stable++;
+      }
+      // At most one category can reach the agreement threshold (it's > 50%).
+      const key = Object.keys(counts).find(k => counts[k] / n >= TREND_AGREEMENT) || "uncertain";
+      const cat = TREND_CATEGORIES[key];
+      trendCardEl.classList.add(`trend-${key}`);
+      trendIconEl.innerHTML = cat.icon;
+      trendIconEl.style.background = cat.iconBg;
+      trendLabelEl.textContent = cat.label;
+      trendLabelEl.style.color = cat.color;
+      trendStatEl.textContent = key === "uncertain"
+        ? "Future trajectories show mixed patterns"
+        : `${Math.round(counts[key] / n * 100)}% of trajectories are ${cat.verb}`;
+      trendStatEl.style.color = cat.color;
+      trendSubEl.textContent = `From the week ending ${fmtMd(lastObsDate)} to the week ending ${fmtMd(trendTargetDate)}`;
     } else {
+      trendIconEl.innerHTML = "";
       trendLabelEl.textContent = "—"; trendLabelEl.style.color = "";
+      trendStatEl.textContent = "";
       trendSubEl.textContent = "";
     }
 
@@ -576,7 +696,7 @@ Reach it directly at /forecast-prototype.html.
     if (ensemble && ensemble.samples.length) {
       const stats = peakStatsFromSamples(ensemble.samples, ensemble.dates);
       const [pvLo, pvMd, pvHi] = quantilesOf(stats.peakValues, [0.25, 0.5, 0.75]);
-      const histPeaks = historicalSeasonPeaks(history);
+      const histPeaks = historicalSeasonPeaks(history, refSeason);
       const fmt = ds => {
         const d = new Date(ds + "T00:00:00Z");
         return d.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
@@ -614,7 +734,7 @@ Reach it directly at /forecast-prototype.html.
       }
 
       // --- Card 4: peak comparison (primary) + value (secondary) ---
-      const lastSeasonPeakObj = histPeaks.find(p => p.season === 2024);
+      const lastSeasonPeakObj = histPeaks.find(p => p.season === refSeason - 1);
       if (lastSeasonPeakObj) {
         const lastPk = lastSeasonPeakObj.peak;
         const deltaPct = (pvMd - lastPk) / lastPk * 100;
