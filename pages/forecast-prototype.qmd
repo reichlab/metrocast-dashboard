@@ -785,14 +785,13 @@ Reach it directly at /forecast-prototype.html.
       };
 
       // --- Card 3: peak week ---
-      const dateCounts = {};
-      for (const d of stats.peakDates) dateCounts[d] = (dateCounts[d] || 0) + 1;
-      const modeDate = Object.keys(dateCounts).reduce((a, b) => dateCounts[a] >= dateCounts[b] ? a : b);
+      // Median peak week (taken from the sorted dates, so it is always a real forecast week and
+      // always falls inside the 50% PI, unlike the most common week).
       const sortedPeakDates = [...stats.peakDates].sort();
-      const loIdx = Math.floor(0.25 * (sortedPeakDates.length - 1));
-      const hiIdx = Math.floor(0.75 * (sortedPeakDates.length - 1));
-      peakWeekEl.textContent = fmt(modeDate);
-      peakWeekSubEl.textContent = `50% PI: ${fmt(sortedPeakDates[loIdx])} – ${fmt(sortedPeakDates[hiIdx])}`;
+      const pick = p => sortedPeakDates[Math.floor(p * (sortedPeakDates.length - 1))];
+      const medianDate = pick(0.5);
+      peakWeekEl.textContent = fmt(medianDate);
+      peakWeekSubEl.textContent = `50% PI: ${fmt(pick(0.25))} – ${fmt(pick(0.75))}`;
 
       if (histPeaks.length) {
         // Normalize calendar weeks around the new year so wraparound averages correctly:
@@ -800,7 +799,7 @@ Reach it directly at /forecast-prototype.html.
         const normalize = w => w >= 27 ? w - 52 : w;
         const histWeeksNorm = histPeaks.map(p => normalize(weekOfYear(p.date)));
         const meanHistWeek = histWeeksNorm.reduce((a, b) => a + b, 0) / histWeeksNorm.length;
-        const forecastWeek = normalize(weekOfYear(modeDate));
+        const forecastWeek = normalize(weekOfYear(medianDate));
         const diffWeeks = forecastWeek - meanHistWeek;
         let text, color;
         if (diffWeeks <= -2.5)        { text = `~${Math.round(Math.abs(diffWeeks))} weeks earlier than usual`; color = "#c2410c"; }
