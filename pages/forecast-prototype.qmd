@@ -492,8 +492,11 @@ Reach it directly at /forecast-prototype.html.
 
   // Epidemic trend card: a trajectory counts as increasing/decreasing if it changes by at least
   // TREND_CHANGE (relative) from the last observation; a category is reported only if at least
-  // TREND_AGREEMENT of trajectories fall in it, otherwise the trend is "Uncertain".
+  // TREND_AGREEMENT of trajectories fall in it, otherwise the trend is "Uncertain". A relative change
+  // is undefined when the last observation is 0, so then a trajectory counts as increasing if it
+  // reaches TREND_ZERO_CHANGE (percentage points; 5% of the median last observation across locations).
   const TREND_CHANGE = 0.05;
+  const TREND_ZERO_CHANGE = 0.03;
   const TREND_AGREEMENT = 0.65;
   // Epidemic level card: flag a location as "unstable" if its observations are noisy, measured as
   // the SD of log values around a centered 3-week rolling mean, or if many weeks are reported as 0.
@@ -735,13 +738,15 @@ Reach it directly at /forecast-prototype.html.
     const trendTargetDate = lastObsDate ? addDays(lastObsDate, 14) : null;
     const trendIdx = ensemble && trendTargetDate ? ensemble.dates.indexOf(trendTargetDate) : -1;
     trendCardEl.classList.remove(...Object.keys(TREND_CATEGORIES).map(k => `trend-${k}`));
-    if (trendIdx >= 0 && lastObs > 0 && ensemble.samples.length) {
+    if (trendIdx >= 0 && lastObs != null && ensemble.samples.length) {
       const n = ensemble.samples.length;
       const counts = { increasing: 0, stable: 0, decreasing: 0 };
+      // Compare in absolute terms (percentage points) so the same test covers both cases.
+      const threshold = lastObs > 0 ? TREND_CHANGE * lastObs : TREND_ZERO_CHANGE;
       for (const s of ensemble.samples) {
-        const change = s[trendIdx] / lastObs - 1;
-        if (change >= TREND_CHANGE) counts.increasing++;
-        else if (change <= -TREND_CHANGE) counts.decreasing++;
+        const change = s[trendIdx] - lastObs;
+        if (change >= threshold) counts.increasing++;
+        else if (change <= -threshold) counts.decreasing++;
         else counts.stable++;
       }
       // At most one category can reach the agreement threshold (it's > 50%).
