@@ -26,7 +26,8 @@ REPO = Path(__file__).resolve().parents[1]
 TARGET = "Flu ED visits pct"
 # Models to include, as {model_id: label shown on the page}. The cards summarize the first one.
 MODELS = {"epiENGAGE-ensemble_long": "Ensemble"}
-HISTORY_START = "2015-01-01"
+# Start of a season (Aug 1), so the oldest season shown on the chart is complete.
+HISTORY_START = "2014-08-01"
 
 
 def season_of(d):

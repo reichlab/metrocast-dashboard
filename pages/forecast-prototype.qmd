@@ -245,7 +245,7 @@ Reach it directly at /forecast-prototype.html.
     padding: 18px 20px;
     margin-bottom: 24px;
     display: grid;
-    grid-template-columns: 2fr 1.4fr 1.4fr;
+    grid-template-columns: 2fr 1.4fr 1.3fr 1.3fr;
     gap: 18px;
     align-items: start;
   }
@@ -359,6 +359,13 @@ Reach it directly at /forecast-prototype.html.
       <button class="active" data-v="trajectories">Trajectories</button>
     </div>
   </div>
+  <div>
+    <div class="fp-control-label">Past seasons</div>
+    <div class="fp-toggle" id="fp-pastseasons">
+      <button data-v="last">Last year</button>
+      <button class="active" data-v="all">All</button>
+    </div>
+  </div>
 </div>
 
 <div class="fp-cards">
@@ -412,7 +419,8 @@ Reach it directly at /forecast-prototype.html.
   <div id="fp-chart"></div>
   <div class="fp-legend">
     <div class="fp-legend-item"><span class="fp-legend-swatch" style="background:#0f172a"></span> Observed data through current week</div>
-    <div class="fp-legend-item"><span class="fp-legend-swatch" style="background:#94a3b8"></span> <span id="fp-last-year-label">Last year</span></div>
+    <div class="fp-legend-item"><span class="fp-legend-swatch" style="background:#64748b"></span> <span id="fp-last-year-label">Last year</span></div>
+    <div class="fp-legend-item" id="fp-older-legend"><span class="fp-legend-swatch" style="background:#a8b4c4"></span> <span id="fp-older-label">Earlier seasons</span></div>
     <div class="fp-legend-item" style="color:#2563eb"><span class="fp-legend-swatch dash"></span> Ensemble forecast <span id="fp-forecast-legend-detail"></span></div>
   </div>
 </div>
@@ -475,6 +483,7 @@ Reach it directly at /forecast-prototype.html.
     region: null,
     locData: null,
     viewMode: "trajectories",
+    pastSeasons: "all",  // "last" (last season only) or "all"
     enabledModels: new Set(["Ensemble"]),
   };
 
@@ -536,14 +545,18 @@ Reach it directly at /forecast-prototype.html.
   }
   regionSel.addEventListener("change", e => selectRegion(e.target.value));
 
-  // View mode toggle
-  document.querySelectorAll("#fp-viewmode button").forEach(btn => {
-    btn.addEventListener("click", () => {
-      state.viewMode = btn.dataset.v;
-      document.querySelectorAll("#fp-viewmode button").forEach(b => b.classList.toggle("active", b === btn));
-      if (state.locData) render();
+  // Toggle buttons: each sets state[key] to the clicked button's data-v
+  function bindToggle(id, key) {
+    document.querySelectorAll(`#${id} button`).forEach(btn => {
+      btn.addEventListener("click", () => {
+        state[key] = btn.dataset.v;
+        document.querySelectorAll(`#${id} button`).forEach(b => b.classList.toggle("active", b === btn));
+        if (state.locData) render();
+      });
     });
-  });
+  }
+  bindToggle("fp-viewmode", "viewMode");
+  bindToggle("fp-pastseasons", "pastSeasons");
 
   // Static labels
   document.getElementById("fp-ref-date").textContent = DATA.reference_date;
@@ -663,7 +676,6 @@ Reach it directly at /forecast-prototype.html.
     const { observed: history, forecasts } = state.locData;
     const refSeason = DATA.season;
     const observed = history.filter(r => seasonOf(r.date) === refSeason);
-    const prior = history.filter(r => seasonOf(r.date) === refSeason - 1);
 
     const ensemble = forecasts.Ensemble;
     const lastObs = observed.length ? observed[observed.length - 1].value : null;
@@ -842,6 +854,34 @@ Reach it directly at /forecast-prototype.html.
     // ---- Chart ----
     const traces = [];
 
+    // Past seasons, drawn under the current one. A season k years back is shifted forward by the
+    // whole number of weeks closest to k years, so weeks still end on Saturdays and land within
+    // half a week of the same time of year.
+    const LAST_SEASON_COLOR = "#64748b";
+    const pastSeasons = [...new Set(history.map(r => seasonOf(r.date)))]
+      .filter(s => s < refSeason && (state.pastSeasons === "all" || s === refSeason - 1))
+      .sort((a, b) => a - b);
+    for (const s of pastSeasons) {
+      const rows = history.filter(r => seasonOf(r.date) === s);
+      const shiftDays = Math.round((refSeason - s) * 365.25 / 7) * 7;
+      const isLast = s === refSeason - 1;
+      const label = `${s}-${s + 1}`;
+      traces.push(trace(label, rows.map(r => addDays(r.date, shiftDays)), rows.map(r => r.value), {
+        mode: isLast ? "lines+markers" : "lines",
+        line: { color: isLast ? LAST_SEASON_COLOR : "#a8b4c4", width: 1.8 },
+        marker: { color: LAST_SEASON_COLOR, size: 4 },
+        opacity: isLast ? 0.9 : 0.85,
+        customdata: rows.map(r => r.date),
+        hovertemplate: `${label}<br>Week ending %{customdata}: %{y:.2f}%<extra></extra>`,
+        showlegend: false,
+      }));
+    }
+    const older = pastSeasons.filter(s => s < refSeason - 1);
+    document.getElementById("fp-older-legend").style.display = older.length ? "" : "none";
+    document.getElementById("fp-older-label").textContent = older.length === 1
+      ? `Earlier season (${older[0]}-${older[0] + 1})`
+      : `Earlier seasons (${older.length}: ${older[0]}-${older[0] + 1} to ${older[older.length - 1]}-${older[older.length - 1] + 1})`;
+
     // Observed (current season)
     const obsX = observed.map(r => r.date);
     const obsY = observed.map(r => r.value);
@@ -850,23 +890,6 @@ Reach it directly at /forecast-prototype.html.
       marker: { color: "#0f172a", size: 5 },
       showlegend: false,
     }));
-
-    // Prior season — shift forward 52 weeks
-    if (prior.length) {
-      const priorAligned = prior
-        .filter(r => r.value != null)
-        .map(r => {
-          const d = new Date(r.date + "T00:00:00Z");
-          const shifted = new Date(d.getTime() + 52 * 7 * 86400000).toISOString().slice(0, 10);
-          return { date: shifted, value: r.value };
-        });
-      traces.push(trace("Last year", priorAligned.map(r => r.date), priorAligned.map(r => r.value), {
-        line: { color: "#94a3b8", width: 1.8 },
-        marker: { color: "#94a3b8", size: 3 },
-        showlegend: false,
-        opacity: 0.7,
-      }));
-    }
 
     document.getElementById("fp-forecast-legend-detail").textContent = !ensemble ? "(not available)"
       : state.viewMode === "intervals" ? "(median, 50% and 95% intervals)"
