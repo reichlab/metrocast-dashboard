@@ -1,0 +1,423 @@
+{
+  "reference_date": "2026-10-24",
+  "season": 2026,
+  "season_label": "2026-2027",
+  "target": "Flu ED visits pct",
+  "models": [
+    "Ensemble"
+  ],
+  "locations": [
+    {
+      "id": "amarillo",
+      "name": "Amarillo, TX"
+    },
+    {
+      "id": "athens",
+      "name": "Athens, GA"
+    },
+    {
+      "id": "austin",
+      "name": "Austin, TX"
+    },
+    {
+      "id": "baltimore",
+      "name": "Baltimore, MD"
+    },
+    {
+      "id": "bangor",
+      "name": "Bangor, ME"
+    },
+    {
+      "id": "bear-river",
+      "name": "Bear River, UT"
+    },
+    {
+      "id": "beaumont",
+      "name": "Beaumont, TX"
+    },
+    {
+      "id": "pittsfield",
+      "name": "Berkshire County, MA"
+    },
+    {
+      "id": "boston",
+      "name": "Boston Metro, South Shore, Cape & Islands, MA"
+    },
+    {
+      "id": "boulder",
+      "name": "Boulder, CO"
+    },
+    {
+      "id": "new-bedford",
+      "name": "Bristol County, MA"
+    },
+    {
+      "id": "brownsville",
+      "name": "Brownsville, TX"
+    },
+    {
+      "id": "bryan",
+      "name": "Bryan, TX"
+    },
+    {
+      "id": "central",
+      "name": "Central Utah, UT"
+    },
+    {
+      "id": "charleston",
+      "name": "Charleston, SC"
+    },
+    {
+      "id": "clt-area",
+      "name": "Charlotte Area, NC"
+    },
+    {
+      "id": "cherokee",
+      "name": "Cherokee, GA"
+    },
+    {
+      "id": "colorado",
+      "name": "Colorado"
+    },
+    {
+      "id": "colorado-springs",
+      "name": "Colorado Springs, CO"
+    },
+    {
+      "id": "columbia",
+      "name": "Columbia, SC"
+    },
+    {
+      "id": "columbus",
+      "name": "Columbus, GA"
+    },
+    {
+      "id": "corpus-christi",
+      "name": "Corpus Christi, TX"
+    },
+    {
+      "id": "dallas",
+      "name": "Dallas, TX"
+    },
+    {
+      "id": "davis",
+      "name": "Davis County, UT"
+    },
+    {
+      "id": "denton",
+      "name": "Denton, TX"
+    },
+    {
+      "id": "denver",
+      "name": "Denver, CO"
+    },
+    {
+      "id": "deschutes",
+      "name": "Deschutes, OR"
+    },
+    {
+      "id": "duluth",
+      "name": "Duluth, MN"
+    },
+    {
+      "id": "el-paso",
+      "name": "El Paso, TX"
+    },
+    {
+      "id": "lynn",
+      "name": "Essex County, MA"
+    },
+    {
+      "id": "eugene",
+      "name": "Eugene, OR"
+    },
+    {
+      "id": "fay-area",
+      "name": "Fayetteville Area, NC"
+    },
+    {
+      "id": "florence",
+      "name": "Florence, SC"
+    },
+    {
+      "id": "floyd",
+      "name": "Floyd, GA"
+    },
+    {
+      "id": "fort-worth",
+      "name": "Fort Worth, TX"
+    },
+    {
+      "id": "worcester",
+      "name": "Franklin & Worcester Counties, MA"
+    },
+    {
+      "id": "frederick",
+      "name": "Frederick, MD"
+    },
+    {
+      "id": "galveston",
+      "name": "Galveston, TX"
+    },
+    {
+      "id": "georgia",
+      "name": "Georgia"
+    },
+    {
+      "id": "greenville",
+      "name": "Greenville, SC"
+    },
+    {
+      "id": "hall",
+      "name": "Hall, GA"
+    },
+    {
+      "id": "springfield",
+      "name": "Hampden & Hampshire Counties, MA"
+    },
+    {
+      "id": "harford",
+      "name": "Harford, MD"
+    },
+    {
+      "id": "henry",
+      "name": "Henry, GA"
+    },
+    {
+      "id": "horry",
+      "name": "Horry, SC"
+    },
+    {
+      "id": "houston",
+      "name": "Houston, TX"
+    },
+    {
+      "id": "indiana",
+      "name": "Indiana"
+    },
+    {
+      "id": "indianapolis",
+      "name": "Indianapolis, IN"
+    },
+    {
+      "id": "killeen",
+      "name": "Killeen, TX"
+    },
+    {
+      "id": "la-grange",
+      "name": "La Grange, GA"
+    },
+    {
+      "id": "lake-jackson",
+      "name": "Lake Jackson, TX"
+    },
+    {
+      "id": "laredo",
+      "name": "Laredo, TX"
+    },
+    {
+      "id": "larimer",
+      "name": "Larimer, CO"
+    },
+    {
+      "id": "lubbock",
+      "name": "Lubbock, TX"
+    },
+    {
+      "id": "macon",
+      "name": "Macon, GA"
+    },
+    {
+      "id": "maine",
+      "name": "Maine"
+    },
+    {
+      "id": "marietta",
+      "name": "Marietta, GA"
+    },
+    {
+      "id": "maryland",
+      "name": "Maryland"
+    },
+    {
+      "id": "massachusetts",
+      "name": "Massachusetts"
+    },
+    {
+      "id": "mcallen",
+      "name": "Mcallen, TX"
+    },
+    {
+      "id": "medford",
+      "name": "Medford, OR"
+    },
+    {
+      "id": "mesa",
+      "name": "Mesa, CO"
+    },
+    {
+      "id": "minneapolis",
+      "name": "Minneapolis, MN"
+    },
+    {
+      "id": "minnesota",
+      "name": "Minnesota"
+    },
+    {
+      "id": "montgomery",
+      "name": "Montgomery, MD"
+    },
+    {
+      "id": "nyc",
+      "name": "NYC"
+    },
+    {
+      "id": "new-york",
+      "name": "New York"
+    },
+    {
+      "id": "north-carolina",
+      "name": "North Carolina"
+    },
+    {
+      "id": "nenc",
+      "name": "Northeastern, NC"
+    },
+    {
+      "id": "oregon",
+      "name": "Oregon"
+    },
+    {
+      "id": "portland",
+      "name": "Portland, ME"
+    },
+    {
+      "id": "portland-or",
+      "name": "Portland, OR"
+    },
+    {
+      "id": "rtp-area",
+      "name": "Research Triangle Park Area, NC"
+    },
+    {
+      "id": "roanoke",
+      "name": "Roanoke, VA"
+    },
+    {
+      "id": "rochester",
+      "name": "Rochester, MN"
+    },
+    {
+      "id": "rock-hill",
+      "name": "Rock Hill, SC"
+    },
+    {
+      "id": "salem",
+      "name": "Salem, OR"
+    },
+    {
+      "id": "salt-lake",
+      "name": "Salt Lake County, UT"
+    },
+    {
+      "id": "san-antonio",
+      "name": "San Antonio, TX"
+    },
+    {
+      "id": "san-juan",
+      "name": "San Juan County, UT"
+    },
+    {
+      "id": "san-marcos",
+      "name": "San Marcos, TX"
+    },
+    {
+      "id": "savannah",
+      "name": "Savannah, GA"
+    },
+    {
+      "id": "south-augusta",
+      "name": "South Augusta, GA"
+    },
+    {
+      "id": "south-carolina",
+      "name": "South Carolina"
+    },
+    {
+      "id": "southeast",
+      "name": "Southeast, UT"
+    },
+    {
+      "id": "senc",
+      "name": "Southeastern, NC"
+    },
+    {
+      "id": "southwest",
+      "name": "Southwest, UT"
+    },
+    {
+      "id": "st-cloud",
+      "name": "St. Cloud, MN"
+    },
+    {
+      "id": "st-paul",
+      "name": "St. Paul, MN"
+    },
+    {
+      "id": "summit",
+      "name": "Summit County, UT"
+    },
+    {
+      "id": "texas",
+      "name": "Texas"
+    },
+    {
+      "id": "tooele",
+      "name": "Tooele County, UT"
+    },
+    {
+      "id": "tri-county",
+      "name": "TriCounty, UT"
+    },
+    {
+      "id": "triad-area",
+      "name": "Triad Area, NC"
+    },
+    {
+      "id": "tyler",
+      "name": "Tyler, TX"
+    },
+    {
+      "id": "utah",
+      "name": "Utah"
+    },
+    {
+      "id": "utah-county",
+      "name": "Utah County, UT"
+    },
+    {
+      "id": "virginia",
+      "name": "Virginia"
+    },
+    {
+      "id": "waco",
+      "name": "Waco, TX"
+    },
+    {
+      "id": "wasatch",
+      "name": "Wasatch County, UT"
+    },
+    {
+      "id": "weber-morgan",
+      "name": "Weber-Morgan, UT"
+    },
+    {
+      "id": "weld",
+      "name": "Weld, CO"
+    },
+    {
+      "id": "wnc",
+      "name": "Western, NC"
+    }
+  ]
+}
