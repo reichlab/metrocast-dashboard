@@ -7,13 +7,16 @@ format:
     include-in-header:
       - text: |
           <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+          <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+          <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 listing: false
 ---
 
 <!--
 Prototype page. Intentionally NOT linked from the site navbar
 (see site-config.yml — this file is omitted from the `pages:` list).
-Reach it directly at /forecast-prototype.html.
+Reach it directly at /forecast-prototype.html; append #<location id> (e.g. #texas or #austin)
+to open a given state or local area.
 -->
 
 
@@ -26,9 +29,9 @@ Reach it directly at /forecast-prototype.html.
   .fp-hero {
     background: linear-gradient(135deg, #0b1d4f 0%, #1e3a8a 60%, #2a4fb8 100%);
     color: #fff;
-    padding: 28px 36px;
+    padding: 24px 32px;
     border-radius: 14px;
-    margin-bottom: 28px;
+    margin-bottom: 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -37,7 +40,7 @@ Reach it directly at /forecast-prototype.html.
   }
   .fp-hero h1 {
     margin: 0;
-    font-size: 2.1rem;
+    font-size: 2.0rem;
     font-weight: 800;
     letter-spacing: -0.02em;
     color: #fff;
@@ -47,214 +50,20 @@ Reach it directly at /forecast-prototype.html.
     color: #c7d2fe;
     font-size: 0.95rem;
   }
-  .fp-hero-right {
+  .fp-hero .stamp { color: #c7d2fe; font-size: 0.85rem; }
+
+  /* ---- Controls: chart toggles (in the chart card) and state picker (in the map card) ---- */
+  .fp-chart-controls {
     display: flex;
-    align-items: center;
-    gap: 14px;
     flex-wrap: wrap;
+    gap: 12px 24px;
+    margin-bottom: 8px;
   }
-  .fp-horizon-label {
-    color: #c7d2fe;
-    font-size: 0.85rem;
-    margin-right: 4px;
-  }
-  .fp-horizon-group {
-    display: inline-flex;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.18);
-    border-radius: 8px;
-    padding: 3px;
-  }
-  .fp-horizon-btn {
-    background: transparent;
-    color: #e0e7ff;
-    border: 0;
-    padding: 6px 14px;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 120ms, color 120ms;
-  }
-  .fp-horizon-btn:hover { background: rgba(255,255,255,0.10); }
-  .fp-horizon-btn.active {
-    background: #ffffff;
-    color: #1e3a8a;
-  }
-  .fp-action {
-    background: transparent;
-    color: #fff;
-    border: 1px solid rgba(255,255,255,0.30);
-    padding: 7px 14px;
-    border-radius: 7px;
-    font-size: 0.85rem;
-    cursor: pointer;
-    font-weight: 500;
-  }
-  .fp-action:hover { background: rgba(255,255,255,0.10); }
-  .fp-action.primary {
-    background: #2563eb;
-    border-color: #2563eb;
-  }
-  .fp-action.primary:hover { background: #1d4ed8; }
-
-  .fp-cards {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 18px;
-    margin-bottom: 24px;
-  }
-  @media (max-width: 1100px) { .fp-cards { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 600px) { .fp-cards { grid-template-columns: 1fr; } }
-  .fp-card {
-    background: linear-gradient(180deg, #ffffff 0%, #f5f9ff 100%);
-    border: 1px solid #e3e9f4;
-    border-radius: 12px;
-    padding: 18px 20px;
-    min-height: 150px;
-  }
-  .fp-card-label {
-    text-transform: uppercase;
-    color: #64748b;
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    margin-bottom: 12px;
-    line-height: 1.3;
-  }
-  .fp-card-primary {
-    font-size: 2.4rem;
-    font-weight: 800;
-    color: #0f172a;
-    line-height: 1;
-    margin-bottom: 10px;
-  }
-  .fp-card-primary.muted { font-size: 1.45rem; font-weight: 700; }
-  .fp-pill {
-    display: inline-block;
-    background: #dbeafe;
-    color: #1d4ed8;
-    padding: 4px 10px;
-    border-radius: 999px;
-    font-size: 0.8rem;
-    font-weight: 600;
-  }
-  .fp-percentile-row { display: flex; gap: 24px; }
-  .fp-percentile-row .fp-pct-block .lbl {
-    color: #64748b;
-    font-size: 0.78rem;
-    margin-bottom: 4px;
-  }
-  .fp-percentile-row .fp-pct-block .val {
-    font-size: 2.0rem;
-    font-weight: 800;
-    line-height: 1;
-  }
-  .fp-percentile-row .fp-pct-block .val.future { color: #2563eb; }
-  .fp-card-sub {
-    color: #2563eb;
-    font-size: 0.82rem;
-    margin-top: 4px;
-    font-style: italic;
-  }
-  .fp-card-sub-strong {
-    color: #1d4ed8;
-    font-size: 0.95rem;
-    font-weight: 700;
-    margin-top: 2px;
-  }
-  .fp-trend-large {
-    font-size: 1.75rem;
-    font-weight: 800;
-    line-height: 1.1;
-    margin-bottom: 10px;
-    letter-spacing: -0.01em;
-  }
-  .fp-trend-head {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-  .fp-trend-head .fp-trend-large { margin-bottom: 0; }
-  .fp-trend-icon {
-    flex: none;
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    background: #94a3b8;
-  }
-  .fp-trend-icon:empty { display: none; }
-  .fp-trend-icon svg { width: 20px; height: 20px; }
-  .fp-trend-stat {
-    font-size: 0.95rem;
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-  .fp-trend-card { border-left-width: 5px; }
-  .fp-trend-card.trend-increasing { background: #fef2f2; border-color: #fecaca; border-left-color: #dc2626; }
-  .fp-trend-card.trend-stable     { background: #fefce8; border-color: #fde68a; border-left-color: #eab308; }
-  .fp-trend-card.trend-decreasing { background: #eff6ff; border-color: #bfdbfe; border-left-color: #2563eb; }
-  .fp-trend-card.trend-uncertain  { background: #f8fafc; border-color: #e2e8f0; border-left-color: #94a3b8; }
-  .fp-trend-card .fp-card-sub { color: #64748b; }
-  .fp-trend-medium {
-    font-size: 1.05rem;
-    font-weight: 700;
-    margin: 6px 0 4px 0;
-  }
-  .fp-level-line {
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
-    margin-bottom: 6px;
-  }
-  .fp-level-line .lbl {
-    color: #64748b;
-    font-size: 0.82rem;
-    min-width: 78px;
-  }
-  .fp-level-line .val {
-    font-size: 1.15rem;
-    font-weight: 700;
-    line-height: 1.15;
-  }
-  .fp-level-warning {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    margin-top: 8px;
-    background: #fef3c7;
-    color: #92400e;
-    border: 1px solid #fcd34d;
-    padding: 3px 9px;
-    border-radius: 999px;
-    font-size: 0.76rem;
-    font-weight: 700;
-    cursor: help;
-  }
-  .fp-level-warning[hidden] { display: none; }
-
-  .fp-controls {
-    background: #fff;
-    border: 1px solid #e3e9f4;
-    border-radius: 12px;
-    padding: 18px 20px;
-    margin-bottom: 24px;
-    display: grid;
-    grid-template-columns: 2fr 1.4fr 1.3fr 1.3fr;
-    gap: 18px;
-    align-items: start;
-  }
-  @media (max-width: 800px) { .fp-controls { grid-template-columns: 1fr 1fr; } }
   .fp-control-label {
     color: #475569;
     font-size: 0.78rem;
     font-weight: 600;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
   .fp-select {
     width: 100%;
@@ -274,156 +83,338 @@ Reach it directly at /forecast-prototype.html.
   .fp-toggle button {
     background: transparent;
     border: 0;
-    padding: 6px 14px;
+    padding: 6px 12px;
     font-size: 0.85rem;
     border-radius: 5px;
     cursor: pointer;
     color: #475569;
     font-weight: 500;
+    white-space: nowrap;
   }
   .fp-toggle button.active {
     background: #fff;
     color: #0f172a;
     box-shadow: 0 1px 2px rgba(0,0,0,0.06);
   }
-  .fp-model-list { display: flex; flex-direction: column; gap: 6px; }
-  .fp-model-list label {
-    display: flex; align-items: center; gap: 8px;
-    font-size: 0.9rem; cursor: pointer;
-  }
-  .fp-uncertainty {
-    background: #eff6ff;
-    border: 1px solid #bfdbfe;
-    border-radius: 12px;
-    padding: 18px 20px;
-  }
-  .fp-uncertainty h4 {
-    text-transform: uppercase;
-    color: #1e3a8a;
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    margin: 0 0 8px 0;
-  }
-  .fp-uncertainty p { color: #1e3a8a; font-size: 0.86rem; line-height: 1.4; margin: 0 0 10px 0; }
-  .fp-uncertainty .src { color: #64748b; font-size: 0.78rem; margin: 0; }
+  .fp-state-picker { padding-bottom: 16px; margin-bottom: 16px; border-bottom: 1px solid #e3e9f4; }
+  #fp-usmap { margin-top: 10px; }
+  #fp-usmap svg { width: 100%; height: auto; display: block; }
+  #fp-usmap path { fill: #f1f5f9; stroke: #fff; stroke-width: 0.6; }
+  #fp-usmap path.has-data { fill: #bfdbfe; cursor: pointer; }
+  #fp-usmap path.has-data:hover { fill: #60a5fa; }
+  #fp-usmap path.active { fill: #1e3a8a; }
 
-  .fp-chart-card {
+  /* ---- Main area: cards + chart on the left, local-area map on the right ---- */
+  .fp-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 380px;
+    gap: 20px;
+    align-items: start;
+  }
+  @media (max-width: 1000px) { .fp-main { grid-template-columns: minmax(0, 1fr); } }
+  .fp-view-head { margin-bottom: 12px; }
+  .fp-view-head h2 {
+    margin: 0;
+    font-size: 1.55rem;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.01em;
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+  .fp-view-head .sub { color: #64748b; font-size: 0.88rem; margin-top: 2px; }
+  .fp-view-head .sub a { color: #2563eb; font-weight: 600; text-decoration: none; }
+  .fp-view-head .sub a:hover { text-decoration: underline; }
+
+  .fp-cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 1300px) { .fp-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 500px) { .fp-cards { grid-template-columns: minmax(0, 1fr); } }
+  .fp-card {
+    background: linear-gradient(180deg, #ffffff 0%, #f5f9ff 100%);
+    border: 1px solid #e3e9f4;
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .fp-card-label {
+    text-transform: uppercase;
+    color: #64748b;
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .fp-card-primary {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+  .fp-card-sub {
+    color: #2563eb;
+    font-size: 0.74rem;
+    margin-top: 3px;
+    font-style: italic;
+    line-height: 1.3;
+  }
+  .fp-card-sub-strong {
+    color: #1d4ed8;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-top: 2px;
+  }
+  .fp-trend-large {
+    font-size: 1.2rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+  .fp-trend-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .fp-trend-head .fp-trend-large { margin-bottom: 0; }
+  .fp-trend-icon {
+    flex: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background: #94a3b8;
+  }
+  .fp-trend-icon:empty { display: none; }
+  .fp-trend-icon svg { width: 14px; height: 14px; }
+  .fp-trend-stat {
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .fp-trend-card { border-left-width: 4px; }
+  .fp-trend-card.trend-increasing { background: #fef2f2; border-color: #fecaca; border-left-color: #dc2626; }
+  .fp-trend-card.trend-stable     { background: #eff6ff; border-color: #bfdbfe; border-left-color: #2563eb; }
+  .fp-trend-card.trend-decreasing { background: #f0fdf4; border-color: #bbf7d0; border-left-color: #16a34a; }
+  .fp-trend-card.trend-uncertain  { background: #f5f3ff; border-color: #ddd6fe; border-left-color: #c4b5fd; }
+  .fp-trend-card .fp-card-sub { color: #64748b; }
+  .fp-level-line {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 3px;
+  }
+  .fp-level-line .lbl {
+    color: #64748b;
+    font-size: 0.74rem;
+    min-width: 64px;
+  }
+  .fp-level-line .val {
+    font-size: 0.92rem;
+    font-weight: 700;
+    line-height: 1.15;
+  }
+  .fp-level-warning {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 6px;
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fcd34d;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    cursor: help;
+  }
+  .fp-level-warning[hidden] { display: none; }
+
+  .fp-chart-card, .fp-map-card {
     background: #fff;
     border: 1px solid #e3e9f4;
     border-radius: 12px;
-    padding: 22px 24px;
+    padding: 18px 20px;
   }
   .fp-chart-head {
     display: flex; justify-content: space-between; align-items: flex-start;
-    margin-bottom: 16px; flex-wrap: wrap; gap: 8px;
+    margin-bottom: 12px; flex-wrap: wrap; gap: 8px;
   }
-  .fp-chart-head h3 { margin: 0; font-size: 1.15rem; font-weight: 700; color: #0f172a; }
-  .fp-chart-head .sub { color: #64748b; font-size: 0.85rem; margin-top: 2px; }
-  .fp-chart-head .stamp { color: #94a3b8; font-size: 0.8rem; }
-  #fp-chart { width: 100%; height: 460px; }
+  .fp-chart-head h3, .fp-map-card h3 { margin: 0; font-size: 1.1rem; font-weight: 700; color: #0f172a; }
+  .fp-chart-head .sub, .fp-map-card .sub { color: #64748b; font-size: 0.84rem; margin-top: 2px; }
+  #fp-chart { width: 100%; height: 440px; }
   .fp-legend {
-    margin-top: 14px;
+    margin-top: 12px;
     display: flex; flex-wrap: wrap; gap: 16px;
     font-size: 0.82rem; color: #475569;
   }
   .fp-legend-item { display: flex; align-items: center; gap: 7px; }
   .fp-legend-swatch { width: 26px; height: 3px; border-radius: 1px; }
   .fp-legend-swatch.dash { background: repeating-linear-gradient(90deg, currentColor 0 5px, transparent 5px 9px); height: 2px; }
-  .fp-legend-swatch.shade { height: 10px; opacity: 0.25; }
   .fp-loading .fp-cards, .fp-loading .fp-chart-card { opacity: 0.5; transition: opacity 120ms; }
+
+  /* ---- Local-area map ---- */
+  #fp-statemap { margin: 12px 0 8px 0; }
+  #fp-statemap svg { width: 100%; height: auto; display: block; }
+  #fp-statemap .fp-county { fill: #f1f5f9; stroke: #fff; stroke-width: 0.5; }
+  #fp-statemap .fp-state-outline { fill: none; stroke: #94a3b8; stroke-width: 1; }
+  #fp-statemap .fp-region {
+    stroke: #fff; stroke-width: 1.2; cursor: pointer;
+    transition: fill 200ms;
+  }
+  #fp-statemap .fp-region:hover, #fp-statemap .fp-region:focus { stroke: #0f172a; stroke-width: 1.5; outline: none; }
+  #fp-statemap .fp-region.selected { stroke: #0f172a; stroke-width: 2.5; }
+  #fp-statemap .fp-msg { color: #64748b; font-size: 0.85rem; padding: 20px 0; }
+  .fp-map-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 0.78rem; color: #475569; }
+  .fp-map-legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .fp-dot { width: 10px; height: 10px; border-radius: 50%; flex: none; display: inline-block; }
+  .fp-loc-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .fp-loc-list button {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 999px;
+    padding: 3px 10px; font-size: 0.76rem; color: #334155; cursor: pointer;
+  }
+  .fp-loc-list button:hover { border-color: #94a3b8; }
+  .fp-loc-list button.active { background: #0f172a; border-color: #0f172a; color: #fff; }
+  .fp-back {
+    margin-top: 12px;
+    background: #fff; color: #1e3a8a;
+    border: 1px solid #bfdbfe; border-radius: 7px;
+    padding: 6px 12px; font-size: 0.84rem; font-weight: 600; cursor: pointer;
+  }
+  .fp-back:hover { background: #eff6ff; }
+  .fp-back[hidden] { display: none; }
+  #fp-tip {
+    position: fixed; pointer-events: none; z-index: 1000;
+    background: #0f172a; color: #fff; border-radius: 6px;
+    padding: 6px 9px; font-size: 0.78rem; line-height: 1.35; max-width: 260px;
+    box-shadow: 0 4px 12px rgba(15,23,42,0.25);
+  }
+  #fp-tip[hidden] { display: none; }
 </style>
 
 <div class="fp-hero">
   <div>
     <h1>Influenza Forecasting</h1>
-    <div class="fp-sub">Full-season outlook • <span id="fp-season-label">2025-2026</span></div>
+    <div class="fp-sub">Ensemble forecasts by state and local area • <span id="fp-season-label">2025-2026</span> season</div>
   </div>
+  <div class="stamp">Reference date: <span id="fp-ref-date">—</span></div>
 </div>
 
-<div class="fp-controls">
+<div class="fp-main">
   <div>
-    <div class="fp-control-label">Region</div>
-    <select class="fp-select" id="fp-region"></select>
-  </div>
-  <div>
-    <div class="fp-control-label">Metric</div>
-    <select class="fp-select" id="fp-metric" disabled>
-      <option>Percent ED Visits</option>
-    </select>
-  </div>
-  <div>
-    <div class="fp-control-label">View Mode</div>
-    <div class="fp-toggle" id="fp-viewmode">
-      <button data-v="intervals">Intervals</button>
-      <button class="active" data-v="trajectories">Trajectories</button>
+    <div class="fp-view-head">
+      <h2 id="fp-view-title">—</h2>
+      <div class="sub" id="fp-view-sub"></div>
     </div>
-  </div>
-  <div>
-    <div class="fp-control-label">Past seasons</div>
-    <div class="fp-toggle" id="fp-pastseasons">
-      <button data-v="last">Last year</button>
-      <button class="active" data-v="all">All</button>
-    </div>
-  </div>
-</div>
 
-<div class="fp-cards">
-  <div class="fp-card fp-trend-card" id="fp-trend-card">
-    <div class="fp-card-label">Epidemic trend</div>
-    <div class="fp-trend-head">
-      <span class="fp-trend-icon" id="fp-trend-icon" aria-hidden="true"></span>
-      <span class="fp-trend-large" id="fp-trend-label">—</span>
+    <div class="fp-cards">
+      <div class="fp-card fp-trend-card" id="fp-trend-card">
+        <div class="fp-card-label">Epidemic trend</div>
+        <div class="fp-trend-head">
+          <span class="fp-trend-icon" id="fp-trend-icon" aria-hidden="true"></span>
+          <span class="fp-trend-large" id="fp-trend-label">—</span>
+        </div>
+        <div class="fp-trend-stat" id="fp-trend-stat"></div>
+        <div class="fp-card-sub" id="fp-trend-sub"></div>
+      </div>
+      <div class="fp-card">
+        <div class="fp-card-label">Epidemic level</div>
+        <div class="fp-level-line">
+          <span class="lbl">Current:</span>
+          <span class="val" id="fp-level-current">—</span>
+        </div>
+        <div class="fp-level-line">
+          <span class="lbl">In 4 weeks:</span>
+          <span class="val" id="fp-level-future">—</span>
+        </div>
+        <div class="fp-card-sub" id="fp-level-sub"></div>
+        <div class="fp-level-warning" id="fp-level-warning" hidden
+             title="Reported values in this location jump around a lot from week to week (often because of small numbers or weeks reported as zero), so the level may change quickly.">
+          &#9888; Warning: unstable data
+        </div>
+      </div>
+      <div class="fp-card">
+        <div class="fp-card-label">Expected peak week</div>
+        <div class="fp-card-primary" id="fp-peak-week">—</div>
+        <div class="fp-card-sub" id="fp-peak-week-sub"></div>
+        <div class="fp-card-sub" id="fp-peak-week-hist"></div>
+      </div>
+      <div class="fp-card">
+        <div class="fp-card-label">Expected season peak</div>
+        <div class="fp-trend-large" id="fp-peak-vs-last">—</div>
+        <div class="fp-card-sub-strong" id="fp-peak-value">—</div>
+        <div class="fp-card-sub" id="fp-peak-vs-last-prob"></div>
+      </div>
     </div>
-    <div class="fp-trend-stat" id="fp-trend-stat"></div>
-    <div class="fp-card-sub" id="fp-trend-sub"></div>
-  </div>
-  <div class="fp-card">
-    <div class="fp-card-label">Epidemic level</div>
-    <div class="fp-level-line">
-      <span class="lbl">Current:</span>
-      <span class="val" id="fp-level-current">—</span>
-    </div>
-    <div class="fp-level-line">
-      <span class="lbl">In 4 weeks:</span>
-      <span class="val" id="fp-level-future">—</span>
-    </div>
-    <div class="fp-card-sub" id="fp-level-sub"></div>
-    <div class="fp-level-warning" id="fp-level-warning" hidden
-         title="Reported values in this location jump around a lot from week to week (often because of small numbers or weeks reported as zero), so the level may change quickly.">
-      &#9888; Warning: unstable data
-    </div>
-  </div>
-  <div class="fp-card">
-    <div class="fp-card-label">Expected peak week</div>
-    <div class="fp-card-primary muted" id="fp-peak-week">—</div>
-    <div class="fp-card-sub" id="fp-peak-week-sub"></div>
-    <div class="fp-card-sub" id="fp-peak-week-hist"></div>
-  </div>
-  <div class="fp-card">
-    <div class="fp-card-label">Expected season peak</div>
-    <div class="fp-trend-large" id="fp-peak-vs-last">—</div>
-    <div class="fp-card-sub-strong" id="fp-peak-value">—</div>
-    <div class="fp-card-sub" id="fp-peak-vs-last-prob"></div>
-  </div>
-</div>
 
-<div class="fp-chart-card">
-  <div class="fp-chart-head">
-    <div>
-      <h3>ED Visits Forecast</h3>
-      <div class="sub">Full-season projection • Data source: NSSP</div>
+    <div class="fp-chart-card">
+      <div class="fp-chart-head">
+        <div>
+          <h3 id="fp-chart-title">ED Visits Forecast</h3>
+          <div class="sub" id="fp-chart-sub"></div>
+        </div>
+      </div>
+      <div class="fp-chart-controls">
+        <div>
+          <div class="fp-control-label">Forecast window</div>
+          <div class="fp-toggle" id="fp-window">
+            <button class="active" data-v="4w">4 weeks</button>
+            <button data-v="season">Full season</button>
+          </div>
+        </div>
+        <div>
+          <div class="fp-control-label">View mode</div>
+          <div class="fp-toggle" id="fp-viewmode">
+            <button data-v="intervals">Intervals</button>
+            <button class="active" data-v="trajectories">Trajectories</button>
+          </div>
+        </div>
+        <div>
+          <div class="fp-control-label">Past seasons</div>
+          <div class="fp-toggle" id="fp-pastseasons">
+            <button data-v="last">Last year</button>
+            <button class="active" data-v="all">All</button>
+          </div>
+        </div>
+      </div>
+      <div id="fp-chart"></div>
+      <div class="fp-legend">
+        <div class="fp-legend-item"><span class="fp-legend-swatch" style="background:#0f172a"></span> Observed data through current week</div>
+        <div class="fp-legend-item"><span class="fp-legend-swatch" style="background:#64748b"></span> <span id="fp-last-year-label">Last year</span></div>
+        <div class="fp-legend-item" id="fp-older-legend"><span class="fp-legend-swatch" style="background:#a8b4c4"></span> <span id="fp-older-label">Earlier seasons</span></div>
+        <div class="fp-legend-item" style="color:#2563eb"><span class="fp-legend-swatch dash"></span> Ensemble forecast <span id="fp-forecast-legend-detail"></span></div>
+      </div>
     </div>
-    <div class="stamp">Reference date: <span id="fp-ref-date">—</span></div>
   </div>
-  <div id="fp-chart"></div>
-  <div class="fp-legend">
-    <div class="fp-legend-item"><span class="fp-legend-swatch" style="background:#0f172a"></span> Observed data through current week</div>
-    <div class="fp-legend-item"><span class="fp-legend-swatch" style="background:#64748b"></span> <span id="fp-last-year-label">Last year</span></div>
-    <div class="fp-legend-item" id="fp-older-legend"><span class="fp-legend-swatch" style="background:#a8b4c4"></span> <span id="fp-older-label">Earlier seasons</span></div>
-    <div class="fp-legend-item" style="color:#2563eb"><span class="fp-legend-swatch dash"></span> Ensemble forecast <span id="fp-forecast-legend-detail"></span></div>
+
+  <!-- A div, not an <aside>: Quarto moves asides into the page margin. -->
+  <div class="fp-map-card">
+    <div class="fp-state-picker">
+      <div class="fp-control-label">State</div>
+      <select class="fp-select" id="fp-state" aria-label="State"></select>
+      <div class="fp-usmap-wrap">
+        <div id="fp-usmap" role="group" aria-label="Pick a state on the map"></div>
+      </div>
+    </div>
+    <h3 id="fp-map-title">Local areas</h3>
+    <div class="sub">Colored by each area's epidemic trend. Select an area to see its forecast.</div>
+    <div id="fp-statemap"></div>
+    <div class="fp-map-legend" id="fp-map-legend"></div>
+    <div class="fp-loc-list" id="fp-loc-list"></div>
+    <button class="fp-back" id="fp-back" hidden></button>
   </div>
 </div>
+<div id="fp-tip" hidden></div>
 
 <script>
 (async function () {
@@ -456,7 +447,15 @@ Reach it directly at /forecast-prototype.html.
       `If you're viewing this via file://, serve the directory over HTTP (e.g. <code>quarto preview</code>).</div>`;
   }
 
-  // Each location's data is fetched the first time it's selected and kept for the rest of the visit.
+  // County and state shapes for the maps (TopoJSON; county ids are 5-digit FIPS codes whose first
+  // two digits are the state's id).
+  const US_ATLAS_URL = "https://cdn.jsdelivr.net/npm/us-atlas@3.0.1/counties-10m.json";
+  const topoPromise = window.d3 && window.topojson
+    ? d3.json(US_ATLAS_URL)
+    : Promise.reject(new Error("Map libraries failed to load"));
+  topoPromise.catch(() => {});
+
+  // Each location's data is fetched the first time it's needed and kept for the rest of the visit.
   const locationCache = new Map();
   function loadLocation(id) {
     if (!locationCache.has(id)) {
@@ -467,9 +466,11 @@ Reach it directly at /forecast-prototype.html.
     return locationCache.get(id);
   }
 
-  // Start fetching the default location alongside options.json rather than after it.
+  // The page opens on the location named in the URL hash (#<location id>), else DEFAULT_LOCATION.
+  // Start fetching it alongside options.json rather than after it.
   const DEFAULT_LOCATION = "texas";
-  loadLocation(DEFAULT_LOCATION).catch(() => {});
+  const hashId = () => decodeURIComponent(location.hash.slice(1));
+  loadLocation(hashId() || DEFAULT_LOCATION).catch(() => {});
   let DATA;
   try {
     DATA = await fetchJson("options.json");
@@ -477,18 +478,33 @@ Reach it directly at /forecast-prototype.html.
     showError(err);
     return;
   }
-  const MODEL_COLORS = { Ensemble: "#2563eb" };
+  const FORECAST_COLOR = "#2563eb";
+
+  // Locations grouped by state: each state has a statewide location (if forecast) and local areas.
+  const LOCATIONS = new Map(DATA.locations.map(l => [l.id, l]));
+  const STATES = new Map();
+  for (const l of DATA.locations) {
+    if (!STATES.has(l.state)) STATES.set(l.state, { name: l.state, abb: l.state_abb, statewide: null, locals: [] });
+    const s = STATES.get(l.state);
+    if (l.level === "state") s.statewide = l; else s.locals.push(l);
+  }
+  const stateHome = s => (s.statewide || s.locals[0]).id;
 
   const state = {
+    stateName: null,
     region: null,
     locData: null,
+    window: "4w",  // "4w" (next 4 weeks) or "season" (full season)
     viewMode: "trajectories",
     pastSeasons: "all",  // "last" (last season only) or "all"
-    enabledModels: new Set(["Ensemble"]),
   };
+  // Epidemic trend of each location in the current state, filled in as their data arrives:
+  // undefined while loading, null if the trend can't be computed, else computeTrend()'s result.
+  const trends = new Map();
 
-  const QUANTILE_LEVELS = [0.025, 0.25, 0.5, 0.75, 0.975];
   const N_TRAJ_DRAWS = 30;  // how many sample paths to render in trajectories view
+  const MAX_HORIZON = 3;  // last horizon (weeks after the reference date) shown in the "4 weeks" window
+  const WINDOW_HISTORY_WEEKS = 16;  // weeks of observations shown before the forecast in that window
 
   // Epidemic trend card: a trajectory counts as increasing/decreasing if it changes by at least
   // TREND_CHANGE (relative) from the last observation; a category is reported only if at least
@@ -509,17 +525,14 @@ Reach it directly at /forecast-prototype.html.
   const TREND_CATEGORIES = {
     increasing: { label: "Increasing", verb: "rising",    color: "#b91c1c", iconBg: "#dc2626",
                   icon: svgIcon('<path d="M5 17 17 5"/><path d="M8 5h9v9"/>') },
-    stable:     { label: "Stable",     verb: "stable",    color: "#a16207", iconBg: "#eab308",
+    stable:     { label: "Stable",     verb: "stable",    color: "#1d4ed8", iconBg: "#2563eb",
                   icon: svgIcon('<path d="M4 12h15"/><path d="M13 6l6 6-6 6"/>') },
-    decreasing: { label: "Decreasing", verb: "declining", color: "#1d4ed8", iconBg: "#2563eb",
+    decreasing: { label: "Decreasing", verb: "declining", color: "#15803d", iconBg: "#16a34a",
                   icon: svgIcon('<path d="M5 7 17 19"/><path d="M17 10v9H8"/>') },
-    uncertain:  { label: "Uncertain",  verb: null,        color: "#475569", iconBg: "#94a3b8",
+    uncertain:  { label: "Uncertain",  verb: null,        color: "#6d28d9", iconBg: "#c4b5fd",
                   icon: svgIcon('<path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>') },
   };
-
-  // Default region: prefer DEFAULT_LOCATION if present, else first.
-  const defaultLoc = DATA.locations.find(l => l.id === DEFAULT_LOCATION) || DATA.locations[0];
-  state.region = defaultLoc.id;
+  const NO_TREND_FILL = "#e2e8f0";  // map fill for areas still loading or without a trend
 
   async function selectRegion(id) {
     state.region = id;
@@ -537,16 +550,79 @@ Reach it directly at /forecast-prototype.html.
     render();
   }
 
-  // Populate region dropdown
-  const regionSel = document.getElementById("fp-region");
-  for (const loc of DATA.locations) {
-    const opt = document.createElement("option");
-    opt.value = loc.id;
-    opt.textContent = loc.name;
-    if (loc.id === state.region) opt.selected = true;
-    regionSel.appendChild(opt);
+  // ---------- navigation ----------
+  // The selected location lives in the URL hash, so views can be linked to and the browser's
+  // back button returns from a local area to its state.
+  function go(id) {
+    if (hashId() === id) route();
+    else location.hash = id;
   }
-  regionSel.addEventListener("change", e => selectRegion(e.target.value));
+  function route() {
+    const hid = hashId();
+    const id = LOCATIONS.has(hid) ? hid
+      : LOCATIONS.has(DEFAULT_LOCATION) ? DEFAULT_LOCATION : DATA.locations[0].id;
+    const loc = LOCATIONS.get(id);
+    selectRegion(id);
+    if (state.stateName !== loc.state) enterState(STATES.get(loc.state));
+    updateSelection();
+  }
+  window.addEventListener("hashchange", route);
+
+  function enterState(st) {
+    state.stateName = st.name;
+    stateSel.value = st.name;
+    document.getElementById("fp-map-title").textContent = `Local areas in ${st.name}`;
+    trends.clear();
+    drawUsMap();
+    drawStateMap(st);
+    renderLocList(st);
+    // The map needs every local area's trend, so load them all (the selected one is already loading).
+    for (const l of [st.statewide, ...st.locals].filter(Boolean)) {
+      loadLocation(l.id)
+        .then(d => computeTrend(d), () => null)
+        .then(t => {
+          if (state.stateName !== st.name) return;
+          trends.set(l.id, t);
+          colorStateMap();
+        });
+    }
+  }
+
+  function updateSelection() {
+    const loc = LOCATIONS.get(state.region);
+    const st = STATES.get(loc.state);
+    const isLocal = loc.level === "local";
+    document.getElementById("fp-view-title").textContent = loc.name;
+    const subEl = document.getElementById("fp-view-sub");
+    if (isLocal && st.statewide) {
+      subEl.innerHTML = `Local forecast • <a href="#${st.statewide.id}">&larr; Back to ${st.name} statewide</a>`;
+    } else {
+      subEl.textContent = isLocal ? "Local forecast" : "Statewide forecast";
+    }
+    const backEl = document.getElementById("fp-back");
+    backEl.hidden = !(isLocal && st.statewide);
+    if (st.statewide) backEl.textContent = `← Back to ${st.name} statewide`;
+    d3Safe(() => d3.selectAll("#fp-statemap .fp-region")
+      .classed("selected", d => d.loc.id === state.region)
+      .filter(d => d.loc.id === state.region).raise());
+    document.querySelectorAll("#fp-loc-list button")
+      .forEach(b => b.classList.toggle("active", b.dataset.id === state.region));
+  }
+  const d3Safe = f => { if (window.d3) f(); };
+
+  // State dropdown
+  const stateSel = document.getElementById("fp-state");
+  for (const s of [...STATES.values()].sort((a, b) => a.name.localeCompare(b.name))) {
+    const opt = document.createElement("option");
+    opt.value = s.name;
+    opt.textContent = s.name;
+    stateSel.appendChild(opt);
+  }
+  stateSel.addEventListener("change", e => go(stateHome(STATES.get(e.target.value))));
+  document.getElementById("fp-back").addEventListener("click", () => {
+    const st = STATES.get(state.stateName);
+    if (st.statewide) go(st.statewide.id);
+  });
 
   // Toggle buttons: each sets state[key] to the clicked button's data-v
   function bindToggle(id, key) {
@@ -558,6 +634,7 @@ Reach it directly at /forecast-prototype.html.
       });
     });
   }
+  bindToggle("fp-window", "window");
   bindToggle("fp-viewmode", "viewMode");
   bindToggle("fp-pastseasons", "pastSeasons");
 
@@ -577,17 +654,16 @@ Reach it directly at /forecast-prototype.html.
     const d = new Date(dateStr + "T00:00:00Z");
     return new Date(d.getTime() + days * 86400000).toISOString().slice(0, 10);
   }
+  const fmtMd = ds => {
+    const d = new Date(ds + "T00:00:00Z");
+    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
+  };
   function quantileInArray(arr, val) {
     if (!arr.length) return null;
     const sorted = [...arr].sort((a, b) => a - b);
     let count = 0;
     for (const x of sorted) if (x <= val) count++;
     return Math.round((count / sorted.length) * 100);
-  }
-  function ordinal(n) {
-    if (n == null) return "—";
-    const s = ["th", "st", "nd", "rd"], v = n % 100;
-    return n + (s[(v - 20) % 10] || s[v] || s[0]);
   }
   function quantilesOf(values, levels) {
     if (!values.length) return levels.map(() => null);
@@ -669,8 +745,178 @@ Reach it directly at /forecast-prototype.html.
     }
     return { peakValues, peakDates };
   }
+  function computeTrend(locData) {
+    // Epidemic trend (last observation vs. ensemble trajectories 2 weeks later; see TREND_* above):
+    // returns {key, counts, n, lastObsDate, targetDate}, or null if the data don't allow it.
+    const observed = locData.observed.filter(r => seasonOf(r.date) === DATA.season);
+    const ensemble = locData.forecasts.Ensemble;
+    if (!observed.length || !ensemble || !ensemble.samples.length) return null;
+    const { date: lastObsDate, value: lastObs } = observed[observed.length - 1];
+    const targetDate = addDays(lastObsDate, 14);
+    const idx = ensemble.dates.indexOf(targetDate);
+    if (idx < 0) return null;
+    const n = ensemble.samples.length;
+    const counts = { increasing: 0, stable: 0, decreasing: 0 };
+    // Compare in absolute terms (percentage points) so the same test covers both cases.
+    const threshold = lastObs > 0 ? TREND_CHANGE * lastObs : TREND_ZERO_CHANGE;
+    for (const s of ensemble.samples) {
+      const change = s[idx] - lastObs;
+      if (change >= threshold) counts.increasing++;
+      else if (change <= -threshold) counts.decreasing++;
+      else counts.stable++;
+    }
+    // At most one category can reach the agreement threshold (it's > 50%).
+    const key = Object.keys(counts).find(k => counts[k] / n >= TREND_AGREEMENT) || "uncertain";
+    return { key, counts, n, lastObsDate, targetDate };
+  }
+  function trendStatText(t) {
+    return t.key === "uncertain"
+      ? "Future trajectories show mixed patterns"
+      : `${Math.round(t.counts[t.key] / t.n * 100)}% of trajectories are ${TREND_CATEGORIES[t.key].verb}`;
+  }
   function trace(name, x, y, opts = {}) {
     return Object.assign({ type: "scatter", mode: "lines+markers", name, x, y }, opts);
+  }
+
+  // ---------- maps ----------
+  const tipEl = document.getElementById("fp-tip");
+  function showTip(event, html) {
+    tipEl.innerHTML = html;
+    tipEl.hidden = false;
+    const pad = 14, r = tipEl.getBoundingClientRect();
+    const x = Math.min(event.clientX + pad, window.innerWidth - r.width - 4);
+    const y = event.clientY + pad + r.height > window.innerHeight ? event.clientY - r.height - pad : event.clientY + pad;
+    tipEl.style.left = `${x}px`;
+    tipEl.style.top = `${y}px`;
+  }
+  const hideTip = () => { tipEl.hidden = true; };
+  // Make a map shape act like a button: click or Enter/Space selects it.
+  function bindSelect(sel, idOf) {
+    sel.attr("tabindex", 0).attr("role", "button")
+      .on("click", (e, d) => go(idOf(d)))
+      .on("keydown", (e, d) => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(idOf(d)); }
+      });
+  }
+
+  async function drawUsMap() {
+    const el = document.getElementById("fp-usmap");
+    let topo;
+    try { topo = await topoPromise; } catch { el.closest(".fp-usmap-wrap").hidden = true; return; }
+    if (!el.firstChild) {
+      const W = 320, H = 200;
+      const states = topojson.feature(topo, topo.objects.states);
+      const path = d3.geoPath(d3.geoAlbersUsa().fitSize([W, H], states));
+      const paths = d3.select(el).append("svg").attr("viewBox", `0 0 ${W} ${H}`)
+        .selectAll("path").data(states.features).join("path")
+        .attr("d", path)
+        .classed("has-data", d => STATES.has(d.properties.name))
+        .attr("aria-label", d => d.properties.name);
+      paths.filter(d => !STATES.has(d.properties.name))
+        .on("mousemove", (e, d) => showTip(e, `${d.properties.name}<br><span style="color:#94a3b8">No forecasts</span>`))
+        .on("mouseleave", hideTip);
+      const withData = paths.filter(d => STATES.has(d.properties.name))
+        .on("mousemove", (e, d) => showTip(e, d.properties.name))
+        .on("mouseleave", hideTip);
+      bindSelect(withData, d => stateHome(STATES.get(d.properties.name)));
+    }
+    d3.selectAll("#fp-usmap path").classed("active", d => d.properties.name === state.stateName);
+  }
+
+  function countiesOf(loc, countyGeoms) {
+    // The county geometries making up a local area, matched by name within its state. A few names
+    // (e.g. Roanoke, VA) belong to both a county and an independent city; such a match is kept only
+    // if it touches the area's other counties, which drops a same-named city elsewhere in the state.
+    const norm = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z]/g, "");
+    const byName = d3.group(countyGeoms.map((g, i) => i), i => norm(countyGeoms[i].properties.name));
+    const chosen = new Set(), ambiguous = [];
+    for (const name of loc.counties) {
+      const matches = byName.get(norm(name)) || [];
+      if (matches.length === 1) chosen.add(matches[0]); else ambiguous.push(...matches);
+    }
+    if (ambiguous.length) {
+      const neighbors = topojson.neighbors(countyGeoms);
+      let added = true;
+      while (added) {
+        added = false;
+        for (const i of ambiguous) {
+          if (!chosen.has(i) && neighbors[i].some(j => chosen.has(j))) { chosen.add(i); added = true; }
+        }
+      }
+      if (!chosen.size) ambiguous.forEach(i => chosen.add(i));
+    }
+    return [...chosen].map(i => countyGeoms[i]);
+  }
+
+  async function drawStateMap(st) {
+    const el = document.getElementById("fp-statemap");
+    el.innerHTML = "";
+    let topo;
+    try { topo = await topoPromise; } catch (err) {
+      el.innerHTML = `<div class="fp-msg">The map couldn't be loaded (${err.message}).</div>`;
+      return;
+    }
+    if (state.stateName !== st.name) return;
+    const stateGeom = topo.objects.states.geometries.find(g => g.properties.name === st.name);
+    const countyGeoms = topo.objects.counties.geometries.filter(g => g.id.slice(0, 2) === stateGeom.id);
+    const stateFeature = topojson.feature(topo, stateGeom);
+    const W = 400, MAX_H = 440;
+    const projection = d3.geoAlbersUsa().fitWidth(W, stateFeature);
+    const path = d3.geoPath(projection);
+    let H = Math.ceil(path.bounds(stateFeature)[1][1]);
+    if (H > MAX_H) { H = MAX_H; projection.fitSize([W, H], stateFeature); }
+
+    const svg = d3.select(el).append("svg").attr("viewBox", `0 0 ${W} ${H}`)
+      .attr("role", "group").attr("aria-label", `Map of local areas in ${st.name}`);
+    svg.append("g").selectAll("path")
+      .data(topojson.feature(topo, { type: "GeometryCollection", geometries: countyGeoms }).features)
+      .join("path").attr("class", "fp-county").attr("d", path);
+    const regions = st.locals.map(loc => ({ loc, shape: topojson.merge(topo, countiesOf(loc, countyGeoms)) }));
+    const regionPaths = svg.append("g").selectAll("path").data(regions).join("path")
+      .attr("class", "fp-region").attr("d", d => path(d.shape))
+      .attr("aria-label", d => d.loc.name)
+      .on("mousemove", (e, d) => showTip(e, regionTip(d.loc.id)))
+      .on("mouseleave", hideTip);
+    bindSelect(regionPaths, d => d.loc.id);
+    svg.append("path").attr("class", "fp-state-outline").attr("d", path(topojson.mesh(topo, stateGeom)));
+    colorStateMap();
+    updateSelection();
+  }
+  function regionTip(id) {
+    const t = trends.get(id);
+    const head = `<strong>${LOCATIONS.get(id).name}</strong>`;
+    if (t === undefined) return `${head}<br>Loading…`;
+    if (t === null) return `${head}<br>Trend not available`;
+    return `${head}<br>${TREND_CATEGORIES[t.key].label}: ${trendStatText(t)}`;
+  }
+  const trendFill = id => trends.get(id) ? TREND_CATEGORIES[trends.get(id).key].iconBg : NO_TREND_FILL;
+
+  function renderLocList(st) {
+    const listEl = document.getElementById("fp-loc-list");
+    listEl.innerHTML = "";
+    for (const loc of [...st.locals].sort((a, b) => a.name.localeCompare(b.name))) {
+      const btn = document.createElement("button");
+      btn.dataset.id = loc.id;
+      btn.innerHTML = `<span class="fp-dot"></span>${loc.name.replace(/, [A-Z]{2}$/, "")}`;
+      btn.addEventListener("click", () => go(loc.id));
+      listEl.appendChild(btn);
+    }
+  }
+  function colorStateMap() {
+    d3Safe(() => d3.selectAll("#fp-statemap .fp-region").attr("fill", d => trendFill(d.loc.id)));
+    document.querySelectorAll("#fp-loc-list button").forEach(b => {
+      b.querySelector(".fp-dot").style.background = trendFill(b.dataset.id);
+      b.title = regionTip(b.dataset.id).replace(/<[^>]+>/g, " ").trim();
+    });
+    const st = STATES.get(state.stateName);
+    const counts = {};
+    for (const l of st.locals) {
+      const t = trends.get(l.id);
+      if (t) counts[t.key] = (counts[t.key] || 0) + 1;
+    }
+    document.getElementById("fp-map-legend").innerHTML = Object.entries(TREND_CATEGORIES)
+      .map(([k, c]) => `<span><i class="fp-dot" style="background:${c.iconBg}"></i>${c.label} (${counts[k] || 0})</span>`)
+      .join("");
   }
 
   // ---------- render ----------
@@ -679,6 +925,7 @@ Reach it directly at /forecast-prototype.html.
     const { observed: history, forecasts } = state.locData;
     const refSeason = DATA.season;
     const observed = history.filter(r => seasonOf(r.date) === refSeason);
+    const locName = LOCATIONS.get(state.region).name;
 
     const ensemble = forecasts.Ensemble;
     const lastObs = observed.length ? observed[observed.length - 1].value : null;
@@ -731,37 +978,18 @@ Reach it directly at /forecast-prototype.html.
     const trendLabelEl = document.getElementById("fp-trend-label");
     const trendStatEl = document.getElementById("fp-trend-stat");
     const trendSubEl = document.getElementById("fp-trend-sub");
-    const fmtMd = ds => {
-      const d = new Date(ds + "T00:00:00Z");
-      return d.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
-    };
-    const trendTargetDate = lastObsDate ? addDays(lastObsDate, 14) : null;
-    const trendIdx = ensemble && trendTargetDate ? ensemble.dates.indexOf(trendTargetDate) : -1;
+    const trend = computeTrend(state.locData);
     trendCardEl.classList.remove(...Object.keys(TREND_CATEGORIES).map(k => `trend-${k}`));
-    if (trendIdx >= 0 && lastObs != null && ensemble.samples.length) {
-      const n = ensemble.samples.length;
-      const counts = { increasing: 0, stable: 0, decreasing: 0 };
-      // Compare in absolute terms (percentage points) so the same test covers both cases.
-      const threshold = lastObs > 0 ? TREND_CHANGE * lastObs : TREND_ZERO_CHANGE;
-      for (const s of ensemble.samples) {
-        const change = s[trendIdx] - lastObs;
-        if (change >= threshold) counts.increasing++;
-        else if (change <= -threshold) counts.decreasing++;
-        else counts.stable++;
-      }
-      // At most one category can reach the agreement threshold (it's > 50%).
-      const key = Object.keys(counts).find(k => counts[k] / n >= TREND_AGREEMENT) || "uncertain";
-      const cat = TREND_CATEGORIES[key];
-      trendCardEl.classList.add(`trend-${key}`);
+    if (trend) {
+      const cat = TREND_CATEGORIES[trend.key];
+      trendCardEl.classList.add(`trend-${trend.key}`);
       trendIconEl.innerHTML = cat.icon;
       trendIconEl.style.background = cat.iconBg;
       trendLabelEl.textContent = cat.label;
       trendLabelEl.style.color = cat.color;
-      trendStatEl.textContent = key === "uncertain"
-        ? "Future trajectories show mixed patterns"
-        : `${Math.round(counts[key] / n * 100)}% of trajectories are ${cat.verb}`;
+      trendStatEl.textContent = trendStatText(trend);
       trendStatEl.style.color = cat.color;
-      trendSubEl.textContent = `From the week ending ${fmtMd(lastObsDate)} to the week ending ${fmtMd(trendTargetDate)}`;
+      trendSubEl.textContent = `From the week ending ${fmtMd(trend.lastObsDate)} to the week ending ${fmtMd(trend.targetDate)}`;
     } else {
       trendIconEl.innerHTML = "";
       trendLabelEl.textContent = "—"; trendLabelEl.style.color = "";
@@ -784,10 +1012,6 @@ Reach it directly at /forecast-prototype.html.
       const stats = peakStatsFromSamples(ensemble.samples, ensemble.dates, observedPeak);
       const [pvLo, pvMd, pvHi] = quantilesOf(stats.peakValues, [0.25, 0.5, 0.75]);
       const histPeaks = historicalSeasonPeaks(history, refSeason);
-      const fmt = ds => {
-        const d = new Date(ds + "T00:00:00Z");
-        return d.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
-      };
 
       // --- Card 3: peak week ---
       // Median peak week (taken from the sorted dates, so it is always a real forecast week and
@@ -795,8 +1019,8 @@ Reach it directly at /forecast-prototype.html.
       const sortedPeakDates = [...stats.peakDates].sort();
       const pick = p => sortedPeakDates[Math.floor(p * (sortedPeakDates.length - 1))];
       const medianDate = pick(0.5);
-      peakWeekEl.textContent = fmt(medianDate);
-      peakWeekSubEl.textContent = `50% PI: ${fmt(pick(0.25))} – ${fmt(pick(0.75))}`;
+      peakWeekEl.textContent = fmtMd(medianDate);
+      peakWeekSubEl.textContent = `50% PI: ${fmtMd(pick(0.25))} – ${fmtMd(pick(0.75))}`;
 
       if (histPeaks.length) {
         // Normalize calendar weeks around the new year so wraparound averages correctly:
@@ -856,6 +1080,20 @@ Reach it directly at /forecast-prototype.html.
     }
 
     // ---- Chart ----
+    // The "4 weeks" window shows forecast horizons 0 to MAX_HORIZON, after the last
+    // WINDOW_HISTORY_WEEKS weeks of this season; "Full season" shows the whole season and forecast.
+    const seasonStart = `${refSeason}-08-01`;
+    const forecastEnd = addDays(DATA.reference_date, MAX_HORIZON * 7);
+    const fourWeeks = state.window === "4w";
+    const xStart = fourWeeks
+      ? [seasonStart, addDays(DATA.reference_date, -7 * WINDOW_HISTORY_WEEKS)].sort()[1]
+      : seasonStart;
+    const xEnd = fourWeeks ? forecastEnd
+      : [`${refSeason + 1}-07-31`, ensemble ? ensemble.dates[ensemble.dates.length - 1] : ""].sort()[1];
+    document.getElementById("fp-chart-title").textContent = `ED Visits Forecast: ${locName}`;
+    document.getElementById("fp-chart-sub").textContent =
+      `${fourWeeks ? `Next ${MAX_HORIZON + 1} weeks` : "Full-season projection"} • Data source: NSSP`;
+
     const traces = [];
 
     // Past seasons, drawn under the current one. A season k years back is shifted forward by the
@@ -895,18 +1133,18 @@ Reach it directly at /forecast-prototype.html.
       showlegend: false,
     }));
 
-    document.getElementById("fp-forecast-legend-detail").textContent = !ensemble ? "(not available)"
+    // Ensemble forecast, cut to the chart's window
+    const nShown = ensemble ? ensemble.dates.filter(d => d <= xEnd).length : 0;
+    const f = ensemble && nShown && {
+      dates: ensemble.dates.slice(0, nShown),
+      samples: ensemble.samples.map(s => s.slice(0, nShown)),
+    };
+    document.getElementById("fp-forecast-legend-detail").textContent = !f || !f.samples.length ? "(not available)"
       : state.viewMode === "intervals" ? "(median, 50% and 95% intervals)"
-      : `(${Math.min(N_TRAJ_DRAWS, ensemble.samples.length)} of ${ensemble.samples.length} trajectories shown)`;
-
-    // Forecasts (per enabled model)
-    for (const m of DATA.models) {
-      if (!state.enabledModels.has(m)) continue;
-      const f = forecasts[m];
-      if (!f || !f.samples.length) continue;
-      const color = MODEL_COLORS[m];
+      : `(${Math.min(N_TRAJ_DRAWS, f.samples.length)} of ${f.samples.length} trajectories shown)`;
+    if (f && f.samples.length) {
+      const color = FORECAST_COLOR;
       const x = f.dates;
-
       if (state.viewMode === "intervals") {
         const bands = quantileBandsByDate(f.samples);
         // 95% band
@@ -916,7 +1154,7 @@ Reach it directly at /forecast-prototype.html.
           y: [...bands.q975, ...bands.q025.slice().reverse()],
           fill: "toself", fillcolor: color + "26",
           line: { color: "transparent" },
-          name: `${m} 95%`, hoverinfo: "skip", showlegend: false,
+          name: "Ensemble 95%", hoverinfo: "skip", showlegend: false,
         });
         // 50% band
         traces.push({
@@ -925,7 +1163,7 @@ Reach it directly at /forecast-prototype.html.
           y: [...bands.q75, ...bands.q25.slice().reverse()],
           fill: "toself", fillcolor: color + "4D",
           line: { color: "transparent" },
-          name: `${m} 50%`, hoverinfo: "skip", showlegend: false,
+          name: "Ensemble 50%", hoverinfo: "skip", showlegend: false,
         });
         // Median, connected to last observed point
         let connX = x, connY = bands.q50;
@@ -933,15 +1171,16 @@ Reach it directly at /forecast-prototype.html.
           connX = [lastObsDate, ...x];
           connY = [lastObs, ...bands.q50];
         }
-        traces.push(trace(m, connX, connY, {
+        traces.push(trace("Ensemble", connX, connY, {
           mode: "lines",
           line: { color, width: 2.5, dash: "dash" },
+          showlegend: false,
         }));
       } else {
         // Trajectories: draw N_TRAJ_DRAWS individual sample paths
         const nDraws = Math.min(N_TRAJ_DRAWS, f.samples.length);
         const indices = Array.from({ length: nDraws }, (_, j) => Math.floor(j * f.samples.length / nDraws));
-        indices.forEach((idx, j) => {
+        for (const idx of indices) {
           let lineX = x, lineY = f.samples[idx];
           if (lastObs != null) {
             lineX = [lastObsDate, ...x];
@@ -952,18 +1191,26 @@ Reach it directly at /forecast-prototype.html.
             x: lineX, y: lineY,
             line: { color, width: 1 },
             opacity: 0.25,
-            name: j === 0 ? m : `${m} draw`,
-            showlegend: j === 0,
+            name: "Ensemble",
+            showlegend: false,
             hoverinfo: "skip",
           });
-        });
+        }
       }
     }
 
+    // Plotly's autorange would fit the y-axis to every past season, so fit it to what's in view.
+    let yMax = 0;
+    for (const t of traces) {
+      t.x.forEach((xi, i) => { if (xi >= xStart && xi <= xEnd && t.y[i] > yMax) yMax = t.y[i]; });
+    }
+    const pad = fourWeeks ? 3 : 7;  // days of space beyond the first/last point
+
     const layout = {
-      margin: { t: 10, r: 20, b: 50, l: 50 },
+      margin: { t: 16, r: 20, b: 50, l: 50 },
       xaxis: {
         type: "date",
+        range: [addDays(xStart, -pad), addDays(xEnd, pad)],
         showgrid: true, gridcolor: "#eef2f7",
         tickfont: { size: 11, color: "#64748b" },
         title: { text: "" },
@@ -972,9 +1219,9 @@ Reach it directly at /forecast-prototype.html.
         title: { text: "ED Percent Flu", font: { size: 12, color: "#475569" } },
         showgrid: true, gridcolor: "#eef2f7",
         tickfont: { size: 11, color: "#64748b" },
-        rangemode: "tozero",
+        range: [0, (yMax || 1) * 1.08],
       },
-      legend: { orientation: "h", x: 0, y: 1.12, font: { size: 11 } },
+      showlegend: false,
       plot_bgcolor: "#fff",
       paper_bgcolor: "#fff",
       shapes: [{
@@ -992,7 +1239,7 @@ Reach it directly at /forecast-prototype.html.
     Plotly.react("fp-chart", traces, layout, { displayModeBar: false, responsive: true });
   }
 
-  selectRegion(state.region);
+  route();
 })();
 </script>
 ```

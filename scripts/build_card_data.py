@@ -7,7 +7,8 @@
 Reads observed target data and the sample trajectories submitted by the models in MODELS for
 one round (by default the most recent round with a file from the first model), and writes:
 
-  <out>/options.json                 reference date, season, models, and location list
+  <out>/options.json                 reference date, season, models, and location list (with each
+                                     location's state, and the counties that make up local ones)
   <out>/locations/<location>.json    observations and forecast trajectories for one location
 
 Run with `uv run scripts/build_card_data.py`; see --help for options.
@@ -69,6 +70,19 @@ def trajectories(df):
     return out
 
 
+def location_entry(locs, loc):
+    """Options entry for one location. Statewide locations are the ones with no counties listed;
+    local ones carry their counties so the page can draw them on a map."""
+    row = locs.loc[loc]
+    entry = {"id": loc, "name": row["location_name"], "state": row["state"], "state_abb": row["state_abb"]}
+    if pd.isna(row["hsa_counties"]):
+        entry["level"] = "state"
+    else:
+        entry["level"] = "local"
+        entry["counties"] = [c.strip() for c in row["hsa_counties"].split(",")]
+    return entry
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--hub", type=Path, default=REPO.parent / "flu-metrocast", help="path to the hub repo")
@@ -118,9 +132,7 @@ def main():
         "season_label": f"{ref_season}-{ref_season + 1}",
         "target": TARGET,
         "models": [label for label in MODELS.values()],
-        "locations": sorted(
-            ({"id": loc, "name": locs.at[loc, "location_name"]} for loc in keep), key=lambda l: l["name"]
-        ),
+        "locations": sorted((location_entry(locs, loc) for loc in keep), key=lambda l: l["name"]),
     }
     (args.out / "options.json").write_text(json.dumps(options, indent=2))
 
