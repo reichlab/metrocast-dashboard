@@ -100,9 +100,13 @@ to open a given state or local area.
   #fp-usmap { margin-top: 10px; }
   #fp-usmap svg { width: 100%; height: auto; display: block; }
   #fp-usmap path { fill: #f1f5f9; stroke: #fff; stroke-width: 0.6; }
-  #fp-usmap path.has-data { fill: #bfdbfe; cursor: pointer; }
-  #fp-usmap path.has-data:hover { fill: #60a5fa; }
-  #fp-usmap path.active { fill: #1e3a8a; }
+  /* States with forecasts are filled by their statewide trend (set in colorUsMap). */
+  /* Unselected states are faded; the selected one is shown at full strength. */
+  #fp-usmap path.has-data { cursor: pointer; fill-opacity: 0.4; transition: fill 200ms, fill-opacity 150ms; }
+  #fp-usmap path.has-data:hover, #fp-usmap path.has-data:focus {
+    fill-opacity: 0.7; stroke: #0f172a; stroke-width: 1.2; outline: none;
+  }
+  #fp-usmap path.active { fill-opacity: 1; }
 
   /* ---- Main area: cards + chart on the left, local-area map on the right ---- */
   .fp-main {
@@ -205,20 +209,18 @@ to open a given state or local area.
   .fp-trend-card.trend-increasing { background: #fef2f2; border-color: #fecaca; border-left-color: #dc2626; }
   .fp-trend-card.trend-stable     { background: #eff6ff; border-color: #bfdbfe; border-left-color: #2563eb; }
   .fp-trend-card.trend-decreasing { background: #f0fdf4; border-color: #bbf7d0; border-left-color: #16a34a; }
-  .fp-trend-card.trend-uncertain  { background: #f5f3ff; border-color: #ddd6fe; border-left-color: #c4b5fd; }
+  .fp-trend-card.trend-uncertain  { background: #f5f3ff; border-color: #ddd6fe; border-left-color: #8b5cf6; }
   .fp-trend-card .fp-card-sub { color: #64748b; }
-  .fp-level-line {
-    display: flex;
-    align-items: baseline;
-    gap: 6px;
-    margin-bottom: 3px;
-  }
+  /* Label ("Current:") on one line, its category on the next. */
+  .fp-level-line { margin-bottom: 6px; }
   .fp-level-line .lbl {
+    display: block;
     color: #64748b;
     font-size: 0.74rem;
-    min-width: 64px;
+    font-weight: 700;
   }
   .fp-level-line .val {
+    display: block;
     font-size: 0.92rem;
     font-weight: 700;
     line-height: 1.15;
@@ -273,6 +275,11 @@ to open a given state or local area.
   }
   #fp-statemap .fp-region:hover, #fp-statemap .fp-region:focus { stroke: #0f172a; stroke-width: 1.5; outline: none; }
   #fp-statemap .fp-region.selected { stroke: #0f172a; stroke-width: 2.5; }
+  /* In a local area's view, the other areas are faded; in the statewide view none are. */
+  #fp-statemap svg.has-selection .fp-region { fill-opacity: 0.4; transition: fill 200ms, fill-opacity 150ms; }
+  #fp-statemap svg.has-selection .fp-region:hover,
+  #fp-statemap svg.has-selection .fp-region:focus { fill-opacity: 0.7; }
+  #fp-statemap svg.has-selection .fp-region.selected { fill-opacity: 1; }
   #fp-statemap .fp-msg { color: #64748b; font-size: 0.85rem; padding: 20px 0; }
   .fp-map-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 0.78rem; color: #475569; }
   .fp-map-legend span { display: inline-flex; align-items: center; gap: 5px; }
@@ -501,6 +508,8 @@ to open a given state or local area.
   // Epidemic trend of each location in the current state, filled in as their data arrives:
   // undefined while loading, null if the trend can't be computed, else computeTrend()'s result.
   const trends = new Map();
+  // Same, for each state's statewide location, keyed by state name (for the US map).
+  const stateTrends = new Map();
 
   const N_TRAJ_DRAWS = 30;  // how many sample paths to render in trajectories view
   const MAX_HORIZON = 3;  // last horizon (weeks after the reference date) shown in the "4 weeks" window
@@ -529,7 +538,7 @@ to open a given state or local area.
                   icon: svgIcon('<path d="M4 12h15"/><path d="M13 6l6 6-6 6"/>') },
     decreasing: { label: "Decreasing", verb: "declining", color: "#15803d", iconBg: "#16a34a",
                   icon: svgIcon('<path d="M5 7 17 19"/><path d="M17 10v9H8"/>') },
-    uncertain:  { label: "Uncertain",  verb: null,        color: "#6d28d9", iconBg: "#c4b5fd",
+    uncertain:  { label: "Uncertain",  verb: null,        color: "#6d28d9", iconBg: "#8b5cf6",
                   icon: svgIcon('<path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>') },
   };
   const NO_TREND_FILL = "#e2e8f0";  // map fill for areas still loading or without a trend
@@ -602,6 +611,7 @@ to open a given state or local area.
     const backEl = document.getElementById("fp-back");
     backEl.hidden = !(isLocal && st.statewide);
     if (st.statewide) backEl.textContent = `← Back to ${st.name} statewide`;
+    d3Safe(() => d3.select("#fp-statemap svg").classed("has-selection", isLocal));
     d3Safe(() => d3.selectAll("#fp-statemap .fp-region")
       .classed("selected", d => d.loc.id === state.region)
       .filter(d => d.loc.id === state.region).raise());
@@ -724,7 +734,7 @@ to open a given state or local area.
     if (pct == null) return { label: "—", color: "#64748b" };
     if (pct >= 90) return { label: "Far above average", color: "#b91c1c" };
     if (pct >= 66) return { label: "Above average",     color: "#c2410c" };
-    if (pct >= 33) return { label: "Average",           color: "#475569" };
+    if (pct >= 33) return { label: "Average",           color: "#1d4ed8" };
     if (pct >= 10) return { label: "Below average",     color: "#15803d" };
     return                  { label: "Far below average", color: "#166534" };
   }
@@ -816,11 +826,17 @@ to open a given state or local area.
         .on("mousemove", (e, d) => showTip(e, `${d.properties.name}<br><span style="color:#94a3b8">No forecasts</span>`))
         .on("mouseleave", hideTip);
       const withData = paths.filter(d => STATES.has(d.properties.name))
-        .on("mousemove", (e, d) => showTip(e, d.properties.name))
+        .on("mousemove", (e, d) => showTip(e, trendTip(d.properties.name, stateTrends.get(d.properties.name))))
         .on("mouseleave", hideTip);
       bindSelect(withData, d => stateHome(STATES.get(d.properties.name)));
     }
-    d3.selectAll("#fp-usmap path").classed("active", d => d.properties.name === state.stateName);
+    d3.selectAll("#fp-usmap path").classed("active", d => d.properties.name === state.stateName)
+      .filter(".active").raise();
+    colorUsMap();
+  }
+  function colorUsMap() {
+    d3Safe(() => d3.selectAll("#fp-usmap path.has-data")
+      .style("fill", d => fillFor(stateTrends.get(d.properties.name))));
   }
 
   function countiesOf(loc, countyGeoms) {
@@ -882,14 +898,15 @@ to open a given state or local area.
     colorStateMap();
     updateSelection();
   }
-  function regionTip(id) {
-    const t = trends.get(id);
-    const head = `<strong>${LOCATIONS.get(id).name}</strong>`;
+  function trendTip(name, t) {
+    const head = `<strong>${name}</strong>`;
     if (t === undefined) return `${head}<br>Loading…`;
     if (t === null) return `${head}<br>Trend not available`;
     return `${head}<br>${TREND_CATEGORIES[t.key].label}: ${trendStatText(t)}`;
   }
-  const trendFill = id => trends.get(id) ? TREND_CATEGORIES[trends.get(id).key].iconBg : NO_TREND_FILL;
+  const regionTip = id => trendTip(LOCATIONS.get(id).name, trends.get(id));
+  const fillFor = t => t ? TREND_CATEGORIES[t.key].iconBg : NO_TREND_FILL;
+  const trendFill = id => fillFor(trends.get(id));
 
   function renderLocList(st) {
     const listEl = document.getElementById("fp-loc-list");
@@ -1240,6 +1257,13 @@ to open a given state or local area.
   }
 
   route();
+  // The US map is colored by each state's statewide trend, so load every statewide location.
+  for (const s of STATES.values()) {
+    if (!s.statewide) { stateTrends.set(s.name, null); continue; }
+    loadLocation(s.statewide.id)
+      .then(d => computeTrend(d), () => null)
+      .then(t => { stateTrends.set(s.name, t); colorUsMap(); });
+  }
 })();
 </script>
 ```
