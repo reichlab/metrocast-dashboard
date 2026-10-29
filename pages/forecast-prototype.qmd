@@ -253,8 +253,7 @@ to open a given state or local area.
   }
   .fp-chart-head h3, .fp-map-card h3 { margin: 0; font-size: 1.1rem; font-weight: 700; color: #0f172a; }
   .fp-chart-head .sub, .fp-map-card .sub { color: #64748b; font-size: 0.84rem; margin-top: 2px; }
-  #fp-chart { width: 100%; height: 440px; }
-  .fp-legend {
+  #fp-chart { width: 100%; height: 440px; }  .fp-legend {
     margin-top: 12px;
     display: flex; flex-wrap: wrap; gap: 16px;
     font-size: 0.82rem; color: #475569;
@@ -1098,7 +1097,8 @@ to open a given state or local area.
 
     // ---- Chart ----
     // The "4 weeks" window shows forecast horizons 0 to MAX_HORIZON, after the last
-    // WINDOW_HISTORY_WEEKS weeks of this season; "Full season" shows the whole season and forecast.
+    // WINDOW_HISTORY_WEEKS weeks of this season, with the x-axis running one week past the last
+    // horizon; "Full season" shows the whole season and forecast.
     const seasonStart = `${refSeason}-08-01`;
     const forecastEnd = addDays(DATA.reference_date, MAX_HORIZON * 7);
     const fourWeeks = state.window === "4w";
@@ -1107,6 +1107,7 @@ to open a given state or local area.
       : seasonStart;
     const xEnd = fourWeeks ? forecastEnd
       : [`${refSeason + 1}-07-31`, ensemble ? ensemble.dates[ensemble.dates.length - 1] : ""].sort()[1];
+    const xAxisEnd = fourWeeks ? addDays(xEnd, 7) : xEnd;
     document.getElementById("fp-chart-title").textContent = `ED Visits Forecast: ${locName}`;
     document.getElementById("fp-chart-sub").textContent =
       `${fourWeeks ? `Next ${MAX_HORIZON + 1} weeks` : "Full-season projection"} • Data source: NSSP`;
@@ -1121,14 +1122,15 @@ to open a given state or local area.
       .filter(s => s < refSeason && (state.pastSeasons === "all" || s === refSeason - 1))
       .sort((a, b) => a - b);
     for (const s of pastSeasons) {
-      const rows = history.filter(r => seasonOf(r.date) === s);
+      // Cut off at the last forecast week, so past seasons don't run into the empty week the
+      // "4 weeks" window leaves after the forecast.
       const shiftDays = Math.round((refSeason - s) * 365.25 / 7) * 7;
+      const rows = history.filter(r => seasonOf(r.date) === s && addDays(r.date, shiftDays) <= xEnd);
       const isLast = s === refSeason - 1;
       const label = `${s}-${s + 1}`;
       traces.push(trace(label, rows.map(r => addDays(r.date, shiftDays)), rows.map(r => r.value), {
-        mode: isLast ? "lines+markers" : "lines",
         line: { color: isLast ? LAST_SEASON_COLOR : "#a8b4c4", width: 1.8 },
-        marker: { color: LAST_SEASON_COLOR, size: 4 },
+        marker: { color: isLast ? LAST_SEASON_COLOR : "#a8b4c4", size: 4 },
         opacity: isLast ? 0.9 : 0.85,
         customdata: rows.map(r => r.date),
         hovertemplate: `${label}<br>Week ending %{customdata}: %{y:.2f}%<extra></extra>`,
@@ -1224,10 +1226,10 @@ to open a given state or local area.
     const pad = fourWeeks ? 3 : 7;  // days of space beyond the first/last point
 
     const layout = {
-      margin: { t: 16, r: 20, b: 50, l: 50 },
+      margin: { t: 36, r: 20, b: 50, l: 50 },  // room above the plot for Plotly's toolbar
       xaxis: {
         type: "date",
-        range: [addDays(xStart, -pad), addDays(xEnd, pad)],
+        range: [addDays(xStart, -pad), addDays(xAxisEnd, pad)],
         showgrid: true, gridcolor: "#eef2f7",
         tickfont: { size: 11, color: "#64748b" },
         title: { text: "" },
@@ -1244,16 +1246,23 @@ to open a given state or local area.
       shapes: [{
         type: "line", xref: "x", yref: "paper",
         x0: DATA.reference_date, x1: DATA.reference_date, y0: 0, y1: 1,
-        line: { color: "#cbd5e1", width: 1, dash: "dot" },
+        line: { color: "#64748b", width: 1.5, dash: "dot" },
       }],
       annotations: [{
-        x: DATA.reference_date, xref: "x", y: 1.02, yref: "paper",
+        x: DATA.reference_date, xref: "x", y: 1, yref: "paper", yanchor: "bottom",
         text: "Forecast date", showarrow: false,
-        font: { size: 10, color: "#94a3b8" },
+        font: { size: 10, color: "#64748b" },
       }],
     };
 
-    Plotly.react("fp-chart", traces, layout, { displayModeBar: false, responsive: true });
+    // Plotly's toolbar (shown on hover), without the buttons the original dashboard's chart also
+    // drops. Autoscaling and double-clicking would otherwise fit the axes to every past season, so
+    // double-click returns to this window instead.
+    Plotly.react("fp-chart", traces, layout, {
+      responsive: true,
+      modeBarButtonsToRemove: ["lasso2d", "autoScale2d"],
+      doubleClick: "reset",
+    });
   }
 
   route();
