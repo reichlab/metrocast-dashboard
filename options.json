@@ -1,0 +1,1380 @@
+{
+  "reference_date": "2026-10-31",
+  "season": 2026,
+  "season_label": "2026-2027",
+  "target": "Flu ED visits pct",
+  "models": [
+    "Ensemble"
+  ],
+  "locations": [
+    {
+      "id": "amarillo",
+      "name": "Amarillo, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Armstrong",
+        "Briscoe",
+        "Carson",
+        "Dallam",
+        "Donley",
+        "Hansford",
+        "Hartley",
+        "Hutchinson",
+        "Moore",
+        "Ochiltree",
+        "Oldham",
+        "Potter",
+        "Randall",
+        "Sherman",
+        "Swisher"
+      ]
+    },
+    {
+      "id": "athens",
+      "name": "Athens, GA",
+      "state": "Georgia",
+      "state_abb": "GA",
+      "level": "local",
+      "counties": [
+        "Barrow",
+        "Clarke",
+        "Jackson",
+        "Madison",
+        "Oconee",
+        "Oglethorpe"
+      ]
+    },
+    {
+      "id": "austin",
+      "name": "Austin, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Bastrop",
+        "Burnet",
+        "Lee",
+        "Llano",
+        "Travis",
+        "Williamson"
+      ]
+    },
+    {
+      "id": "baltimore",
+      "name": "Baltimore, MD",
+      "state": "Maryland",
+      "state_abb": "MD",
+      "level": "local",
+      "counties": [
+        "Anne Arundel",
+        "Baltimore",
+        "Calvert",
+        "Carroll",
+        "Howard"
+      ]
+    },
+    {
+      "id": "bangor",
+      "name": "Bangor, ME",
+      "state": "Maine",
+      "state_abb": "ME",
+      "level": "local",
+      "counties": [
+        "Hancock",
+        "Penobscot",
+        "Piscataquis",
+        "Washington"
+      ]
+    },
+    {
+      "id": "bear-river",
+      "name": "Bear River, UT",
+      "state": "Utah",
+      "state_abb": "UT",
+      "level": "local",
+      "counties": [
+        "Cache",
+        "Box Elder",
+        "Rich"
+      ]
+    },
+    {
+      "id": "beaumont",
+      "name": "Beaumont, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Hardin",
+        "Jasper",
+        "Jefferson",
+        "Newton",
+        "Orange",
+        "Tyler"
+      ]
+    },
+    {
+      "id": "pittsfield",
+      "name": "Berkshire County, MA",
+      "state": "Massachusetts",
+      "state_abb": "MA",
+      "level": "local",
+      "counties": [
+        "Berkshire"
+      ]
+    },
+    {
+      "id": "boston",
+      "name": "Boston Metro, South Shore, Cape & Islands, MA",
+      "state": "Massachusetts",
+      "state_abb": "MA",
+      "level": "local",
+      "counties": [
+        "Barnstable",
+        "Dukes",
+        "Middlesex",
+        "Nantucket",
+        "Norfolk",
+        "Plymouth",
+        "Suffolk"
+      ]
+    },
+    {
+      "id": "boulder",
+      "name": "Boulder, CO",
+      "state": "Colorado",
+      "state_abb": "CO",
+      "level": "local",
+      "counties": [
+        "Boulder",
+        "Broomfield"
+      ]
+    },
+    {
+      "id": "new-bedford",
+      "name": "Bristol County, MA",
+      "state": "Massachusetts",
+      "state_abb": "MA",
+      "level": "local",
+      "counties": [
+        "Bristol"
+      ]
+    },
+    {
+      "id": "brownsville",
+      "name": "Brownsville, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Cameron",
+        "Willacy"
+      ]
+    },
+    {
+      "id": "bryan",
+      "name": "Bryan, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Brazos",
+        "Burleson",
+        "Grimes",
+        "Robertson",
+        "Washington"
+      ]
+    },
+    {
+      "id": "central",
+      "name": "Central Utah, UT",
+      "state": "Utah",
+      "state_abb": "UT",
+      "level": "local",
+      "counties": [
+        "Sanpete",
+        "Sevier",
+        "Millard",
+        "Juab",
+        "Wayne",
+        "Piute"
+      ]
+    },
+    {
+      "id": "charleston",
+      "name": "Charleston, SC",
+      "state": "South Carolina",
+      "state_abb": "SC",
+      "level": "local",
+      "counties": [
+        "Berkeley",
+        "Charleston",
+        "Colleton",
+        "Dorchester",
+        "Hampton"
+      ]
+    },
+    {
+      "id": "clt-area",
+      "name": "Charlotte Area, NC",
+      "state": "North Carolina",
+      "state_abb": "NC",
+      "level": "local",
+      "counties": [
+        "Alexander",
+        "Anson",
+        "Cabarrus",
+        "Catawba",
+        "Cleveland",
+        "Gaston",
+        "Iredell",
+        "Lincoln",
+        "Mecklenburg",
+        "Rowan",
+        "Stanly",
+        "Union"
+      ]
+    },
+    {
+      "id": "cherokee",
+      "name": "Cherokee, GA",
+      "state": "Georgia",
+      "state_abb": "GA",
+      "level": "local",
+      "counties": [
+        "Cherokee",
+        "Douglas",
+        "Paulding",
+        "Pickens"
+      ]
+    },
+    {
+      "id": "colorado",
+      "name": "Colorado",
+      "state": "Colorado",
+      "state_abb": "CO",
+      "level": "state"
+    },
+    {
+      "id": "colorado-springs",
+      "name": "Colorado Springs, CO",
+      "state": "Colorado",
+      "state_abb": "CO",
+      "level": "local",
+      "counties": [
+        "Cheyenne",
+        "El Paso",
+        "Kit Carson",
+        "Lincoln",
+        "Teller"
+      ]
+    },
+    {
+      "id": "columbia",
+      "name": "Columbia, SC",
+      "state": "South Carolina",
+      "state_abb": "SC",
+      "level": "local",
+      "counties": [
+        "Fairfield",
+        "Lexington",
+        "Newberry",
+        "Richland"
+      ]
+    },
+    {
+      "id": "columbus",
+      "name": "Columbus, GA",
+      "state": "Georgia",
+      "state_abb": "GA",
+      "level": "local",
+      "counties": [
+        "Chattahoochee",
+        "Harris",
+        "Marion",
+        "Muscogee",
+        "Schley",
+        "Stewart",
+        "Talbot",
+        "Webster"
+      ]
+    },
+    {
+      "id": "corpus-christi",
+      "name": "Corpus Christi, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Aransas",
+        "Brooks",
+        "Duval",
+        "Jim Wells",
+        "Kenedy",
+        "Kleberg",
+        "Live Oak",
+        "Nueces",
+        "San Patricio"
+      ]
+    },
+    {
+      "id": "dallas",
+      "name": "Dallas, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Collin",
+        "Dallas",
+        "Ellis",
+        "Hopkins",
+        "Hunt",
+        "Kaufman",
+        "Rains",
+        "Rockwall"
+      ]
+    },
+    {
+      "id": "davis",
+      "name": "Davis County, UT",
+      "state": "Utah",
+      "state_abb": "UT",
+      "level": "local",
+      "counties": [
+        "Davis"
+      ]
+    },
+    {
+      "id": "denton",
+      "name": "Denton, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Cooke",
+        "Denton",
+        "Wise"
+      ]
+    },
+    {
+      "id": "denver",
+      "name": "Denver, CO",
+      "state": "Colorado",
+      "state_abb": "CO",
+      "level": "local",
+      "counties": [
+        "Adams",
+        "Arapahoe",
+        "Clear Creek",
+        "Denver",
+        "Douglas",
+        "Elbert",
+        "Gilpin",
+        "Grand",
+        "Jefferson",
+        "Park",
+        "Summit"
+      ]
+    },
+    {
+      "id": "deschutes",
+      "name": "Deschutes, OR",
+      "state": "Oregon",
+      "state_abb": "OR",
+      "level": "local",
+      "counties": [
+        "Crook",
+        "Deschutes",
+        "Harney",
+        "Jefferson",
+        "Wheeler"
+      ]
+    },
+    {
+      "id": "duluth",
+      "name": "Duluth, MN",
+      "state": "Minnesota",
+      "state_abb": "MN",
+      "level": "local",
+      "counties": [
+        "Carlton",
+        "Cook",
+        "Itasca",
+        "Koochiching",
+        "Lake",
+        "Pine",
+        "St. Louis"
+      ]
+    },
+    {
+      "id": "el-paso",
+      "name": "El Paso, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Culberson",
+        "El Paso",
+        "Hudspeth",
+        "Loving"
+      ]
+    },
+    {
+      "id": "lynn",
+      "name": "Essex County, MA",
+      "state": "Massachusetts",
+      "state_abb": "MA",
+      "level": "local",
+      "counties": [
+        "Essex"
+      ]
+    },
+    {
+      "id": "eugene",
+      "name": "Eugene, OR",
+      "state": "Oregon",
+      "state_abb": "OR",
+      "level": "local",
+      "counties": [
+        "Douglas",
+        "Lane"
+      ]
+    },
+    {
+      "id": "fay-area",
+      "name": "Fayetteville Area, NC",
+      "state": "North Carolina",
+      "state_abb": "NC",
+      "level": "local",
+      "counties": [
+        "Bladen",
+        "Cumberland",
+        "Harnett",
+        "Hoke",
+        "Johnston",
+        "Lee",
+        "Moore",
+        "Richmond",
+        "Robeson",
+        "Sampson",
+        "Scotland",
+        "Wayne"
+      ]
+    },
+    {
+      "id": "florence",
+      "name": "Florence, SC",
+      "state": "South Carolina",
+      "state_abb": "SC",
+      "level": "local",
+      "counties": [
+        "Chesterfield",
+        "Darlington",
+        "Florence",
+        "Marlboro",
+        "Williamsburg"
+      ]
+    },
+    {
+      "id": "floyd",
+      "name": "Floyd, GA",
+      "state": "Georgia",
+      "state_abb": "GA",
+      "level": "local",
+      "counties": [
+        "Bartow",
+        "Chattooga",
+        "Floyd",
+        "Gordon",
+        "Polk"
+      ]
+    },
+    {
+      "id": "fort-worth",
+      "name": "Fort Worth, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Hood",
+        "Johnson",
+        "Parker",
+        "Somervell",
+        "Tarrant"
+      ]
+    },
+    {
+      "id": "worcester",
+      "name": "Franklin & Worcester Counties, MA",
+      "state": "Massachusetts",
+      "state_abb": "MA",
+      "level": "local",
+      "counties": [
+        "Franklin",
+        "Worcester"
+      ]
+    },
+    {
+      "id": "frederick",
+      "name": "Frederick, MD",
+      "state": "Maryland",
+      "state_abb": "MD",
+      "level": "local",
+      "counties": [
+        "Frederick"
+      ]
+    },
+    {
+      "id": "galveston",
+      "name": "Galveston, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Galveston"
+      ]
+    },
+    {
+      "id": "georgia",
+      "name": "Georgia",
+      "state": "Georgia",
+      "state_abb": "GA",
+      "level": "state"
+    },
+    {
+      "id": "greenville",
+      "name": "Greenville, SC",
+      "state": "South Carolina",
+      "state_abb": "SC",
+      "level": "local",
+      "counties": [
+        "Anderson",
+        "Greenville",
+        "Oconee",
+        "Pickens"
+      ]
+    },
+    {
+      "id": "hall",
+      "name": "Hall, GA",
+      "state": "Georgia",
+      "state_abb": "GA",
+      "level": "local",
+      "counties": [
+        "Banks",
+        "Dawson",
+        "Habersham",
+        "Hall",
+        "Lumpkin",
+        "Towns",
+        "Union",
+        "White"
+      ]
+    },
+    {
+      "id": "springfield",
+      "name": "Hampden & Hampshire Counties, MA",
+      "state": "Massachusetts",
+      "state_abb": "MA",
+      "level": "local",
+      "counties": [
+        "Hampden",
+        "Hampshire"
+      ]
+    },
+    {
+      "id": "harford",
+      "name": "Harford, MD",
+      "state": "Maryland",
+      "state_abb": "MD",
+      "level": "local",
+      "counties": [
+        "Cecil",
+        "Harford"
+      ]
+    },
+    {
+      "id": "henry",
+      "name": "Henry, GA",
+      "state": "Georgia",
+      "state_abb": "GA",
+      "level": "local",
+      "counties": [
+        "Fayette",
+        "Forsyth",
+        "Henry",
+        "Rockdale",
+        "Walton"
+      ]
+    },
+    {
+      "id": "horry",
+      "name": "Horry, SC",
+      "state": "South Carolina",
+      "state_abb": "SC",
+      "level": "local",
+      "counties": [
+        "Georgetown",
+        "Horry"
+      ]
+    },
+    {
+      "id": "houston",
+      "name": "Houston, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Austin",
+        "Chambers",
+        "Fort Bend",
+        "Harris",
+        "Liberty",
+        "Montgomery",
+        "San Jacinto",
+        "Waller"
+      ]
+    },
+    {
+      "id": "indiana",
+      "name": "Indiana",
+      "state": "Indiana",
+      "state_abb": "IN",
+      "level": "state"
+    },
+    {
+      "id": "indianapolis",
+      "name": "Indianapolis, IN",
+      "state": "Indiana",
+      "state_abb": "IN",
+      "level": "local",
+      "counties": [
+        "Hendricks",
+        "Johnson",
+        "Marion",
+        "Morgan",
+        "Putnam",
+        "Rush",
+        "Shelby"
+      ]
+    },
+    {
+      "id": "killeen",
+      "name": "Killeen, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Bell",
+        "Coryell",
+        "Lampasas",
+        "Milam"
+      ]
+    },
+    {
+      "id": "la-grange",
+      "name": "La Grange, GA",
+      "state": "Georgia",
+      "state_abb": "GA",
+      "level": "local",
+      "counties": [
+        "Coweta",
+        "Heard",
+        "Meriwether",
+        "Troup"
+      ]
+    },
+    {
+      "id": "lake-jackson",
+      "name": "Lake Jackson, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Brazoria",
+        "Matagorda",
+        "Wharton"
+      ]
+    },
+    {
+      "id": "laredo",
+      "name": "Laredo, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Jim Hogg",
+        "Webb",
+        "Zapata"
+      ]
+    },
+    {
+      "id": "larimer",
+      "name": "Larimer, CO",
+      "state": "Colorado",
+      "state_abb": "CO",
+      "level": "local",
+      "counties": [
+        "Larimer"
+      ]
+    },
+    {
+      "id": "lubbock",
+      "name": "Lubbock, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Bailey",
+        "Borden",
+        "Cochran",
+        "Crosby",
+        "Dawson",
+        "Dickens",
+        "Garza",
+        "Hockley",
+        "King",
+        "Lamb",
+        "Lubbock",
+        "Lynn",
+        "Motley"
+      ]
+    },
+    {
+      "id": "macon",
+      "name": "Macon, GA",
+      "state": "Georgia",
+      "state_abb": "GA",
+      "level": "local",
+      "counties": [
+        "Bibb",
+        "Bleckley",
+        "Crawford",
+        "Houston",
+        "Jones",
+        "Monroe",
+        "Peach",
+        "Pulaski",
+        "Taylor",
+        "Twiggs",
+        "Wilkinson"
+      ]
+    },
+    {
+      "id": "maine",
+      "name": "Maine",
+      "state": "Maine",
+      "state_abb": "ME",
+      "level": "state"
+    },
+    {
+      "id": "marietta",
+      "name": "Marietta, GA",
+      "state": "Georgia",
+      "state_abb": "GA",
+      "level": "local",
+      "counties": [
+        "Cobb"
+      ]
+    },
+    {
+      "id": "maryland",
+      "name": "Maryland",
+      "state": "Maryland",
+      "state_abb": "MD",
+      "level": "state"
+    },
+    {
+      "id": "massachusetts",
+      "name": "Massachusetts",
+      "state": "Massachusetts",
+      "state_abb": "MA",
+      "level": "state"
+    },
+    {
+      "id": "mcallen",
+      "name": "Mcallen, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Hidalgo",
+        "Starr"
+      ]
+    },
+    {
+      "id": "medford",
+      "name": "Medford, OR",
+      "state": "Oregon",
+      "state_abb": "OR",
+      "level": "local",
+      "counties": [
+        "Jackson",
+        "Josephine"
+      ]
+    },
+    {
+      "id": "mesa",
+      "name": "Mesa, CO",
+      "state": "Colorado",
+      "state_abb": "CO",
+      "level": "local",
+      "counties": [
+        "Eagle",
+        "Garfield",
+        "Mesa",
+        "Pitkin",
+        "Rio Blanco"
+      ]
+    },
+    {
+      "id": "minneapolis",
+      "name": "Minneapolis, MN",
+      "state": "Minnesota",
+      "state_abb": "MN",
+      "level": "local",
+      "counties": [
+        "Anoka",
+        "Carver",
+        "Hennepin",
+        "Le Sueur",
+        "McLeod",
+        "Scott",
+        "Sherburne",
+        "Sibley",
+        "Wright"
+      ]
+    },
+    {
+      "id": "minnesota",
+      "name": "Minnesota",
+      "state": "Minnesota",
+      "state_abb": "MN",
+      "level": "state"
+    },
+    {
+      "id": "montgomery",
+      "name": "Montgomery, MD",
+      "state": "Maryland",
+      "state_abb": "MD",
+      "level": "local",
+      "counties": [
+        "Charles",
+        "Montgomery",
+        "Prince Georges",
+        "St. Marys"
+      ]
+    },
+    {
+      "id": "nyc",
+      "name": "NYC",
+      "state": "New York",
+      "state_abb": "NY",
+      "level": "local",
+      "counties": [
+        "Bronx",
+        "Kings",
+        "New York",
+        "Queens",
+        "Richmond"
+      ]
+    },
+    {
+      "id": "new-york",
+      "name": "New York",
+      "state": "New York",
+      "state_abb": "NY",
+      "level": "state"
+    },
+    {
+      "id": "north-carolina",
+      "name": "North Carolina",
+      "state": "North Carolina",
+      "state_abb": "NC",
+      "level": "state"
+    },
+    {
+      "id": "nenc",
+      "name": "Northeastern, NC",
+      "state": "North Carolina",
+      "state_abb": "NC",
+      "level": "local",
+      "counties": [
+        "Beaufort",
+        "Bertie",
+        "Camden",
+        "Chowan",
+        "Craven",
+        "Currituck",
+        "Dare",
+        "Edgecombe",
+        "Gates",
+        "Greene",
+        "Halifax",
+        "Hertford",
+        "Hyde",
+        "Jones",
+        "Lenoir",
+        "Martin",
+        "Nash",
+        "Northampton",
+        "Pamlico",
+        "Pasquotank",
+        "Perquimans",
+        "Pitt",
+        "Tyrrell",
+        "Washington",
+        "Wilson"
+      ]
+    },
+    {
+      "id": "oregon",
+      "name": "Oregon",
+      "state": "Oregon",
+      "state_abb": "OR",
+      "level": "state"
+    },
+    {
+      "id": "portland",
+      "name": "Portland, ME",
+      "state": "Maine",
+      "state_abb": "ME",
+      "level": "local",
+      "counties": [
+        "Cumberland",
+        "Knox",
+        "Lincoln",
+        "Sagadahoc"
+      ]
+    },
+    {
+      "id": "portland-or",
+      "name": "Portland, OR",
+      "state": "Oregon",
+      "state_abb": "OR",
+      "level": "local",
+      "counties": [
+        "Clackamas",
+        "Clatsop",
+        "Columbia",
+        "Multnomah",
+        "Washington"
+      ]
+    },
+    {
+      "id": "rtp-area",
+      "name": "Research Triangle Park Area, NC",
+      "state": "North Carolina",
+      "state_abb": "NC",
+      "level": "local",
+      "counties": [
+        "Alamance",
+        "Chatham",
+        "Durham",
+        "Franklin",
+        "Granville",
+        "Orange",
+        "Person",
+        "Vance",
+        "Wake",
+        "Warren"
+      ]
+    },
+    {
+      "id": "roanoke",
+      "name": "Roanoke, VA",
+      "state": "Virginia",
+      "state_abb": "VA",
+      "level": "local",
+      "counties": [
+        "Amherst",
+        "Appomattox",
+        "Botetourt",
+        "Campbell",
+        "Craig",
+        "Floyd",
+        "Franklin",
+        "Lynchburg",
+        "Roanoke",
+        "Salem"
+      ]
+    },
+    {
+      "id": "rochester",
+      "name": "Rochester, MN",
+      "state": "Minnesota",
+      "state_abb": "MN",
+      "level": "local",
+      "counties": [
+        "Dodge",
+        "Fillmore",
+        "Mower",
+        "Olmsted",
+        "Steele",
+        "Wabasha",
+        "Winona"
+      ]
+    },
+    {
+      "id": "rock-hill",
+      "name": "Rock Hill, SC",
+      "state": "South Carolina",
+      "state_abb": "SC",
+      "level": "local",
+      "counties": [
+        "Chester",
+        "York"
+      ]
+    },
+    {
+      "id": "salem",
+      "name": "Salem, OR",
+      "state": "Oregon",
+      "state_abb": "OR",
+      "level": "local",
+      "counties": [
+        "Marion",
+        "Polk",
+        "Yamhill"
+      ]
+    },
+    {
+      "id": "salt-lake",
+      "name": "Salt Lake County, UT",
+      "state": "Utah",
+      "state_abb": "UT",
+      "level": "local",
+      "counties": [
+        "Salt Lake"
+      ]
+    },
+    {
+      "id": "san-antonio",
+      "name": "San Antonio, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Atascosa",
+        "Bandera",
+        "Bexar",
+        "Frio",
+        "Gonzales",
+        "Guadalupe",
+        "Kendall",
+        "La Salle",
+        "McMullen",
+        "Medina",
+        "Wilson",
+        "Zavala"
+      ]
+    },
+    {
+      "id": "san-juan",
+      "name": "San Juan County, UT",
+      "state": "Utah",
+      "state_abb": "UT",
+      "level": "local",
+      "counties": [
+        "San Juan"
+      ]
+    },
+    {
+      "id": "san-marcos",
+      "name": "San Marcos, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Caldwell",
+        "Hays"
+      ]
+    },
+    {
+      "id": "savannah",
+      "name": "Savannah, GA",
+      "state": "Georgia",
+      "state_abb": "GA",
+      "level": "local",
+      "counties": [
+        "Bryan",
+        "Chatham",
+        "Effingham",
+        "Evans",
+        "Liberty",
+        "Long",
+        "Tattnall"
+      ]
+    },
+    {
+      "id": "south-augusta",
+      "name": "South Augusta, GA",
+      "state": "Georgia",
+      "state_abb": "GA",
+      "level": "local",
+      "counties": [
+        "Burke",
+        "Columbia",
+        "Jenkins",
+        "Lincoln",
+        "McDuffie",
+        "Richmond"
+      ]
+    },
+    {
+      "id": "south-carolina",
+      "name": "South Carolina",
+      "state": "South Carolina",
+      "state_abb": "SC",
+      "level": "state"
+    },
+    {
+      "id": "southeast",
+      "name": "Southeast, UT",
+      "state": "Utah",
+      "state_abb": "UT",
+      "level": "local",
+      "counties": [
+        "Carbon",
+        "Emery",
+        "Grand"
+      ]
+    },
+    {
+      "id": "senc",
+      "name": "Southeastern, NC",
+      "state": "North Carolina",
+      "state_abb": "NC",
+      "level": "local",
+      "counties": [
+        "Brunswick",
+        "Carteret",
+        "Columbus",
+        "Duplin",
+        "New Hanover",
+        "Onslow",
+        "Pender"
+      ]
+    },
+    {
+      "id": "southwest",
+      "name": "Southwest, UT",
+      "state": "Utah",
+      "state_abb": "UT",
+      "level": "local",
+      "counties": [
+        "Washington",
+        "Iron",
+        "Kane",
+        "Beaver",
+        "Garfield"
+      ]
+    },
+    {
+      "id": "st-cloud",
+      "name": "St. Cloud, MN",
+      "state": "Minnesota",
+      "state_abb": "MN",
+      "level": "local",
+      "counties": [
+        "Benton",
+        "Meeker",
+        "Morrison",
+        "Stearns",
+        "Todd"
+      ]
+    },
+    {
+      "id": "st-paul",
+      "name": "St. Paul, MN",
+      "state": "Minnesota",
+      "state_abb": "MN",
+      "level": "local",
+      "counties": [
+        "Chisago",
+        "Dakota",
+        "Ramsey",
+        "Washington"
+      ]
+    },
+    {
+      "id": "summit",
+      "name": "Summit County, UT",
+      "state": "Utah",
+      "state_abb": "UT",
+      "level": "local",
+      "counties": [
+        "Summit"
+      ]
+    },
+    {
+      "id": "texas",
+      "name": "Texas",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "state"
+    },
+    {
+      "id": "tooele",
+      "name": "Tooele County, UT",
+      "state": "Utah",
+      "state_abb": "UT",
+      "level": "local",
+      "counties": [
+        "Tooele"
+      ]
+    },
+    {
+      "id": "tri-county",
+      "name": "TriCounty, UT",
+      "state": "Utah",
+      "state_abb": "UT",
+      "level": "local",
+      "counties": [
+        "Uintah",
+        "Duchesne",
+        "Daggett"
+      ]
+    },
+    {
+      "id": "triad-area",
+      "name": "Triad Area, NC",
+      "state": "North Carolina",
+      "state_abb": "NC",
+      "level": "local",
+      "counties": [
+        "Alleghany",
+        "Ashe",
+        "Caswell",
+        "Davidson",
+        "Davie",
+        "Forsyth",
+        "Guilford",
+        "Montgomery",
+        "Randolph",
+        "Rockingham",
+        "Stokes",
+        "Surry",
+        "Watauga",
+        "Wilkes",
+        "Yadkin"
+      ]
+    },
+    {
+      "id": "tyler",
+      "name": "Tyler, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Henderson",
+        "Smith",
+        "Van Zandt",
+        "Wood"
+      ]
+    },
+    {
+      "id": "utah",
+      "name": "Utah",
+      "state": "Utah",
+      "state_abb": "UT",
+      "level": "state"
+    },
+    {
+      "id": "utah-county",
+      "name": "Utah County, UT",
+      "state": "Utah",
+      "state_abb": "UT",
+      "level": "local",
+      "counties": [
+        "Utah"
+      ]
+    },
+    {
+      "id": "virginia",
+      "name": "Virginia",
+      "state": "Virginia",
+      "state_abb": "VA",
+      "level": "state"
+    },
+    {
+      "id": "waco",
+      "name": "Waco, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Bosque",
+        "Falls",
+        "Hamilton",
+        "Hill",
+        "Limestone",
+        "McLennan"
+      ]
+    },
+    {
+      "id": "wasatch",
+      "name": "Wasatch County, UT",
+      "state": "Utah",
+      "state_abb": "UT",
+      "level": "local",
+      "counties": [
+        "Wasatch"
+      ]
+    },
+    {
+      "id": "weber-morgan",
+      "name": "Weber-Morgan, UT",
+      "state": "Utah",
+      "state_abb": "UT",
+      "level": "local",
+      "counties": [
+        "Weber",
+        "Morgan"
+      ]
+    },
+    {
+      "id": "weld",
+      "name": "Weld, CO",
+      "state": "Colorado",
+      "state_abb": "CO",
+      "level": "local",
+      "counties": [
+        "Morgan",
+        "Washington",
+        "Weld",
+        "Yuma"
+      ]
+    },
+    {
+      "id": "wnc",
+      "name": "Western, NC",
+      "state": "North Carolina",
+      "state_abb": "NC",
+      "level": "local",
+      "counties": [
+        "Avery",
+        "Buncombe",
+        "Burke",
+        "Caldwell",
+        "Cherokee",
+        "Clay",
+        "Graham",
+        "Haywood",
+        "Henderson",
+        "Jackson",
+        "Macon",
+        "Madison",
+        "McDowell",
+        "Mitchell",
+        "Polk",
+        "Rutherford",
+        "Swain",
+        "Transylvania",
+        "Yancey"
+      ]
+    }
+  ]
+}
