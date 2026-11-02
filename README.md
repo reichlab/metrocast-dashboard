@@ -83,7 +83,7 @@ html:
 ##### Contents
 
 If you wanted to add custom HTML to appear at the bottom or top of every page,
-you can use `.html.include-after-body` or `.html.include-before-body`. Remeber
+you can use `.html.include-after-body` or `.html.include-before-body`. Remember
 that all resources are _relative to the `pages/` directory_, so if you wanted
 to include an HTML snippet at the end of every page you would:
 
