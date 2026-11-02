@@ -259,6 +259,7 @@ to open a given state or local area.
     font-size: 0.82rem; color: #475569;
   }
   .fp-legend-item { display: flex; align-items: center; gap: 7px; }
+  .fp-legend-item[hidden] { display: none; }
   .fp-legend-swatch { width: 26px; height: 3px; border-radius: 1px; }
   .fp-legend-swatch.dash { background: repeating-linear-gradient(90deg, currentColor 0 5px, transparent 5px 9px); height: 2px; }
   .fp-loading .fp-cards, .fp-loading .fp-chart-card { opacity: 0.5; transition: opacity 120ms; }
@@ -383,6 +384,7 @@ to open a given state or local area.
           <div class="fp-toggle" id="fp-viewmode">
             <button data-v="intervals">Intervals</button>
             <button class="active" data-v="trajectories">Trajectories</button>
+            <button data-v="deciles">Deciles</button>
           </div>
         </div>
         <div>
@@ -399,6 +401,7 @@ to open a given state or local area.
         <div class="fp-legend-item"><span class="fp-legend-swatch" style="background:#64748b"></span> <span id="fp-last-year-label">Last year</span></div>
         <div class="fp-legend-item" id="fp-older-legend"><span class="fp-legend-swatch" style="background:#a8b4c4"></span> <span id="fp-older-label">Earlier seasons</span></div>
         <div class="fp-legend-item" style="color:#2563eb"><span class="fp-legend-swatch dash"></span> Ensemble forecast <span id="fp-forecast-legend-detail"></span></div>
+        <div class="fp-legend-item" id="fp-smooth-legend" style="color:#ea580c" hidden><span class="fp-legend-swatch" style="background:#ea580c"></span> Smoothed median (3-week moving average)</div>
       </div>
     </div>
   </div>
@@ -511,6 +514,17 @@ to open a given state or local area.
   const stateTrends = new Map();
 
   const N_TRAJ_DRAWS = 30;  // how many sample paths to render in trajectories view
+  const TRAJ_STYLE = { opacity: 0.25, width: 1 };        // a trajectory's usual look
+  const TRAJ_HOVER_STYLE = { opacity: 0.9, width: 2.5 };  // the trajectory under the mouse
+  // Deciles view: the trajectory closest to each of these quantile levels (see decileTrajectories),
+  // colored from DECILE_DARK at the median to DECILE_LIGHT at the outermost levels, and the median
+  // of all trajectories smoothed with a centered MEDIAN_SMOOTH_WEEKS-week moving average.
+  const DECILE_LEVELS = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];
+  const DECILE_DARK = "#1e3a8a", DECILE_LIGHT = "#93c5fd";
+  const DECILE_STYLE = { opacity: 0.9, width: 1.6 };
+  const DECILE_HOVER_STYLE = { opacity: 1, width: 3.5 };
+  const MEDIAN_SMOOTH_WEEKS = 3;
+  const SMOOTH_MEDIAN_COLOR = "#ea580c";
   const MAX_HORIZON = 3;  // last horizon (weeks after the reference date) shown in the "4 weeks" window
   const WINDOW_HISTORY_WEEKS = 16;  // weeks of observations shown before the forecast in that window
 
@@ -695,6 +709,45 @@ to open a given state or local area.
       out.q75.push(q75); out.q975.push(q975);
     }
     return out;
+  }
+  function decileTrajectories(samples) {
+    // For each of DECILE_LEVELS, the trajectory closest (mean absolute difference over the weeks
+    // shown) to that level's quantile at each week: returns [{level, idx}] sorted by level. Levels
+    // are matched from the median outward, and each trajectory is used at most once, so neighboring
+    // levels don't end up drawing the same line.
+    const N = samples[0].length;
+    const curves = new Map(DECILE_LEVELS.map(level => [level, []]));
+    for (let t = 0; t < N; t++) {
+      const qs = quantilesOf(samples.map(s => s[t]), DECILE_LEVELS);
+      DECILE_LEVELS.forEach((level, k) => curves.get(level).push(qs[k]));
+    }
+    const used = new Set(), out = [];
+    for (const level of [...DECILE_LEVELS].sort((a, b) => Math.abs(a - 0.5) - Math.abs(b - 0.5))) {
+      const q = curves.get(level);
+      let best = -1, bestDist = Infinity;
+      samples.forEach((s, i) => {
+        if (used.has(i)) return;
+        const dist = s.reduce((acc, v, t) => acc + Math.abs(v - q[t]), 0) / N;
+        if (dist < bestDist) { bestDist = dist; best = i; }
+      });
+      used.add(best);
+      out.push({ level, idx: best });
+    }
+    return out.sort((a, b) => a.level - b.level);
+  }
+  function smoothed(values, width) {
+    // Centered moving average over `width` points, using whatever neighbors exist at the ends.
+    const half = Math.floor(width / 2);
+    return values.map((_, i) => {
+      const win = values.slice(Math.max(0, i - half), i + half + 1);
+      return win.reduce((a, b) => a + b, 0) / win.length;
+    });
+  }
+  function mixHex(a, b, t) {
+    // Color `t` of the way (0-1) from hex color a to hex color b.
+    const ch = (h, i) => parseInt(h.slice(1 + 2 * i, 3 + 2 * i), 16);
+    return "#" + [0, 1, 2].map(i => Math.round(ch(a, i) + (ch(b, i) - ch(a, i)) * t)
+      .toString(16).padStart(2, "0")).join("");
   }
   function seasonOf(dateStr) {
     // Flu season (Aug 1 → Jul 31), identified by the year it starts in.
@@ -1160,7 +1213,9 @@ to open a given state or local area.
     };
     document.getElementById("fp-forecast-legend-detail").textContent = !f || !f.samples.length ? "(not available)"
       : state.viewMode === "intervals" ? "(median, 50% and 95% intervals)"
+      : state.viewMode === "deciles" ? "(trajectories closest to the 10th–90th percentiles; darker nearer the median)"
       : `(${Math.min(N_TRAJ_DRAWS, f.samples.length)} of ${f.samples.length} trajectories shown)`;
+    document.getElementById("fp-smooth-legend").hidden = !(f && f.samples.length && state.viewMode === "deciles");
     if (f && f.samples.length) {
       const color = FORECAST_COLOR;
       const x = f.dates;
@@ -1195,6 +1250,34 @@ to open a given state or local area.
           line: { color, width: 2.5, dash: "dash" },
           showlegend: false,
         }));
+      } else if (state.viewMode === "deciles") {
+        // Deciles: the trajectory closest to each decile, shaded darker toward the median, plus the
+        // smoothed median of all trajectories
+        const conn = ys => lastObs != null ? [lastObs, ...ys] : ys;
+        const connX = lastObs != null ? [lastObsDate, ...x] : x;
+        for (const { level, idx } of decileTrajectories(f.samples)) {
+          // 0 at the median, 1 at the 10th/90th percentiles
+          const fromMiddle = Math.abs(level - 0.5) / (0.5 - DECILE_LEVELS[0]);
+          const pct = Math.round(level * 100);
+          traces.push({
+            type: "scatter", mode: "lines",
+            x: connX, y: conn(f.samples[idx]),
+            line: { color: mixHex(DECILE_DARK, DECILE_LIGHT, fromMiddle), width: DECILE_STYLE.width },
+            opacity: DECILE_STYLE.opacity,
+            name: `${pct}th percentile`,
+            showlegend: false,
+            hovertemplate: `Trajectory closest to the ${pct}th percentile<br>%{x|%b %d}: %{y:.2f}%<extra></extra>`,
+            meta: { base: DECILE_STYLE, hover: DECILE_HOVER_STYLE },
+          });
+        }
+        // Smoothed over the whole forecast, then cut to the window, so the window doesn't change it.
+        const median = smoothed(quantileBandsByDate(ensemble.samples).q50, MEDIAN_SMOOTH_WEEKS).slice(0, nShown);
+        traces.push(trace("Smoothed median", connX, conn(median), {
+          mode: "lines",
+          line: { color: SMOOTH_MEDIAN_COLOR, width: 3 },
+          showlegend: false,
+          hovertemplate: "Smoothed median<br>%{x|%b %d}: %{y:.2f}%<extra></extra>",
+        }));
       } else {
         // Trajectories: draw N_TRAJ_DRAWS individual sample paths
         const nDraws = Math.min(N_TRAJ_DRAWS, f.samples.length);
@@ -1208,11 +1291,12 @@ to open a given state or local area.
           traces.push({
             type: "scatter", mode: "lines",
             x: lineX, y: lineY,
-            line: { color, width: 1 },
-            opacity: 0.25,
+            line: { color, width: TRAJ_STYLE.width },
+            opacity: TRAJ_STYLE.opacity,
             name: "Ensemble",
             showlegend: false,
-            hoverinfo: "skip",
+            hoverinfo: "none",  // no tooltip, but hover events still fire (see highlightTrajectories)
+            meta: { base: TRAJ_STYLE, hover: TRAJ_HOVER_STYLE },
           });
         }
       }
@@ -1226,7 +1310,7 @@ to open a given state or local area.
     const pad = fourWeeks ? 3 : 7;  // days of space beyond the first/last point
 
     const layout = {
-      margin: { t: 36, r: 20, b: 50, l: 50 },  // room above the plot for Plotly's toolbar
+      margin: { t: 50, r: 20, b: 50, l: 50 },  // room above the plot for the toolbar, then the forecast date label
       xaxis: {
         type: "date",
         range: [addDays(xStart, -pad), addDays(xAxisEnd, pad)],
@@ -1263,6 +1347,25 @@ to open a given state or local area.
       modeBarButtonsToRemove: ["lasso2d", "autoScale2d"],
       doubleClick: "reset",
     });
+    highlightTrajectories();
+  }
+
+  // Trajectories and deciles views: the trajectory under the mouse switches from its usual style to
+  // its hover style (both kept in the trace's meta) until the mouse leaves it. The listeners stay on
+  // the chart across re-renders, so they're added only once.
+  let trajHighlightBound = false;
+  function highlightTrajectories() {
+    if (trajHighlightBound) return;
+    trajHighlightBound = true;
+    const chartEl = document.getElementById("fp-chart");
+    const restyle = (e, which) => {
+      for (const p of e.points) {
+        const style = p.data.meta && p.data.meta[which];
+        if (style) Plotly.restyle(chartEl, { opacity: style.opacity, "line.width": style.width }, [p.curveNumber]);
+      }
+    };
+    chartEl.on("plotly_hover", e => restyle(e, "hover"));
+    chartEl.on("plotly_unhover", e => restyle(e, "base"));
   }
 
   route();
