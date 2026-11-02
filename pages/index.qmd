@@ -3,7 +3,7 @@ title: "Introduction"
 ---
 ::::{.callout-important}
 
-This version of the dashboard is retired as of the start of the 2026/2027 season (Wednesday, October 21, 2026).
+Updates to the dashboard are paused as of the start of the 2026/2027 season (Wednesday, October 21, 2026).
 
 We are working on a new, improved version of the dashboard to be released in the coming weeks. In the meantime, please visit the [RespiLens](https://www.respilens.com/forecasts/flu-metrocast) website to view the latest Flu MetroCast forecasts for this season. 
 
