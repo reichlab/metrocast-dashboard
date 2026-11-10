@@ -213,6 +213,8 @@ to open a given state or local area.
   .fp-trend-card .fp-card-sub { color: #64748b; }
   /* Label ("Current:") on one line, its category on the next. */
   .fp-level-line { margin-bottom: 6px; }
+  /* "vs N past seasons" sits right under the card label, above the level lines. */
+  .fp-level-sub { margin: -4px 0 6px; }
   .fp-level-line .lbl {
     display: block;
     color: #64748b;
@@ -336,15 +338,15 @@ to open a given state or local area.
       </div>
       <div class="fp-card">
         <div class="fp-card-label">Epidemic level</div>
+        <div class="fp-card-sub fp-level-sub" id="fp-level-sub"></div>
         <div class="fp-level-line">
-          <span class="lbl">Current:</span>
+          <span class="lbl">Current (observed):</span>
           <span class="val" id="fp-level-current">—</span>
         </div>
         <div class="fp-level-line">
-          <span class="lbl">In 4 weeks:</span>
+          <span class="lbl">In 4 weeks (forecasted):</span>
           <span class="val" id="fp-level-future">—</span>
         </div>
-        <div class="fp-card-sub" id="fp-level-sub"></div>
         <div class="fp-level-warning" id="fp-level-warning" hidden
              title="Reported values in this location jump around a lot from week to week (often because of small numbers or weeks reported as zero), so the level may change quickly.">
           &#9888; Warning: unstable data
@@ -1036,7 +1038,7 @@ to open a given state or local area.
       levelFutEl.textContent = "—"; levelFutEl.style.color = "";
     }
     levelSubEl.textContent = nSeasonsUsed
-      ? `Compared with the same time of year in ${nSeasonsUsed} past season${nSeasonsUsed === 1 ? "" : "s"}`
+      ? `vs ${nSeasonsUsed} past season${nSeasonsUsed === 1 ? "" : "s"}`
       : "";
     const noise = noiseStats(history.filter(r => r.date <= DATA.reference_date));
     levelWarnEl.hidden = !(noise && (noise.residSd > UNSTABLE_RESID_SD || noise.zeroFrac > UNSTABLE_ZERO_FRAC));
