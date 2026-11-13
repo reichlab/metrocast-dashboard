@@ -161,14 +161,14 @@ to open a given state or local area.
     margin-bottom: 4px;
   }
   .fp-card-sub {
-    color: #2563eb;
+    color: #0f172a;
     font-size: 0.74rem;
     margin-top: 3px;
     font-style: italic;
     line-height: 1.3;
   }
   .fp-card-sub-strong {
-    color: #1d4ed8;
+    color: #475569;
     font-size: 0.8rem;
     font-weight: 700;
     margin-top: 2px;
@@ -210,14 +210,13 @@ to open a given state or local area.
   .fp-trend-card.trend-stable     { background: #eff6ff; border-color: #bfdbfe; border-left-color: #2563eb; }
   .fp-trend-card.trend-decreasing { background: #f0fdf4; border-color: #bbf7d0; border-left-color: #16a34a; }
   .fp-trend-card.trend-uncertain  { background: #f5f3ff; border-color: #ddd6fe; border-left-color: #8b5cf6; }
-  .fp-trend-card .fp-card-sub { color: #64748b; }
   /* Label ("Current:") on one line, its category on the next. */
   .fp-level-line { margin-bottom: 6px; }
   /* "vs N past seasons" sits right under the card label, above the level lines. */
   .fp-level-sub { margin: -4px 0 6px; }
   .fp-level-line .lbl {
     display: block;
-    color: #64748b;
+    color: #0f172a;
     font-size: 0.74rem;
     font-weight: 700;
   }
@@ -349,7 +348,7 @@ to open a given state or local area.
         </div>
         <div class="fp-level-warning" id="fp-level-warning" hidden
              title="Reported values in this location jump around a lot from week to week (often because of small numbers or weeks reported as zero), so the level may change quickly.">
-          &#9888; Warning: unstable data
+          &#9888; Unstable data
         </div>
       </div>
       <div class="fp-card">
@@ -1103,8 +1102,8 @@ to open a given state or local area.
         let text, color;
         if (diffWeeks <= -2.5)        { text = `~${Math.round(Math.abs(diffWeeks))} weeks earlier than last year`; color = "#c2410c"; }
         else if (diffWeeks <= -0.75)  { text = "Slightly earlier than last year"; color = "#c2410c"; }
-        else if (diffWeeks < 0.75)    { text = "About the same time as last year"; color = "#475569"; }
-        else if (diffWeeks < 2.5)     { text = "Slightly later than last year"; color = "#ca8a04"; }
+        else if (diffWeeks < 0.75)    { text = "About the same time as last year"; color = "#1d4ed8"; }
+        else if (diffWeeks < 2.5)     { text = "Slightly later than last year"; color = "#0891b2"; }
         else                          { text = `~${Math.round(diffWeeks)} weeks later than last year`; color = "#ca8a04"; }
         peakWeekHistEl.textContent = `${text} (last yr: ${fmtMd(lastSeasonPeakObj.date)})`;
         peakWeekHistEl.style.color = color;
@@ -1125,7 +1124,7 @@ to open a given state or local area.
         const pctDir = stats.peakValues.filter(v => dirWord === "higher" ? v > lastPk : v < lastPk).length
           / stats.peakValues.length;
         let dirLabel, dirColor;
-        if (Math.abs(deltaPct) <= 20) { dirLabel = "Similar to last year";  dirColor = "#475569"; }
+        if (Math.abs(deltaPct) <= 20) { dirLabel = "Similar to last year";  dirColor = "#1d4ed8"; }
         else if (deltaPct > 20)       { dirLabel = "Higher than last year"; dirColor = "#b91c1c"; }
         else                          { dirLabel = "Lower than last year";  dirColor = "#15803d"; }
         peakVsLastEl.textContent = dirLabel;
