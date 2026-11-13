@@ -1093,47 +1093,45 @@ to open a given state or local area.
       peakWeekEl.textContent = fmtMd(medianDate);
       peakWeekSubEl.textContent = `50% PI: ${fmtMd(pick(0.25))} – ${fmtMd(pick(0.75))}`;
 
-      if (histPeaks.length) {
-        // Normalize calendar weeks around the new year so wraparound averages correctly:
+      // Both peak cards compare against last season only.
+      const lastSeasonPeakObj = histPeaks.find(p => p.season === refSeason - 1);
+      if (lastSeasonPeakObj) {
+        // Normalize calendar weeks around the new year so weeks compare across it:
         // late-year weeks (e.g. week 50) shift to negative (-2), Jan weeks stay positive.
         const normalize = w => w >= 27 ? w - 52 : w;
-        const histWeeksNorm = histPeaks.map(p => normalize(weekOfYear(p.date)));
-        const meanHistWeek = histWeeksNorm.reduce((a, b) => a + b, 0) / histWeeksNorm.length;
-        const forecastWeek = normalize(weekOfYear(medianDate));
-        const diffWeeks = forecastWeek - meanHistWeek;
+        const diffWeeks = normalize(weekOfYear(medianDate)) - normalize(weekOfYear(lastSeasonPeakObj.date));
         let text, color;
-        if (diffWeeks <= -2.5)        { text = `~${Math.round(Math.abs(diffWeeks))} weeks earlier than usual`; color = "#c2410c"; }
-        else if (diffWeeks <= -0.75)  { text = "Slightly earlier than usual"; color = "#c2410c"; }
-        else if (diffWeeks < 0.75)    { text = "About the same time as usual"; color = "#475569"; }
-        else if (diffWeeks < 2.5)     { text = "Slightly later than usual"; color = "#ca8a04"; }
-        else                          { text = `~${Math.round(diffWeeks)} weeks later than usual`; color = "#ca8a04"; }
-        peakWeekHistEl.textContent = text;
+        if (diffWeeks <= -2.5)        { text = `~${Math.round(Math.abs(diffWeeks))} weeks earlier than last year`; color = "#c2410c"; }
+        else if (diffWeeks <= -0.75)  { text = "Slightly earlier than last year"; color = "#c2410c"; }
+        else if (diffWeeks < 0.75)    { text = "About the same time as last year"; color = "#475569"; }
+        else if (diffWeeks < 2.5)     { text = "Slightly later than last year"; color = "#ca8a04"; }
+        else                          { text = `~${Math.round(diffWeeks)} weeks later than last year`; color = "#ca8a04"; }
+        peakWeekHistEl.textContent = `${text} (last yr: ${fmtMd(lastSeasonPeakObj.date)})`;
         peakWeekHistEl.style.color = color;
         peakWeekHistEl.style.fontWeight = "600";
       } else {
-        peakWeekHistEl.textContent = "";
+        peakWeekHistEl.textContent = "Last season unavailable";
+        peakWeekHistEl.style.color = "#94a3b8";
+        peakWeekHistEl.style.fontWeight = "600";
       }
 
       // --- Card 4: peak comparison (primary) + value (secondary) ---
-      const lastSeasonPeakObj = histPeaks.find(p => p.season === refSeason - 1);
       if (lastSeasonPeakObj) {
         const lastPk = lastSeasonPeakObj.peak;
         const deltaPct = (pvMd - lastPk) / lastPk * 100;
-        let dirLabel, dirColor, dirWord, probDir;
-        if (deltaPct >= 0) {
-          dirWord = "higher";
-          probDir = stats.peakValues.filter(v => v > 1.20 * lastPk).length / stats.peakValues.length;
-        } else {
-          dirWord = "lower";
-          probDir = stats.peakValues.filter(v => v < 0.80 * lastPk).length / stats.peakValues.length;
-        }
+        // The median forecast peak picks the direction; then the share of trajectories whose season
+        // peak is on that side of last season's peak, by any amount.
+        const dirWord = pvMd >= lastPk ? "higher" : "lower";
+        const pctDir = stats.peakValues.filter(v => dirWord === "higher" ? v > lastPk : v < lastPk).length
+          / stats.peakValues.length;
+        let dirLabel, dirColor;
         if (Math.abs(deltaPct) <= 20) { dirLabel = "Similar to last year";  dirColor = "#475569"; }
         else if (deltaPct > 20)       { dirLabel = "Higher than last year"; dirColor = "#b91c1c"; }
         else                          { dirLabel = "Lower than last year";  dirColor = "#15803d"; }
         peakVsLastEl.textContent = dirLabel;
         peakVsLastEl.style.color = dirColor;
         peakValEl.textContent = `Forecast peak: ${pvMd.toFixed(1)}% (last yr: ${lastPk.toFixed(1)}%)`;
-        peakVsLastProbEl.textContent = `${Math.round(probDir * 100)}% chance peak is more than 20% ${dirWord} than last year`;
+        peakVsLastProbEl.textContent = `${Math.round(pctDir * 100)}% of trajectories show a ${dirWord} peak than last year`;
       } else {
         peakVsLastEl.textContent = "Last season unavailable";
         peakVsLastEl.style.color = "#94a3b8";
