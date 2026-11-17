@@ -202,32 +202,11 @@ to open a given state or local area.
   }
   .fp-trend-icon:empty { display: none; }
   .fp-trend-icon svg { width: 14px; height: 14px; }
-  .fp-trend-stat {
-    font-size: 0.8rem;
-    font-weight: 700;
-    margin-bottom: 2px;
-  }
   .fp-trend-card { border-left-width: 4px; }
   .fp-trend-card.trend-increasing { background: #fef2f2; border-color: #fecaca; border-left-color: #dc2626; }
   .fp-trend-card.trend-stable     { background: #eff6ff; border-color: #bfdbfe; border-left-color: #2563eb; }
   .fp-trend-card.trend-decreasing { background: #f0fdf4; border-color: #bbf7d0; border-left-color: #16a34a; }
   .fp-trend-card.trend-uncertain  { background: #f5f3ff; border-color: #ddd6fe; border-left-color: #8b5cf6; }
-  /* Label ("Current:") on one line, its category on the next. */
-  .fp-level-line { margin-bottom: 6px; }
-  /* "vs N past seasons" sits right under the card label, above the level lines. */
-  .fp-level-sub { margin: -4px 0 6px; }
-  .fp-level-line .lbl {
-    display: block;
-    color: #0f172a;
-    font-size: 0.74rem;
-    font-weight: 700;
-  }
-  .fp-level-line .val {
-    display: block;
-    font-size: 0.92rem;
-    font-weight: 700;
-    line-height: 1.15;
-  }
   .fp-level-warning {
     display: inline-flex;
     align-items: center;
@@ -242,7 +221,44 @@ to open a given state or local area.
     font-weight: 700;
     cursor: help;
   }
+  .fp-level-warning { align-self: flex-start; }
   .fp-level-warning[hidden] { display: none; }
+  /* Level card: "Now" and "In 2 weeks" categories side by side. */
+  /* Two equal columns, so a long "Now" category can't squeeze the "In 2 weeks" column against the
+     card's edge; the right padding keeps some whitespace there. */
+  .fp-level-pair {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 10px; margin-bottom: 2px; padding-right: 6px;
+  }
+  .fp-level-pair .lbl { display: block; color: #64748b; font-size: 0.66rem; font-weight: 600; white-space: nowrap; }
+  .fp-level-pair .val { display: block; font-size: 0.86rem; font-weight: 700; line-height: 1.15; }
+
+  /* ---- Card visuals: forecast ranges against past seasons ---- */
+  .fp-card { display: flex; flex-direction: column; }
+  .fp-viz { margin-top: auto; padding-top: 6px; }
+  #fp-trend-viz { margin-top: 10px; }
+  .fp-viz svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .fp-viz .ax { stroke: #cbd5e1; stroke-width: 1; }
+  .fp-viz .tick { font-size: 10px; fill: #94a3b8; }
+  .fp-viz .col { font-size: 10px; fill: #64748b; font-weight: 600; }
+  .fp-viz .past { fill: #64748b; stroke: #fff; stroke-width: 1; }
+  .fp-viz .past-line { stroke: #64748b; stroke-width: 1.5; }
+  .fp-viz .past-lbl { font-size: 10px; fill: #475569; }
+  .fp-viz .pill-outer { fill: #dbeafe; stroke: #93c5fd; stroke-width: 1; }
+  .fp-viz .pill-inner { fill: #93c5fd; }
+  .fp-viz .pill-med { stroke: #1e3a8a; stroke-width: 2.5; stroke-linecap: round; }
+  .fp-viz .past.now { fill: #000; }
+  .fp-viz .past-line.now { stroke: #000; }
+  .fp-viz .past-lbl.now { fill: #000; font-weight: 700; }
+  /* Trend card: one line per category under the bar. */
+  .fp-trend-key { display: flex; flex-direction: column; gap: 2px; margin-top: 6px; font-size: 0.7rem; color: #475569; }
+  .fp-trend-key span { display: inline-flex; align-items: center; gap: 5px; }
+  /* Trend card: share of trajectories rising / stable / falling. */
+  .fp-trend-bar { display: flex; height: 18px; border-radius: 5px; overflow: hidden; margin-top: 4px; }
+  .fp-trend-bar > div {
+    display: flex; align-items: center; justify-content: center; min-width: 0;
+    color: #fff; font-size: 0.66rem; font-weight: 700; white-space: nowrap; overflow: hidden;
+  }
 
   .fp-chart-card, .fp-map-card {
     background: #fff;
@@ -340,36 +356,32 @@ to open a given state or local area.
           <span class="fp-trend-icon" id="fp-trend-icon" aria-hidden="true"></span>
           <span class="fp-trend-large" id="fp-trend-label">—</span>
         </div>
-        <div class="fp-trend-stat" id="fp-trend-stat"></div>
         <div class="fp-card-sub" id="fp-trend-sub"></div>
+        <div class="fp-viz" id="fp-trend-viz"></div>
       </div>
       <div class="fp-card">
         <div class="fp-card-label">Epidemic level</div>
-        <div class="fp-card-sub fp-level-sub" id="fp-level-sub"></div>
-        <div class="fp-level-line">
-          <span class="lbl">Current (observed):</span>
-          <span class="val" id="fp-level-current">—</span>
-        </div>
-        <div class="fp-level-line">
-          <span class="lbl">In 4 weeks (forecasted):</span>
-          <span class="val" id="fp-level-future">—</span>
+        <div class="fp-level-pair">
+          <div><span class="lbl">Now</span><span class="val" id="fp-level-current">—</span></div>
+          <div><span class="lbl">In 2 weeks</span><span class="val" id="fp-level-future">—</span></div>
         </div>
         <div class="fp-level-warning" id="fp-level-warning" hidden
              title="Reported values in this location jump around a lot from week to week (often because of small numbers or weeks reported as zero), so the level may change quickly.">
           &#9888; Unstable data
         </div>
+        <div class="fp-viz" id="fp-level-viz"></div>
       </div>
       <div class="fp-card">
         <div class="fp-card-label">Expected peak week</div>
         <div class="fp-card-primary" id="fp-peak-week">—</div>
-        <div class="fp-card-sub" id="fp-peak-week-sub"></div>
         <div class="fp-card-sub" id="fp-peak-week-hist"></div>
+        <div class="fp-viz" id="fp-peak-week-viz"></div>
       </div>
       <div class="fp-card">
         <div class="fp-card-label">Expected season peak</div>
         <div class="fp-trend-large" id="fp-peak-vs-last">—</div>
-        <div class="fp-card-sub-strong" id="fp-peak-value">—</div>
         <div class="fp-card-sub" id="fp-peak-vs-last-prob"></div>
+        <div class="fp-viz" id="fp-peak-viz"></div>
       </div>
     </div>
 
@@ -543,6 +555,7 @@ to open a given state or local area.
   const DECILE_MEDIAN_HOVER_STYLE = { opacity: 1, width: 4.5 };
   const MEDIAN_SMOOTH_WEEKS = 3;
   const SMOOTH_MEDIAN_COLOR = "#ea580c";
+  const FIRST_SEASON = 2022;  // earliest past season of target data used anywhere (2022/23)
   const MAX_HORIZON = 3;  // last horizon (weeks after the reference date) shown in the "4 weeks" window
   const WINDOW_HISTORY_WEEKS = 16;  // weeks of observations shown before the forecast in that window
 
@@ -708,6 +721,18 @@ to open a given state or local area.
   bindToggle("fp-window", "window");
   bindToggle("fp-viewmode", "viewMode");
   bindToggle("fp-pastseasons", "pastSeasons");
+  // The card visuals are drawn at their container's width, so redraw them when that changes. Watch
+  // the cards themselves rather than the window: the layout can change without a window resize
+  // (e.g. when a scrollbar appears), which would leave the visuals drawn at the old width.
+  let resizeTimer, lastCardWidth = null;
+  const cardEl = document.getElementById("fp-level-viz");
+  new ResizeObserver(() => {
+    const w = cardEl.clientWidth;
+    if (w === lastCardWidth) return;  // ignore height-only changes (e.g. from redrawing)
+    lastCardWidth = w;
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => { if (state.locData) render(); }, 150);
+  }).observe(cardEl);
 
   // Static labels
   document.getElementById("fp-ref-date").textContent = DATA.reference_date;
@@ -835,7 +860,7 @@ to open a given state or local area.
     // pct = percentile (0-100) of value vs same-week historical observations
     if (pct == null) return { label: "—", color: "#64748b" };
     if (pct >= 90) return { label: "Far above average", color: "#b91c1c" };
-    if (pct >= 66) return { label: "Above average",     color: "#c2410c" };
+    if (pct >= 66) return { label: "Above average",     color: "#d97706" };  // amber, distinct from the red above
     if (pct >= 33) return { label: "Average",           color: "#1d4ed8" };
     if (pct >= 10) return { label: "Below average",     color: "#15803d" };
     return                  { label: "Far below average", color: "#166534" };
@@ -886,6 +911,165 @@ to open a given state or local area.
       ? "Future trajectories show mixed patterns"
       : `${Math.round(t.counts[t.key] / t.n * 100)}% of trajectories are ${TREND_CATEGORIES[t.key].verb}`;
   }
+  // ---------- card visuals ----------
+  // Each card's visual shows the ensemble forecast as a "pill" (light: 10th-90th percentile of
+  // trajectories, dark: 25th-75th, bar: median) next to past seasons' values.
+  const PILL_LEVELS = [0.1, 0.25, 0.5, 0.75, 0.9];
+  const shortSeason = s => `${String(s).slice(-2)}/${String(s + 1).slice(-2)}`;
+  const escAttr = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const fmtPct = v => `${v >= 10 ? v.toFixed(0) : v.toFixed(1)}%`;
+  function niceTicks(lo, hi, n) {
+    const raw = (hi - lo) / n;
+    const mag = 10 ** Math.floor(Math.log10(raw));
+    const step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => s >= raw);
+    const ticks = [];
+    for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-9; v += step) ticks.push(+v.toFixed(10));
+    return { ticks, step };
+  }
+  function dodge(pos, gap, lo, hi) {
+    // Spread positions (returned in the same order) at least `gap` apart, kept within [lo, hi],
+    // moving them as little as possible: labels that would overlap form a block that is centered on
+    // its members' own positions, so the upper ones move up and the lower ones down by about as
+    // much (least squares). Blocks that then overlap merge, and so on.
+    const order = pos.map((_, i) => i).sort((a, b) => pos[a] - pos[b]);
+    // Each block: n labels at start, start + gap, ...; sum = Σ (position - offset within block).
+    const blocks = [];
+    for (const i of order) {
+      let b = { n: 1, sum: pos[i] };
+      b.start = b.sum;
+      while (blocks.length) {
+        const prev = blocks[blocks.length - 1];
+        if (prev.start + prev.n * gap <= b.start) break;
+        blocks.pop();
+        const sum = prev.sum + b.sum - b.n * prev.n * gap;
+        const n = prev.n + b.n;
+        b = { n, sum, start: sum / n };
+      }
+      blocks.push(b);
+    }
+    const out = blocks.flatMap(b => Array.from({ length: b.n }, (_, k) => b.start + k * gap))
+      .map(p => Math.min(Math.max(p, lo), hi));
+    // Blocks pushed back inside [lo, hi] may overlap their neighbors again; spread those apart.
+    for (let k = 1; k < out.length; k++) out[k] = Math.max(out[k], out[k - 1] + gap);
+    for (let k = out.length - 1; k >= 0; k--) {
+      out[k] = Math.min(out[k], k === out.length - 1 ? hi : out[k + 1] - gap);
+    }
+    for (let k = 0; k < out.length; k++) out[k] = Math.max(out[k], k === 0 ? lo : out[k - 1] + gap);
+    const res = [];
+    order.forEach((i, k) => { res[i] = out[k]; });
+    return res;
+  }
+  // Pill shades from the card's category color: a light 80% band with a mid-tone outline, a
+  // mid-tone 50% band, and a darkened median bar.
+  function pillStyles(color) {
+    return {
+      outer: `fill:${mixHex(color, "#ffffff", 0.85)};stroke:${mixHex(color, "#ffffff", 0.5)}`,
+      inner: `fill:${mixHex(color, "#ffffff", 0.45)}`,
+      med: `stroke:${mixHex(color, "#000000", 0.3)}`,
+    };
+  }
+  // Vertical pill on a % axis. qs: values at PILL_LEVELS; past: [{season, value}];
+  // now: optional current observation, drawn in black alongside the past seasons.
+  // Visuals are drawn at their container's width, so text renders at its CSS size.
+  const vizWidth = el => Math.max(Math.round(el.clientWidth), 150) || 200;
+  function pillSvg({ W, qs, past, now, pillLabel, ariaLabel, color = FORECAST_COLOR }) {
+    const ps = pillStyles(color);
+    const H = 136, top = 8, bottom = 16, axisX = 32;
+    const vals = [...qs, ...past.map(p => p.value), ...(now != null ? [now] : [])];
+    let lo = Math.min(...vals), hi = Math.max(...vals);
+    const pad = Math.max((hi - lo) * 0.1, 0.05);
+    lo = Math.max(0, lo - pad); hi += pad;
+    const y = v => top + (hi - v) / (hi - lo) * (H - top - bottom);
+    const { ticks, step } = niceTicks(lo, hi, 3);
+    const dec = step < 0.1 ? 2 : step < 1 ? 1 : 0;
+    // Leave ~52px right of the pill's past-season lines for their labels.
+    const pillX = Math.round(axisX + (W - axisX - 52) * 0.45);
+    let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${escAttr(ariaLabel)}">`;
+    s += `<line class="ax" x1="${axisX}" x2="${axisX}" y1="${top}" y2="${H - bottom}"/>`;
+    for (const t of ticks) {
+      s += `<text class="tick" x="${axisX - 4}" y="${y(t)}" text-anchor="end" dy="0.35em">${t.toFixed(dec)}%</text>`;
+    }
+    const [q10, q25, q50, q75, q90] = qs;
+    const pw = 18, px = pillX - pw / 2;
+    const tip = `<title>Forecast: median ${fmtPct(q50)}; 50% of trajectories ${fmtPct(q25)}–${fmtPct(q75)}, ` +
+      `80% ${fmtPct(q10)}–${fmtPct(q90)}</title>`;
+    s += `<g>${tip}<rect class="pill-outer" style="${ps.outer}" x="${px}" y="${y(q90)}" width="${pw}" height="${Math.max(y(q10) - y(q90), 4)}" rx="${pw / 2}"/>`;
+    s += `<rect class="pill-inner" style="${ps.inner}" x="${px + 2}" y="${y(q75)}" width="${pw - 4}" height="${Math.max(y(q25) - y(q75), 3)}" rx="${(pw - 4) / 2}"/>`;
+    s += `<line class="pill-med" style="${ps.med}" x1="${pillX - 13}" x2="${pillX + 13}" y1="${y(q50)}" y2="${y(q50)}"/></g>`;
+    s += `<text class="col" x="${pillX}" y="${H - 3}" text-anchor="middle">${pillLabel}</text>`;
+    // Past seasons (and "Now", in black): a short line at the value, with its label dodged to
+    // stay legible.
+    // Markers start a few px right of the pill (and its median bar, which reaches pillX + 13).
+    const lineX1 = pillX + 19, lineX2 = pillX + 33;
+    const markers = [...past].sort((a, b) => a.season - b.season).map(p => ({
+      value: p.value, label: shortSeason(p.season), title: `${seasonName(p.season)}: ${fmtPct(p.value)}`, cls: "",
+    }));
+    if (now != null) markers.push({ value: now, label: "Now", title: `Latest observation: ${fmtPct(now)}`, cls: " now" });
+    const labelYs = dodge(markers.map(m => y(m.value)), 12, top, H - bottom);
+    markers.forEach((m, i) => {
+      s += `<g><title>${m.title}</title>`;
+      s += `<line class="past-line${m.cls}" x1="${lineX1}" x2="${lineX2}" y1="${y(m.value)}" y2="${y(m.value)}"/>`;
+      s += `<circle class="past${m.cls}" cx="${lineX2 + 2}" cy="${y(m.value)}" r="3"/>`;
+      s += `<text class="past-lbl${m.cls}" x="${lineX2 + 9}" y="${labelYs[i]}" dy="0.35em">${m.label}</text></g>`;
+    });
+    return s + "</svg>";
+  }
+  // Days since the Aug 1 start of a date's flu season, so peak weeks compare across seasons.
+  const dayOfSeason = ds => (new Date(ds + "T00:00:00Z") - new Date(`${seasonOf(ds)}-08-01T00:00:00Z`)) / 86400000;
+  // Horizontal timeline of peak weeks. qd: days-of-season at PILL_LEVELS; past: [{season, date}].
+  function peakTimelineSvg({ W, qd, qDates, past, ariaLabel, color = FORECAST_COLOR }) {
+    const ps = pillStyles(color);
+    const H = 92, L = 8, R = 8;
+    const all = [...qd, ...past.map(p => dayOfSeason(p.date))];
+    // Fit the axis tightly around the peaks, with at least ~2 months shown.
+    let lo = Math.min(...all) - 6, hi = Math.max(...all) + 6;
+    if (hi - lo < 60) { const c = (lo + hi) / 2; lo = c - 30; hi = c + 30; }
+    const x = d => L + (d - lo) / (hi - lo) * (W - L - R);
+    const dotY = 34, pillY = 54, axisY = 68;
+    let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${escAttr(ariaLabel)}">`;
+    s += `<line class="ax" x1="${L}" x2="${W - R}" y1="${dotY}" y2="${dotY}" stroke-dasharray="2 3"/>`;
+    s += `<line class="ax" x1="${L}" x2="${W - R}" y1="${axisY}" y2="${axisY}"/>`;
+    for (let m = 0; m < 12; m++) {
+      const mon = (7 + m) % 12, yr = DATA.season + (7 + m >= 12 ? 1 : 0);
+      const ds = `${yr}-${String(mon + 1).padStart(2, "0")}-01`;
+      const d = dayOfSeason(ds);
+      if (d < lo || d > hi) continue;
+      const name = new Date(ds + "T00:00:00Z").toLocaleDateString("en-US", { month: "short", timeZone: "UTC" });
+      s += `<line class="ax" x1="${x(d)}" x2="${x(d)}" y1="${axisY}" y2="${axisY + 3}"/>`;
+      s += `<text class="tick" x="${x(d)}" y="${axisY + 13}" text-anchor="middle">${name}</text>`;
+    }
+    const sorted = [...past].sort((a, b) => a.season - b.season);
+    const xs = sorted.map(p => x(dayOfSeason(p.date)));
+    const labelXs = dodge(xs, 31, L + 14, W - R - 14);
+    sorted.forEach((p, i) => {
+      s += `<g><title>${seasonName(p.season)} peak: week ending ${fmtMd(p.date)}</title>`;
+      s += `<circle class="past" cx="${xs[i]}" cy="${dotY}" r="4"/>`;
+      s += `<text class="past-lbl" x="${labelXs[i]}" y="${dotY - 9}" text-anchor="middle">${shortSeason(p.season)}</text></g>`;
+    });
+    const [d10, d25, d50, d75, d90] = qd;
+    const tip = `<title>Forecast peak week: median ${fmtMd(qDates[2])}; 50% of trajectories ` +
+      `${fmtMd(qDates[1])}–${fmtMd(qDates[3])}, 80% ${fmtMd(qDates[0])}–${fmtMd(qDates[4])}</title>`;
+    const ph = 14;
+    s += `<g>${tip}<rect class="pill-outer" style="${ps.outer}" x="${x(d10) - 3}" y="${pillY - ph / 2}" width="${x(d90) - x(d10) + 6}" height="${ph}" rx="${ph / 2}"/>`;
+    s += `<rect class="pill-inner" style="${ps.inner}" x="${x(d25) - 2}" y="${pillY - ph / 2 + 2}" width="${x(d75) - x(d25) + 4}" height="${ph - 4}" rx="${(ph - 4) / 2}"/>`;
+    s += `<line class="pill-med" style="${ps.med}" x1="${x(d50)}" x2="${x(d50)}" y1="${pillY - 10}" y2="${pillY + 10}"/></g>`;
+    return s + "</svg>";
+  }
+  function trendBarHtml(t) {
+    const parts = [["increasing", "↑"], ["stable", "→"], ["decreasing", "↓"]];
+    const title = parts.map(([k]) => `${Math.round(t.counts[k] / t.n * 100)}% ${TREND_CATEGORIES[k].verb}`).join(", ");
+    return `<div class="fp-trend-bar" title="Share of forecast trajectories: ${title}">` +
+      parts.filter(([k]) => t.counts[k] > 0).map(([k, arrow]) => {
+        const pct = t.counts[k] / t.n * 100;
+        return `<div style="width:${pct}%;background:${TREND_CATEGORIES[k].iconBg}">` +
+          `${pct >= 18 ? `${arrow} ${Math.round(pct)}%` : ""}</div>`;
+      }).join("") + "</div>" +
+      `<div class="fp-trend-key">${parts.map(([k]) =>
+        `<span><i class="fp-dot" style="width:7px;height:7px;background:${TREND_CATEGORIES[k].iconBg}"></i>` +
+        `${{ increasing: "Rising", stable: "Stable", decreasing: "Falling" }[k]} ` +
+        `${Math.round(t.counts[k] / t.n * 100)}%</span>`).join("")}</div>`;
+  }
+
   function trace(name, x, y, opts = {}) {
     return Object.assign({ type: "scatter", mode: "lines+markers", name, x, y }, opts);
   }
@@ -1054,7 +1238,9 @@ to open a given state or local area.
   // ---------- render ----------
   function render() {
     // history: all observations through the reference date; forecasts: {model label: {dates, samples}}
-    const { observed: history, forecasts } = state.locData;
+    // Past seasons start at FIRST_SEASON (chart, level comparisons, peak cards, noise check).
+    const { forecasts } = state.locData;
+    const history = state.locData.observed.filter(r => seasonOf(r.date) >= FIRST_SEASON);
     const refSeason = DATA.season;
     const observed = history.filter(r => seasonOf(r.date) === refSeason);
     const locName = LOCATIONS.get(state.region).name;
@@ -1066,18 +1252,16 @@ to open a given state or local area.
     // ---- Card 2: Epidemic level (colored categories, vs same week in past seasons) ----
     const levelCurEl = document.getElementById("fp-level-current");
     const levelFutEl = document.getElementById("fp-level-future");
-    const levelSubEl = document.getElementById("fp-level-sub");
+    const levelVizEl = document.getElementById("fp-level-viz");
     const levelWarnEl = document.getElementById("fp-level-warning");
     // Only seasons before the forecast's season are used as the comparison set, so the current
     // season (including the value being ranked, and any later data) never leaks in.
     const pastHistory = history.filter(r => r.value != null && seasonOf(r.date) < refSeason);
     const histRowsForWeek = (wk) => pastHistory.filter(r => Math.abs(weekOfYear(r.date) - wk) <= 1);
     const histValuesForWeek = (wk) => histRowsForWeek(wk).map(r => r.value);
-    let nSeasonsUsed = 0;
     if (lastObs != null && lastObsDate) {
       const wk = weekOfYear(lastObsDate);
       const histVals = histValuesForWeek(wk);
-      nSeasonsUsed = new Set(histRowsForWeek(wk).map(r => seasonOf(r.date))).size;
       const p = quantileInArray(histVals, lastObs);
       const cat = levelCategory(p);
       levelCurEl.textContent = cat.label;
@@ -1085,22 +1269,33 @@ to open a given state or local area.
     } else {
       levelCurEl.textContent = "—"; levelCurEl.style.color = "";
     }
-    const futureDate = lastObsDate ? addDays(lastObsDate, 28) : null;
+    const futureDate = lastObsDate ? addDays(lastObsDate, 14) : null;  // 2 weeks after the last observation
     const futureIdx = ensemble && futureDate ? ensemble.dates.indexOf(futureDate) : -1;
     if (futureIdx >= 0 && ensemble.samples.length) {
-      const futureMedian = quantilesOf(ensemble.samples.map(s => s[futureIdx]), [0.5])[0];
+      const futureQs = quantilesOf(ensemble.samples.map(s => s[futureIdx]), PILL_LEVELS);
+      const futureMedian = futureQs[2];
       const wk = weekOfYear(futureDate);
       const histVals = histValuesForWeek(wk);
       const p = quantileInArray(histVals, futureMedian);
       const cat = levelCategory(p);
       levelFutEl.textContent = cat.label;
       levelFutEl.style.color = cat.color;
+      // Each past season's value in the same week as the forecast target (shifted as in the chart).
+      const past = [];
+      for (const s of new Set(pastHistory.map(r => seasonOf(r.date)))) {
+        const shiftDays = Math.round((refSeason - s) * 365.25 / 7) * 7;
+        const row = pastHistory.find(r => r.date === addDays(futureDate, -shiftDays));
+        if (row) past.push({ season: s, value: row.value });
+      }
+      levelVizEl.innerHTML = pillSvg({
+        W: vizWidth(levelVizEl), qs: futureQs, past, now: lastObs, pillLabel: "In 2 wks", color: cat.color,
+        ariaLabel: `Latest observation ${fmtPct(lastObs)}; forecast for the week ending ${fmtMd(futureDate)} ` +
+          `${fmtPct(futureMedian)}, compared with past seasons in the same week`,
+      });
     } else {
       levelFutEl.textContent = "—"; levelFutEl.style.color = "";
+      levelVizEl.innerHTML = "";
     }
-    levelSubEl.textContent = nSeasonsUsed
-      ? `vs ${nSeasonsUsed} past season${nSeasonsUsed === 1 ? "" : "s"}`
-      : "";
     const noise = noiseStats(history.filter(r => r.date <= DATA.reference_date));
     levelWarnEl.hidden = !(noise && (noise.residSd > UNSTABLE_RESID_SD || noise.zeroFrac > UNSTABLE_ZERO_FRAC));
 
@@ -1108,7 +1303,7 @@ to open a given state or local area.
     const trendCardEl = document.getElementById("fp-trend-card");
     const trendIconEl = document.getElementById("fp-trend-icon");
     const trendLabelEl = document.getElementById("fp-trend-label");
-    const trendStatEl = document.getElementById("fp-trend-stat");
+    const trendVizEl = document.getElementById("fp-trend-viz");
     const trendSubEl = document.getElementById("fp-trend-sub");
     const trend = computeTrend(state.locData);
     trendCardEl.classList.remove(...Object.keys(TREND_CATEGORIES).map(k => `trend-${k}`));
@@ -1119,21 +1314,20 @@ to open a given state or local area.
       trendIconEl.style.background = cat.iconBg;
       trendLabelEl.textContent = cat.label;
       trendLabelEl.style.color = cat.color;
-      trendStatEl.textContent = trendStatText(trend);
-      trendStatEl.style.color = cat.color;
-      trendSubEl.textContent = `From the week ending ${fmtMd(trend.lastObsDate)} to the week ending ${fmtMd(trend.targetDate)}`;
+      trendSubEl.textContent = `Week ending ${fmtMd(trend.lastObsDate)} → ${fmtMd(trend.targetDate)}`;
+      trendVizEl.innerHTML = trendBarHtml(trend);
     } else {
       trendIconEl.innerHTML = "";
       trendLabelEl.textContent = "—"; trendLabelEl.style.color = "";
-      trendStatEl.textContent = "";
       trendSubEl.textContent = "";
+      trendVizEl.innerHTML = "";
     }
 
     // ---- Card 3 (Expected peak week) + Card 4 (Expected season peak) ----
     const peakWeekEl = document.getElementById("fp-peak-week");
-    const peakWeekSubEl = document.getElementById("fp-peak-week-sub");
     const peakWeekHistEl = document.getElementById("fp-peak-week-hist");
-    const peakValEl = document.getElementById("fp-peak-value");
+    const peakWeekVizEl = document.getElementById("fp-peak-week-viz");
+    const peakVizEl = document.getElementById("fp-peak-viz");
     const peakVsLastEl = document.getElementById("fp-peak-vs-last");
     const peakVsLastProbEl = document.getElementById("fp-peak-vs-last-prob");
 
@@ -1142,8 +1336,10 @@ to open a given state or local area.
     const observedPeak = observed.reduce((best, r) => (!best || r.value > best.value ? r : best), null);
     if (fullSeason && ensemble.samples.length) {
       const stats = peakStatsFromSamples(ensemble.samples, ensemble.dates, observedPeak);
-      const [pvLo, pvMd, pvHi] = quantilesOf(stats.peakValues, [0.25, 0.5, 0.75]);
+      const peakQs = quantilesOf(stats.peakValues, PILL_LEVELS);
+      const pvMd = peakQs[2];
       const histPeaks = historicalSeasonPeaks(history, refSeason);
+      const pastPeaks = histPeaks.map(p => ({ ...p, value: p.peak }));
 
       // --- Card 3: peak week ---
       // Median peak week (taken from the sorted dates, so it is always a real forecast week and
@@ -1152,7 +1348,11 @@ to open a given state or local area.
       const pick = p => sortedPeakDates[Math.floor(p * (sortedPeakDates.length - 1))];
       const medianDate = pick(0.5);
       peakWeekEl.textContent = fmtMd(medianDate);
-      peakWeekSubEl.textContent = `50% PI: ${fmtMd(pick(0.25))} – ${fmtMd(pick(0.75))}`;
+      const qDates = PILL_LEVELS.map(pick);
+      // The pills take their card's category color, or grey (like the headline) if last season is
+      // unavailable.
+      const NO_LAST_SEASON_COLOR = "#94a3b8";
+      let peakWeekColor = NO_LAST_SEASON_COLOR, peakColor = NO_LAST_SEASON_COLOR;
 
       // Both peak cards compare against last season only.
       const lastSeasonPeakObj = histPeaks.find(p => p.season === refSeason - 1);
@@ -1162,19 +1362,25 @@ to open a given state or local area.
         const normalize = w => w >= 27 ? w - 52 : w;
         const diffWeeks = normalize(weekOfYear(medianDate)) - normalize(weekOfYear(lastSeasonPeakObj.date));
         let text, color;
-        if (diffWeeks <= -2.5)        { text = `~${Math.round(Math.abs(diffWeeks))} weeks earlier than last year`; color = "#c2410c"; }
+        if (diffWeeks <= -2.5)        { text = `~${Math.round(Math.abs(diffWeeks))} wks earlier than last year`; color = "#b91c1c"; }
         else if (diffWeeks <= -0.75)  { text = "Slightly earlier than last year"; color = "#c2410c"; }
-        else if (diffWeeks < 0.75)    { text = "About the same time as last year"; color = "#1d4ed8"; }
+        else if (diffWeeks < 0.75)    { text = "Same time as last year"; color = "#1d4ed8"; }
         else if (diffWeeks < 2.5)     { text = "Slightly later than last year"; color = "#0891b2"; }
-        else                          { text = `~${Math.round(diffWeeks)} weeks later than last year`; color = "#ca8a04"; }
-        peakWeekHistEl.textContent = `${text} (last yr: ${fmtMd(lastSeasonPeakObj.date)})`;
+        else                          { text = `~${Math.round(diffWeeks)} wks later than last year`; color = "#15803d"; }
+        peakWeekHistEl.textContent = text;
         peakWeekHistEl.style.color = color;
         peakWeekHistEl.style.fontWeight = "600";
+        peakWeekColor = color;
       } else {
         peakWeekHistEl.textContent = "Last season unavailable";
         peakWeekHistEl.style.color = "#94a3b8";
         peakWeekHistEl.style.fontWeight = "600";
       }
+      peakWeekVizEl.innerHTML = peakTimelineSvg({
+        W: vizWidth(peakWeekVizEl), qd: qDates.map(dayOfSeason), qDates, past: pastPeaks, color: peakWeekColor,
+        ariaLabel: `Forecast peak week ${fmtMd(medianDate)} (50% of trajectories ${fmtMd(qDates[1])} to ` +
+          `${fmtMd(qDates[3])}), compared with past seasons' peak weeks`,
+      });
 
       // --- Card 4: peak comparison (primary) + value (secondary) ---
       if (lastSeasonPeakObj) {
@@ -1191,21 +1397,26 @@ to open a given state or local area.
         else                          { dirLabel = "Lower than last year";  dirColor = "#15803d"; }
         peakVsLastEl.textContent = dirLabel;
         peakVsLastEl.style.color = dirColor;
-        peakValEl.textContent = `Forecast peak: ${pvMd.toFixed(1)}% (last yr: ${lastPk.toFixed(1)}%)`;
-        peakVsLastProbEl.textContent = `${Math.round(pctDir * 100)}% of trajectories show a ${dirWord} peak than last year`;
+        peakVsLastProbEl.textContent = `${Math.round(pctDir * 100)}% of trajectories ${dirWord}`;
+        peakColor = dirColor;
       } else {
         peakVsLastEl.textContent = "Last season unavailable";
         peakVsLastEl.style.color = "#94a3b8";
-        peakValEl.textContent = `Forecast peak: ${pvMd.toFixed(1)}%`;
         peakVsLastProbEl.textContent = "";
       }
+      peakVizEl.innerHTML = pillSvg({
+        W: vizWidth(peakVizEl), qs: peakQs, past: pastPeaks, pillLabel: "Forecast", color: peakColor,
+        ariaLabel: `Forecast season peak ${fmtPct(pvMd)}, compared with past seasons' peaks`,
+      });
     } else {
-      peakWeekEl.textContent = "—"; peakWeekSubEl.textContent = ""; peakWeekHistEl.textContent = "";
-      peakValEl.textContent = "—"; peakVsLastEl.textContent = "—"; peakVsLastProbEl.textContent = "";
+      peakWeekEl.textContent = "—"; peakWeekHistEl.textContent = "";
+      peakVsLastEl.textContent = "—"; peakVsLastProbEl.textContent = "";
       peakVsLastEl.style.color = "";
+      peakWeekVizEl.innerHTML = peakVizEl.innerHTML = "";
       if (ensemble) {
-        peakWeekSubEl.textContent = peakVsLastProbEl.textContent =
+        peakWeekHistEl.textContent = peakVsLastProbEl.textContent =
           "Needs a full-season forecast, which isn't available this week";
+        peakWeekHistEl.style.color = "";
       }
     }
 
