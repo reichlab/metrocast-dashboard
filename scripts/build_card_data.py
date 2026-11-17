@@ -80,6 +80,10 @@ def location_entry(locs, loc):
     else:
         entry["level"] = "local"
         entry["counties"] = [c.strip() for c in row["hsa_counties"].split(",")]
+        # NCI health service areas are labeled on the map by their NCI ID. Other local areas (NC flu
+        # regions, UT health districts) have only small region numbers, so they keep their names.
+        if row["location_type"] == "hsa_nci_id":
+            entry["hsa_code"] = str(row["original_location_code"]).strip()
     return entry
 
 

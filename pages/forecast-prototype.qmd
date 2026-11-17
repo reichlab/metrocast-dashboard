@@ -101,12 +101,14 @@ to open a given state or local area.
   #fp-usmap svg { width: 100%; height: auto; display: block; }
   #fp-usmap path { fill: #f1f5f9; stroke: #fff; stroke-width: 0.6; }
   /* States with forecasts are filled by their statewide trend (set in colorUsMap). */
-  /* Unselected states are faded; the selected one is shown at full strength. */
-  #fp-usmap path.has-data { cursor: pointer; fill-opacity: 0.4; transition: fill 200ms, fill-opacity 150ms; }
+  /* The selected state gets a black outline (raised in drawUsMap so its whole border shows). */
+  #fp-usmap path.has-data { cursor: pointer; transition: fill 200ms; }
   #fp-usmap path.has-data:hover, #fp-usmap path.has-data:focus {
-    fill-opacity: 0.7; stroke: #0f172a; stroke-width: 1.2; outline: none;
+    stroke: #0f172a; stroke-width: 1.2; outline: none;
   }
-  #fp-usmap path.active { fill-opacity: 1; }
+  #fp-usmap path.active, #fp-usmap path.active:hover, #fp-usmap path.active:focus {
+    stroke: #000; stroke-width: 2;
+  }
 
   /* ---- Main area: cards + chart on the left, local-area map on the right ---- */
   .fp-main {
@@ -270,6 +272,15 @@ to open a given state or local area.
   #fp-statemap svg { width: 100%; height: auto; display: block; }
   #fp-statemap .fp-county { fill: #f1f5f9; stroke: #fff; stroke-width: 0.5; }
   #fp-statemap .fp-state-outline { fill: none; stroke: #94a3b8; stroke-width: 1; }
+  #fp-statemap .fp-county-lines {
+    fill: none; stroke: #fff; stroke-width: 0.5; stroke-opacity: 0.7; pointer-events: none;
+  }
+  #fp-statemap .fp-cities { pointer-events: none; }
+  #fp-statemap .fp-cities circle { fill: #0f172a; stroke: #fff; stroke-width: 1; }
+  #fp-statemap .fp-cities text {
+    font-size: 12px; font-weight: 600; fill: #0f172a;
+    paint-order: stroke; stroke: #fff; stroke-width: 3px; stroke-linejoin: round;
+  }
   #fp-statemap .fp-region {
     stroke: #fff; stroke-width: 1.2; cursor: pointer;
     transition: fill 200ms;
@@ -285,14 +296,6 @@ to open a given state or local area.
   .fp-map-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 0.78rem; color: #475569; }
   .fp-map-legend span { display: inline-flex; align-items: center; gap: 5px; }
   .fp-dot { width: 10px; height: 10px; border-radius: 50%; flex: none; display: inline-block; }
-  .fp-loc-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
-  .fp-loc-list button {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 999px;
-    padding: 3px 10px; font-size: 0.76rem; color: #334155; cursor: pointer;
-  }
-  .fp-loc-list button:hover { border-color: #94a3b8; }
-  .fp-loc-list button.active { background: #0f172a; border-color: #0f172a; color: #fff; }
   .fp-back {
     margin-top: 12px;
     background: #fff; color: #1e3a8a;
@@ -308,6 +311,7 @@ to open a given state or local area.
     box-shadow: 0 4px 12px rgba(15,23,42,0.25);
   }
   #fp-tip[hidden] { display: none; }
+  #fp-tip .fp-tip-counties { margin-top: 4px; color: #cbd5e1; font-size: 0.72rem; }
 </style>
 
 <div class="fp-hero">
@@ -420,7 +424,6 @@ to open a given state or local area.
     <div class="sub">Colored by each area's epidemic trend. Select an area to see its forecast.</div>
     <div id="fp-statemap"></div>
     <div class="fp-map-legend" id="fp-map-legend"></div>
-    <div class="fp-loc-list" id="fp-loc-list"></div>
     <button class="fp-back" id="fp-back" hidden></button>
   </div>
 </div>
@@ -556,6 +559,39 @@ to open a given state or local area.
                   icon: svgIcon('<path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>') },
   };
   const NO_TREND_FILL = "#e2e8f0";  // map fill for areas still loading or without a trend
+  // Landmark cities on the local-area map: [name, latitude, longitude, optional label side]. Mostly
+  // each state's largest cities, skipping suburbs that would sit on top of a bigger neighbor's label.
+  const MAJOR_CITIES = {
+    "Colorado": [["Denver", 39.739, -104.990], ["Colorado Springs", 38.834, -104.821],
+      ["Fort Collins", 40.585, -105.084], ["Pueblo", 38.254, -104.609], ["Grand Junction", 39.064, -108.551]],
+    "Georgia": [["Atlanta", 33.749, -84.388], ["Augusta", 33.471, -81.975], ["Columbus", 32.461, -84.988],
+      ["Macon", 32.841, -83.632], ["Savannah", 32.081, -81.091], ["Athens", 33.951, -83.357]],
+    "Indiana": [["Indianapolis", 39.768, -86.158], ["Fort Wayne", 41.079, -85.139],
+      ["Evansville", 37.975, -87.571], ["South Bend", 41.676, -86.252]],
+    "Maine": [["Portland", 43.659, -70.257], ["Bangor", 44.801, -68.778]],
+    "Maryland": [["Baltimore", 39.290, -76.612], ["Frederick", 39.414, -77.411]],
+    "Massachusetts": [["Boston", 42.360, -71.059], ["Worcester", 42.263, -71.802],
+      ["Springfield", 42.101, -72.590], ["Lowell", 42.633, -71.316], ["New Bedford", 41.636, -70.934]],
+    "Minnesota": [["Minneapolis–St. Paul", 44.966, -93.180], ["Rochester", 44.012, -92.480],
+      ["Duluth", 46.787, -92.100], ["St. Cloud", 45.557, -94.163]],
+    "New York": [["New York City", 40.713, -74.006], ["Buffalo", 42.886, -78.878],
+      ["Rochester", 43.157, -77.616], ["Syracuse", 43.049, -76.147], ["Albany", 42.653, -73.756]],
+    "North Carolina": [["Charlotte", 35.227, -80.843], ["Raleigh", 35.780, -78.639],
+      ["Greensboro", 36.073, -79.792, "left"], ["Fayetteville", 35.053, -78.878], ["Wilmington", 34.226, -77.945],
+      ["Asheville", 35.595, -82.551]],
+    "Oregon": [["Portland", 45.515, -122.678], ["Salem", 44.943, -123.035], ["Eugene", 44.052, -123.087],
+      ["Bend", 44.058, -121.315], ["Medford", 42.327, -122.873]],
+    "South Carolina": [["Columbia", 34.000, -81.035], ["Charleston", 32.777, -79.931],
+      ["Greenville", 34.853, -82.394], ["Myrtle Beach", 33.689, -78.887]],
+    "Texas": [["Houston", 29.760, -95.370, "right"], ["San Antonio", 29.424, -98.494], ["Dallas", 32.777, -96.797, "right"],
+      ["Austin", 30.267, -97.743], ["Fort Worth", 32.755, -97.331, "left"], ["El Paso", 31.762, -106.485],
+      ["Corpus Christi", 27.801, -97.396], ["Lubbock", 33.578, -101.855], ["Laredo", 27.506, -99.507],
+      ["Amarillo", 35.222, -101.831], ["Brownsville", 25.901, -97.497]],
+    "Utah": [["Salt Lake City", 40.761, -111.891], ["Provo", 40.234, -111.659], ["Ogden", 41.223, -111.974],
+      ["Logan", 41.736, -111.834], ["St. George", 37.096, -113.568]],
+    "Virginia": [["Virginia Beach", 36.853, -75.978], ["Richmond", 37.541, -77.436],
+      ["Roanoke", 37.271, -79.941], ["Arlington", 38.880, -77.107]],
+  };
 
   async function selectRegion(id) {
     state.region = id;
@@ -598,7 +634,6 @@ to open a given state or local area.
     trends.clear();
     drawUsMap();
     drawStateMap(st);
-    renderLocList(st);
     // The map needs every local area's trend, so load them all (the selected one is already loading).
     for (const l of [st.statewide, ...st.locals].filter(Boolean)) {
       loadLocation(l.id)
@@ -629,8 +664,6 @@ to open a given state or local area.
     d3Safe(() => d3.selectAll("#fp-statemap .fp-region")
       .classed("selected", d => d.loc.id === state.region)
       .filter(d => d.loc.id === state.region).raise());
-    document.querySelectorAll("#fp-loc-list button")
-      .forEach(b => b.classList.toggle("active", b.dataset.id === state.region));
   }
   const d3Safe = f => { if (window.d3) f(); };
 
@@ -940,52 +973,65 @@ to open a given state or local area.
     svg.append("g").selectAll("path")
       .data(topojson.feature(topo, { type: "GeometryCollection", geometries: countyGeoms }).features)
       .join("path").attr("class", "fp-county").attr("d", path);
-    const regions = st.locals.map(loc => ({ loc, shape: topojson.merge(topo, countiesOf(loc, countyGeoms)) }));
+    const regionOf = new Map();  // county geometry -> index of the local area it belongs to
+    const regions = st.locals.map((loc, k) => {
+      const geoms = countiesOf(loc, countyGeoms);
+      geoms.forEach(g => regionOf.set(g, k));
+      return { loc, shape: topojson.merge(topo, geoms) };
+    });
     const regionPaths = svg.append("g").selectAll("path").data(regions).join("path")
       .attr("class", "fp-region").attr("d", d => path(d.shape))
-      .attr("aria-label", d => d.loc.name)
+      .attr("aria-label", d => `${areaLabel(d.loc)}: ${d.loc.counties.join(", ")}`)
       .on("mousemove", (e, d) => showTip(e, regionTip(d.loc.id)))
       .on("mouseleave", hideTip);
     bindSelect(regionPaths, d => d.loc.id);
+    // County lines inside each local area (the areas' own edges are drawn by their outlines, and
+    // counties outside any area already show their borders).
+    svg.append("path").attr("class", "fp-county-lines")
+      .attr("d", path(topojson.mesh(topo, { type: "GeometryCollection", geometries: countyGeoms },
+        (a, b) => a !== b && regionOf.has(a) && regionOf.get(a) === regionOf.get(b))));
     svg.append("path").attr("class", "fp-state-outline").attr("d", path(topojson.mesh(topo, stateGeom)));
+    drawCities(svg, projection, st.name, W);
     colorStateMap();
     updateSelection();
   }
-  function trendTip(name, t) {
-    const head = `<strong>${name}</strong>`;
-    if (t === undefined) return `${head}<br>Loading…`;
-    if (t === null) return `${head}<br>Trend not available`;
-    return `${head}<br>${TREND_CATEGORIES[t.key].label}: ${trendStatText(t)}`;
+  function drawCities(svg, projection, stateName, W) {
+    // Dots and names for the state's largest cities, as landmarks. They ignore the mouse, so hovering
+    // or clicking one acts on the local area underneath. Labels go on the right of the dot, or the
+    // left near the map's right edge, unless the city names a side.
+    const g = svg.append("g").attr("class", "fp-cities");
+    for (const [name, lat, lon, side] of MAJOR_CITIES[stateName] || []) {
+      const p = projection([lon, lat]);
+      if (!p) continue;
+      const left = side ? side === "left" : p[0] > W * 0.72;
+      g.append("circle").attr("cx", p[0]).attr("cy", p[1]).attr("r", 2.6);
+      g.append("text").attr("x", p[0] + (left ? -5 : 5)).attr("y", p[1])
+        .attr("text-anchor", left ? "end" : "start").attr("dy", "0.35em").text(name);
+    }
   }
-  const regionTip = id => trendTip(LOCATIONS.get(id).name, trends.get(id));
+  function trendTip(name, t, extra = "") {
+    const head = `<strong>${name}</strong>`;
+    if (t === undefined) return `${head}<br>Loading…${extra}`;
+    if (t === null) return `${head}<br>Trend not available${extra}`;
+    return `${head}<br>${TREND_CATEGORIES[t.key].label}: ${trendStatText(t)}${extra}`;
+  }
+  // On the local-area map, NCI health service areas go by their NCI ID ("HSA 405"); other local
+  // areas (NC flu regions, UT health districts) keep their names, without the state.
+  const areaLabel = loc => loc.hsa_code ? `HSA ${loc.hsa_code}` : loc.name.replace(/, [A-Z]{2}$/, "");
+  function regionTip(id) {
+    const loc = LOCATIONS.get(id);
+    const counties = [...loc.counties].sort();
+    const list = `<div class="fp-tip-counties">${counties.length} ${counties.length === 1 ? "county" : "counties"}: ` +
+      `${counties.join(", ")}</div>`;
+    return trendTip(areaLabel(loc), trends.get(id), list);
+  }
   const fillFor = t => t ? TREND_CATEGORIES[t.key].iconBg : NO_TREND_FILL;
   const trendFill = id => fillFor(trends.get(id));
 
-  function renderLocList(st) {
-    const listEl = document.getElementById("fp-loc-list");
-    listEl.innerHTML = "";
-    for (const loc of [...st.locals].sort((a, b) => a.name.localeCompare(b.name))) {
-      const btn = document.createElement("button");
-      btn.dataset.id = loc.id;
-      btn.innerHTML = `<span class="fp-dot"></span>${loc.name.replace(/, [A-Z]{2}$/, "")}`;
-      btn.addEventListener("click", () => go(loc.id));
-      listEl.appendChild(btn);
-    }
-  }
   function colorStateMap() {
     d3Safe(() => d3.selectAll("#fp-statemap .fp-region").attr("fill", d => trendFill(d.loc.id)));
-    document.querySelectorAll("#fp-loc-list button").forEach(b => {
-      b.querySelector(".fp-dot").style.background = trendFill(b.dataset.id);
-      b.title = regionTip(b.dataset.id).replace(/<[^>]+>/g, " ").trim();
-    });
-    const st = STATES.get(state.stateName);
-    const counts = {};
-    for (const l of st.locals) {
-      const t = trends.get(l.id);
-      if (t) counts[t.key] = (counts[t.key] || 0) + 1;
-    }
-    document.getElementById("fp-map-legend").innerHTML = Object.entries(TREND_CATEGORIES)
-      .map(([k, c]) => `<span><i class="fp-dot" style="background:${c.iconBg}"></i>${c.label} (${counts[k] || 0})</span>`)
+    document.getElementById("fp-map-legend").innerHTML = Object.values(TREND_CATEGORIES)
+      .map(c => `<span><i class="fp-dot" style="background:${c.iconBg}"></i>${c.label}</span>`)
       .join("");
   }
 
