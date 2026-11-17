@@ -256,14 +256,18 @@ to open a given state or local area.
   }
   .fp-chart-head h3, .fp-map-card h3 { margin: 0; font-size: 1.1rem; font-weight: 700; color: #0f172a; }
   .fp-chart-head .sub, .fp-map-card .sub { color: #64748b; font-size: 0.84rem; margin-top: 2px; }
-  #fp-chart { width: 100%; height: 440px; }  .fp-legend {
+  #fp-chart { width: 100%; height: 440px; }
+  /* Observed data and past seasons on the first row, the forecast on the second. */
+  .fp-legend {
     margin-top: 12px;
-    display: flex; flex-wrap: wrap; gap: 16px;
+    display: flex; flex-direction: column; gap: 8px;
     font-size: 0.82rem; color: #475569;
   }
+  .fp-legend-row { display: flex; flex-wrap: wrap; gap: 8px 16px; }
   .fp-legend-item { display: flex; align-items: center; gap: 7px; }
   .fp-legend-item[hidden] { display: none; }
   .fp-legend-swatch { width: 26px; height: 3px; border-radius: 1px; }
+  .fp-legend-swatch.band { height: 12px; border-radius: 2px; }
   .fp-legend-swatch.dash { background: repeating-linear-gradient(90deg, currentColor 0 5px, transparent 5px 9px); height: 2px; }
   .fp-loading .fp-cards, .fp-loading .fp-chart-card { opacity: 0.5; transition: opacity 120ms; }
 
@@ -402,11 +406,18 @@ to open a given state or local area.
       </div>
       <div id="fp-chart"></div>
       <div class="fp-legend">
-        <div class="fp-legend-item"><span class="fp-legend-swatch" style="background:#0f172a"></span> Observed data through current week</div>
+        <div class="fp-legend-row">
+        <div class="fp-legend-item"><span class="fp-legend-swatch" style="background:#0f172a"></span> Observed data</div>
         <div class="fp-legend-item"><span class="fp-legend-swatch" style="background:#64748b"></span> <span id="fp-last-year-label">Last year</span></div>
         <div class="fp-legend-item" id="fp-older-legend"><span class="fp-legend-swatch" style="background:#a8b4c4"></span> <span id="fp-older-label">Earlier seasons</span></div>
+        </div>
+        <div class="fp-legend-row">
         <div class="fp-legend-item" style="color:#2563eb"><span class="fp-legend-swatch dash"></span> Ensemble forecast <span id="fp-forecast-legend-detail"></span></div>
+        <!-- The 50% band is drawn over the 95% band, so its swatch is the two fills combined. -->
+        <div class="fp-legend-item fp-interval-legend" hidden><span class="fp-legend-swatch band" style="background:#2563eb67"></span> 50% interval</div>
+        <div class="fp-legend-item fp-interval-legend" hidden><span class="fp-legend-swatch band" style="background:#2563eb26"></span> 95% interval</div>
         <div class="fp-legend-item" id="fp-smooth-legend" style="color:#ea580c" hidden><span class="fp-legend-swatch" style="background:#ea580c"></span> Smoothed median (3-week moving average)</div>
+        </div>
       </div>
     </div>
   </div>
@@ -527,6 +538,9 @@ to open a given state or local area.
   const DECILE_DARK = "#1e3a8a", DECILE_LIGHT = "#93c5fd";
   const DECILE_STYLE = { opacity: 0.9, width: 1.6 };
   const DECILE_HOVER_STYLE = { opacity: 1, width: 3.5 };
+  // The trajectory closest to the median is drawn thicker, so it's easy to pick out.
+  const DECILE_MEDIAN_STYLE = { opacity: 1, width: 2.5 };
+  const DECILE_MEDIAN_HOVER_STYLE = { opacity: 1, width: 4.5 };
   const MEDIAN_SMOOTH_WEEKS = 3;
   const SMOOTH_MEDIAN_COLOR = "#ea580c";
   const MAX_HORIZON = 3;  // last horizon (weeks after the reference date) shown in the "4 weeks" window
@@ -697,8 +711,10 @@ to open a given state or local area.
 
   // Static labels
   document.getElementById("fp-ref-date").textContent = DATA.reference_date;
-  document.getElementById("fp-season-label").textContent = DATA.season_label;
-  document.getElementById("fp-last-year-label").textContent = `Last year (${DATA.season - 1}-${DATA.season})`;
+  // A season is named by the years it spans, e.g. 2025/26.
+  const seasonName = s => `${s}/${String(s + 1).slice(-2)}`;
+  document.getElementById("fp-season-label").textContent = seasonName(DATA.season);
+  document.getElementById("fp-last-year-label").textContent = `Last year (${seasonName(DATA.season - 1)})`;
 
   // ---------- helpers ----------
   function weekOfYear(dateStr) {
@@ -1225,7 +1241,7 @@ to open a given state or local area.
       const shiftDays = Math.round((refSeason - s) * 365.25 / 7) * 7;
       const rows = history.filter(r => seasonOf(r.date) === s && addDays(r.date, shiftDays) <= xEnd);
       const isLast = s === refSeason - 1;
-      const label = `${s}-${s + 1}`;
+      const label = seasonName(s);
       traces.push(trace(label, rows.map(r => addDays(r.date, shiftDays)), rows.map(r => r.value), {
         line: { color: isLast ? LAST_SEASON_COLOR : "#a8b4c4", width: 1.8 },
         marker: { color: isLast ? LAST_SEASON_COLOR : "#a8b4c4", size: 4 },
@@ -1238,8 +1254,8 @@ to open a given state or local area.
     const older = pastSeasons.filter(s => s < refSeason - 1);
     document.getElementById("fp-older-legend").style.display = older.length ? "" : "none";
     document.getElementById("fp-older-label").textContent = older.length === 1
-      ? `Earlier season (${older[0]}-${older[0] + 1})`
-      : `Earlier seasons (${older.length}: ${older[0]}-${older[0] + 1} to ${older[older.length - 1]}-${older[older.length - 1] + 1})`;
+      ? `Earlier season (${seasonName(older[0])})`
+      : `Earlier seasons (${older.length}: ${seasonName(older[0])} to ${seasonName(older[older.length - 1])})`;
 
     // Observed (current season)
     const obsX = observed.map(r => r.date);
@@ -1257,10 +1273,13 @@ to open a given state or local area.
       samples: ensemble.samples.map(s => s.slice(0, nShown)),
     };
     document.getElementById("fp-forecast-legend-detail").textContent = !f || !f.samples.length ? "(not available)"
-      : state.viewMode === "intervals" ? "(median, 50% and 95% intervals)"
-      : state.viewMode === "deciles" ? "(trajectories closest to the 10th–90th percentiles; darker nearer the median)"
+      : state.viewMode === "intervals" ? "(median)"
+      : state.viewMode === "deciles" ? "(trajectories closest to the 10th–90th percentiles; darker nearer the median, thickest at the median)"
       : `(${Math.min(N_TRAJ_DRAWS, f.samples.length)} of ${f.samples.length} trajectories shown)`;
     document.getElementById("fp-smooth-legend").hidden = !(f && f.samples.length && state.viewMode === "deciles");
+    for (const el of document.querySelectorAll(".fp-interval-legend")) {
+      el.hidden = !(f && f.samples.length && state.viewMode === "intervals");
+    }
     if (f && f.samples.length) {
       const color = FORECAST_COLOR;
       const x = f.dates;
@@ -1284,15 +1303,27 @@ to open a given state or local area.
           line: { color: "transparent" },
           name: "Ensemble 50%", hoverinfo: "skip", showlegend: false,
         });
-        // Median, connected to last observed point
+        // Median, connected to last observed point. Hovering a forecast week shows its median and
+        // both interval bounds.
+        const pct = v => `${v.toFixed(2)}%`;
+        const tips = x.map((d, i) => `Ensemble forecast, week ending ${fmtMd(d)}<br>`
+          + `Median: ${pct(bands.q50[i])}<br>`
+          + `50% interval: ${pct(bands.q25[i])} – ${pct(bands.q75[i])}<br>`
+          + `95% interval: ${pct(bands.q025[i])} – ${pct(bands.q975[i])}`);
         let connX = x, connY = bands.q50;
         if (lastObs != null) {
           connX = [lastObsDate, ...x];
           connY = [lastObs, ...bands.q50];
+          // The first forecast week usually ends on the last observed date, so both points share a
+          // date there. Give the connecting point the forecast's tooltip so either one shows it.
+          tips.unshift(lastObsDate === x[0] ? tips[0]
+            : `Last observed, week ending ${fmtMd(lastObsDate)}: ${pct(lastObs)}`);
         }
         traces.push(trace("Ensemble", connX, connY, {
           mode: "lines",
           line: { color, width: 2.5, dash: "dash" },
+          text: tips,
+          hovertemplate: "%{text}<extra></extra>",
           showlegend: false,
         }));
       } else if (state.viewMode === "deciles") {
@@ -1304,15 +1335,17 @@ to open a given state or local area.
           // 0 at the median, 1 at the 10th/90th percentiles
           const fromMiddle = Math.abs(level - 0.5) / (0.5 - DECILE_LEVELS[0]);
           const pct = Math.round(level * 100);
+          const isMedian = level === 0.5;
+          const base = isMedian ? DECILE_MEDIAN_STYLE : DECILE_STYLE;
           traces.push({
             type: "scatter", mode: "lines",
             x: connX, y: conn(f.samples[idx]),
-            line: { color: mixHex(DECILE_DARK, DECILE_LIGHT, fromMiddle), width: DECILE_STYLE.width },
-            opacity: DECILE_STYLE.opacity,
+            line: { color: mixHex(DECILE_DARK, DECILE_LIGHT, fromMiddle), width: base.width },
+            opacity: base.opacity,
             name: `${pct}th percentile`,
             showlegend: false,
-            hovertemplate: `Trajectory closest to the ${pct}th percentile<br>%{x|%b %d}: %{y:.2f}%<extra></extra>`,
-            meta: { base: DECILE_STYLE, hover: DECILE_HOVER_STYLE },
+            hovertemplate: `Trajectory closest to the ${isMedian ? "median" : `${pct}th percentile`}<br>%{x|%b %d}: %{y:.2f}%<extra></extra>`,
+            meta: { base, hover: isMedian ? DECILE_MEDIAN_HOVER_STYLE : DECILE_HOVER_STYLE },
           });
         }
         // Smoothed over the whole forecast, then cut to the window, so the window doesn't change it.
@@ -1385,14 +1418,24 @@ to open a given state or local area.
     };
 
     // Plotly's toolbar (shown on hover), without the buttons the original dashboard's chart also
-    // drops. Autoscaling and double-clicking would otherwise fit the axes to every past season, so
-    // double-click returns to this window instead.
+    // drops. Plotly's own reset returns to the first range it drew, even after a switch between "4
+    // weeks" and "Full season", so its home button and double-click are replaced with ones that
+    // return to the window being shown. (Autoscaling would fit the axes to every past season.)
+    // Copies, since Plotly changes the layout's range arrays in place when the chart is zoomed.
+    chartHome = { x: [...layout.xaxis.range], y: [...layout.yaxis.range] };
     Plotly.react("fp-chart", traces, layout, {
       responsive: true,
-      modeBarButtonsToRemove: ["lasso2d", "autoScale2d"],
-      doubleClick: "reset",
+      modeBarButtonsToRemove: ["lasso2d", "autoScale2d", "resetScale2d"],
+      modeBarButtonsToAdd: [{ name: "Reset axes", title: "Reset axes", icon: Plotly.Icons.home, click: resetChartView }],
+      doubleClick: false,
     });
     highlightTrajectories();
+  }
+
+  // The axis ranges of the window being shown, set each time the chart is drawn.
+  let chartHome = null;
+  function resetChartView() {
+    if (chartHome) Plotly.relayout("fp-chart", { "xaxis.range": [...chartHome.x], "yaxis.range": [...chartHome.y] });
   }
 
   // Trajectories and deciles views: the trajectory under the mouse switches from its usual style to
@@ -1411,6 +1454,7 @@ to open a given state or local area.
     };
     chartEl.on("plotly_hover", e => restyle(e, "hover"));
     chartEl.on("plotly_unhover", e => restyle(e, "base"));
+    chartEl.on("plotly_doubleclick", resetChartView);
   }
 
   route();
