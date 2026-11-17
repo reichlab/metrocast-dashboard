@@ -1,0 +1,1449 @@
+{
+  "reference_date": "2026-11-14",
+  "season": 2026,
+  "season_label": "2026-2027",
+  "target": "Flu ED visits pct",
+  "models": [
+    "Ensemble"
+  ],
+  "locations": [
+    {
+      "id": "amarillo",
+      "name": "Amarillo, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Armstrong",
+        "Briscoe",
+        "Carson",
+        "Dallam",
+        "Donley",
+        "Hansford",
+        "Hartley",
+        "Hutchinson",
+        "Moore",
+        "Ochiltree",
+        "Oldham",
+        "Potter",
+        "Randall",
+        "Sherman",
+        "Swisher"
+      ],
+      "hsa_code": "405"
+    },
+    {
+      "id": "athens",
+      "name": "Athens, GA",
+      "state": "Georgia",
+      "state_abb": "GA",
+      "level": "local",
+      "counties": [
+        "Barrow",
+        "Clarke",
+        "Jackson",
+        "Madison",
+        "Oconee",
+        "Oglethorpe"
+      ],
+      "hsa_code": "829"
+    },
+    {
+      "id": "austin",
+      "name": "Austin, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Bastrop",
+        "Burnet",
+        "Lee",
+        "Llano",
+        "Travis",
+        "Williamson"
+      ],
+      "hsa_code": "425"
+    },
+    {
+      "id": "baltimore",
+      "name": "Baltimore, MD",
+      "state": "Maryland",
+      "state_abb": "MD",
+      "level": "local",
+      "counties": [
+        "Anne Arundel",
+        "Baltimore",
+        "Calvert",
+        "Carroll",
+        "Howard"
+      ],
+      "hsa_code": "16"
+    },
+    {
+      "id": "bangor",
+      "name": "Bangor, ME",
+      "state": "Maine",
+      "state_abb": "ME",
+      "level": "local",
+      "counties": [
+        "Hancock",
+        "Penobscot",
+        "Piscataquis",
+        "Washington"
+      ],
+      "hsa_code": "17"
+    },
+    {
+      "id": "bear-river",
+      "name": "Bear River, UT",
+      "state": "Utah",
+      "state_abb": "UT",
+      "level": "local",
+      "counties": [
+        "Cache",
+        "Box Elder",
+        "Rich"
+      ]
+    },
+    {
+      "id": "beaumont",
+      "name": "Beaumont, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Hardin",
+        "Jasper",
+        "Jefferson",
+        "Newton",
+        "Orange",
+        "Tyler"
+      ],
+      "hsa_code": "413"
+    },
+    {
+      "id": "pittsfield",
+      "name": "Berkshire County, MA",
+      "state": "Massachusetts",
+      "state_abb": "MA",
+      "level": "local",
+      "counties": [
+        "Berkshire"
+      ],
+      "hsa_code": "112"
+    },
+    {
+      "id": "boston",
+      "name": "Boston Metro, South Shore, Cape & Islands, MA",
+      "state": "Massachusetts",
+      "state_abb": "MA",
+      "level": "local",
+      "counties": [
+        "Barnstable",
+        "Dukes",
+        "Middlesex",
+        "Nantucket",
+        "Norfolk",
+        "Plymouth",
+        "Suffolk"
+      ],
+      "hsa_code": "22"
+    },
+    {
+      "id": "boulder",
+      "name": "Boulder, CO",
+      "state": "Colorado",
+      "state_abb": "CO",
+      "level": "local",
+      "counties": [
+        "Boulder",
+        "Broomfield"
+      ],
+      "hsa_code": "795"
+    },
+    {
+      "id": "new-bedford",
+      "name": "Bristol County, MA",
+      "state": "Massachusetts",
+      "state_abb": "MA",
+      "level": "local",
+      "counties": [
+        "Bristol"
+      ],
+      "hsa_code": "68"
+    },
+    {
+      "id": "brownsville",
+      "name": "Brownsville, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Cameron",
+        "Willacy"
+      ],
+      "hsa_code": "520"
+    },
+    {
+      "id": "bryan",
+      "name": "Bryan, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Brazos",
+        "Burleson",
+        "Grimes",
+        "Robertson",
+        "Washington"
+      ],
+      "hsa_code": "464"
+    },
+    {
+      "id": "central",
+      "name": "Central Utah, UT",
+      "state": "Utah",
+      "state_abb": "UT",
+      "level": "local",
+      "counties": [
+        "Sanpete",
+        "Sevier",
+        "Millard",
+        "Juab",
+        "Wayne",
+        "Piute"
+      ]
+    },
+    {
+      "id": "charleston",
+      "name": "Charleston, SC",
+      "state": "South Carolina",
+      "state_abb": "SC",
+      "level": "local",
+      "counties": [
+        "Berkeley",
+        "Charleston",
+        "Colleton",
+        "Dorchester",
+        "Hampton"
+      ],
+      "hsa_code": "212"
+    },
+    {
+      "id": "clt-area",
+      "name": "Charlotte Area, NC",
+      "state": "North Carolina",
+      "state_abb": "NC",
+      "level": "local",
+      "counties": [
+        "Alexander",
+        "Anson",
+        "Cabarrus",
+        "Catawba",
+        "Cleveland",
+        "Gaston",
+        "Iredell",
+        "Lincoln",
+        "Mecklenburg",
+        "Rowan",
+        "Stanly",
+        "Union"
+      ]
+    },
+    {
+      "id": "cherokee",
+      "name": "Cherokee, GA",
+      "state": "Georgia",
+      "state_abb": "GA",
+      "level": "local",
+      "counties": [
+        "Cherokee",
+        "Douglas",
+        "Paulding",
+        "Pickens"
+      ],
+      "hsa_code": "826"
+    },
+    {
+      "id": "colorado",
+      "name": "Colorado",
+      "state": "Colorado",
+      "state_abb": "CO",
+      "level": "state"
+    },
+    {
+      "id": "colorado-springs",
+      "name": "Colorado Springs, CO",
+      "state": "Colorado",
+      "state_abb": "CO",
+      "level": "local",
+      "counties": [
+        "Cheyenne",
+        "El Paso",
+        "Kit Carson",
+        "Lincoln",
+        "Teller"
+      ],
+      "hsa_code": "754"
+    },
+    {
+      "id": "columbia",
+      "name": "Columbia, SC",
+      "state": "South Carolina",
+      "state_abb": "SC",
+      "level": "local",
+      "counties": [
+        "Fairfield",
+        "Lexington",
+        "Newberry",
+        "Richland"
+      ],
+      "hsa_code": "160"
+    },
+    {
+      "id": "columbus",
+      "name": "Columbus, GA",
+      "state": "Georgia",
+      "state_abb": "GA",
+      "level": "local",
+      "counties": [
+        "Chattahoochee",
+        "Harris",
+        "Marion",
+        "Muscogee",
+        "Schley",
+        "Stewart",
+        "Talbot",
+        "Webster"
+      ],
+      "hsa_code": "893"
+    },
+    {
+      "id": "corpus-christi",
+      "name": "Corpus Christi, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Aransas",
+        "Brooks",
+        "Duval",
+        "Jim Wells",
+        "Kenedy",
+        "Kleberg",
+        "Live Oak",
+        "Nueces",
+        "San Patricio"
+      ],
+      "hsa_code": "437"
+    },
+    {
+      "id": "dallas",
+      "name": "Dallas, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Collin",
+        "Dallas",
+        "Ellis",
+        "Hopkins",
+        "Hunt",
+        "Kaufman",
+        "Rains",
+        "Rockwall"
+      ],
+      "hsa_code": "453"
+    },
+    {
+      "id": "davis",
+      "name": "Davis County, UT",
+      "state": "Utah",
+      "state_abb": "UT",
+      "level": "local",
+      "counties": [
+        "Davis"
+      ]
+    },
+    {
+      "id": "denton",
+      "name": "Denton, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Cooke",
+        "Denton",
+        "Wise"
+      ],
+      "hsa_code": "495"
+    },
+    {
+      "id": "denver",
+      "name": "Denver, CO",
+      "state": "Colorado",
+      "state_abb": "CO",
+      "level": "local",
+      "counties": [
+        "Adams",
+        "Arapahoe",
+        "Clear Creek",
+        "Denver",
+        "Douglas",
+        "Elbert",
+        "Gilpin",
+        "Grand",
+        "Jefferson",
+        "Park",
+        "Summit"
+      ],
+      "hsa_code": "688"
+    },
+    {
+      "id": "deschutes",
+      "name": "Deschutes, OR",
+      "state": "Oregon",
+      "state_abb": "OR",
+      "level": "local",
+      "counties": [
+        "Crook",
+        "Deschutes",
+        "Harney",
+        "Jefferson",
+        "Wheeler"
+      ],
+      "hsa_code": "719"
+    },
+    {
+      "id": "duluth",
+      "name": "Duluth, MN",
+      "state": "Minnesota",
+      "state_abb": "MN",
+      "level": "local",
+      "counties": [
+        "Carlton",
+        "Cook",
+        "Itasca",
+        "Koochiching",
+        "Lake",
+        "Pine",
+        "St. Louis"
+      ],
+      "hsa_code": "289"
+    },
+    {
+      "id": "el-paso",
+      "name": "El Paso, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Culberson",
+        "El Paso",
+        "Hudspeth",
+        "Loving"
+      ],
+      "hsa_code": "415"
+    },
+    {
+      "id": "lynn",
+      "name": "Essex County, MA",
+      "state": "Massachusetts",
+      "state_abb": "MA",
+      "level": "local",
+      "counties": [
+        "Essex"
+      ],
+      "hsa_code": "74"
+    },
+    {
+      "id": "eugene",
+      "name": "Eugene, OR",
+      "state": "Oregon",
+      "state_abb": "OR",
+      "level": "local",
+      "counties": [
+        "Douglas",
+        "Lane"
+      ],
+      "hsa_code": "782"
+    },
+    {
+      "id": "fay-area",
+      "name": "Fayetteville Area, NC",
+      "state": "North Carolina",
+      "state_abb": "NC",
+      "level": "local",
+      "counties": [
+        "Bladen",
+        "Cumberland",
+        "Harnett",
+        "Hoke",
+        "Johnston",
+        "Lee",
+        "Moore",
+        "Richmond",
+        "Robeson",
+        "Sampson",
+        "Scotland",
+        "Wayne"
+      ]
+    },
+    {
+      "id": "florence",
+      "name": "Florence, SC",
+      "state": "South Carolina",
+      "state_abb": "SC",
+      "level": "local",
+      "counties": [
+        "Chesterfield",
+        "Darlington",
+        "Florence",
+        "Marlboro",
+        "Williamsburg"
+      ],
+      "hsa_code": "184"
+    },
+    {
+      "id": "floyd",
+      "name": "Floyd, GA",
+      "state": "Georgia",
+      "state_abb": "GA",
+      "level": "local",
+      "counties": [
+        "Bartow",
+        "Chattooga",
+        "Floyd",
+        "Gordon",
+        "Polk"
+      ],
+      "hsa_code": "154"
+    },
+    {
+      "id": "fort-worth",
+      "name": "Fort Worth, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Hood",
+        "Johnson",
+        "Parker",
+        "Somervell",
+        "Tarrant"
+      ],
+      "hsa_code": "434"
+    },
+    {
+      "id": "worcester",
+      "name": "Franklin & Worcester Counties, MA",
+      "state": "Massachusetts",
+      "state_abb": "MA",
+      "level": "local",
+      "counties": [
+        "Franklin",
+        "Worcester"
+      ],
+      "hsa_code": "101"
+    },
+    {
+      "id": "frederick",
+      "name": "Frederick, MD",
+      "state": "Maryland",
+      "state_abb": "MD",
+      "level": "local",
+      "counties": [
+        "Frederick"
+      ],
+      "hsa_code": "48"
+    },
+    {
+      "id": "galveston",
+      "name": "Galveston, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Galveston"
+      ],
+      "hsa_code": "532"
+    },
+    {
+      "id": "georgia",
+      "name": "Georgia",
+      "state": "Georgia",
+      "state_abb": "GA",
+      "level": "state"
+    },
+    {
+      "id": "greenville",
+      "name": "Greenville, SC",
+      "state": "South Carolina",
+      "state_abb": "SC",
+      "level": "local",
+      "counties": [
+        "Anderson",
+        "Greenville",
+        "Oconee",
+        "Pickens"
+      ],
+      "hsa_code": "182"
+    },
+    {
+      "id": "hall",
+      "name": "Hall, GA",
+      "state": "Georgia",
+      "state_abb": "GA",
+      "level": "local",
+      "counties": [
+        "Banks",
+        "Dawson",
+        "Habersham",
+        "Hall",
+        "Lumpkin",
+        "Towns",
+        "Union",
+        "White"
+      ],
+      "hsa_code": "157"
+    },
+    {
+      "id": "springfield",
+      "name": "Hampden & Hampshire Counties, MA",
+      "state": "Massachusetts",
+      "state_abb": "MA",
+      "level": "local",
+      "counties": [
+        "Hampden",
+        "Hampshire"
+      ],
+      "hsa_code": "32"
+    },
+    {
+      "id": "harford",
+      "name": "Harford, MD",
+      "state": "Maryland",
+      "state_abb": "MD",
+      "level": "local",
+      "counties": [
+        "Cecil",
+        "Harford"
+      ],
+      "hsa_code": "875"
+    },
+    {
+      "id": "henry",
+      "name": "Henry, GA",
+      "state": "Georgia",
+      "state_abb": "GA",
+      "level": "local",
+      "counties": [
+        "Fayette",
+        "Forsyth",
+        "Henry",
+        "Rockdale",
+        "Walton"
+      ],
+      "hsa_code": "825"
+    },
+    {
+      "id": "horry",
+      "name": "Horry, SC",
+      "state": "South Carolina",
+      "state_abb": "SC",
+      "level": "local",
+      "counties": [
+        "Georgetown",
+        "Horry"
+      ],
+      "hsa_code": "246"
+    },
+    {
+      "id": "houston",
+      "name": "Houston, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Austin",
+        "Chambers",
+        "Fort Bend",
+        "Harris",
+        "Liberty",
+        "Montgomery",
+        "San Jacinto",
+        "Waller"
+      ],
+      "hsa_code": "408"
+    },
+    {
+      "id": "indiana",
+      "name": "Indiana",
+      "state": "Indiana",
+      "state_abb": "IN",
+      "level": "state"
+    },
+    {
+      "id": "indianapolis",
+      "name": "Indianapolis, IN",
+      "state": "Indiana",
+      "state_abb": "IN",
+      "level": "local",
+      "counties": [
+        "Hendricks",
+        "Johnson",
+        "Marion",
+        "Morgan",
+        "Putnam",
+        "Rush",
+        "Shelby"
+      ],
+      "hsa_code": "275"
+    },
+    {
+      "id": "killeen",
+      "name": "Killeen, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Bell",
+        "Coryell",
+        "Lampasas",
+        "Milam"
+      ],
+      "hsa_code": "452"
+    },
+    {
+      "id": "la-grange",
+      "name": "La Grange, GA",
+      "state": "Georgia",
+      "state_abb": "GA",
+      "level": "local",
+      "counties": [
+        "Coweta",
+        "Heard",
+        "Meriwether",
+        "Troup"
+      ],
+      "hsa_code": "894"
+    },
+    {
+      "id": "lake-jackson",
+      "name": "Lake Jackson, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Brazoria",
+        "Matagorda",
+        "Wharton"
+      ],
+      "hsa_code": "505"
+    },
+    {
+      "id": "laredo",
+      "name": "Laredo, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Jim Hogg",
+        "Webb",
+        "Zapata"
+      ],
+      "hsa_code": "538"
+    },
+    {
+      "id": "larimer",
+      "name": "Larimer, CO",
+      "state": "Colorado",
+      "state_abb": "CO",
+      "level": "local",
+      "counties": [
+        "Larimer"
+      ],
+      "hsa_code": "796"
+    },
+    {
+      "id": "lubbock",
+      "name": "Lubbock, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Bailey",
+        "Borden",
+        "Cochran",
+        "Crosby",
+        "Dawson",
+        "Dickens",
+        "Garza",
+        "Hockley",
+        "King",
+        "Lamb",
+        "Lubbock",
+        "Lynn",
+        "Motley"
+      ],
+      "hsa_code": "406"
+    },
+    {
+      "id": "macon",
+      "name": "Macon, GA",
+      "state": "Georgia",
+      "state_abb": "GA",
+      "level": "local",
+      "counties": [
+        "Bibb",
+        "Bleckley",
+        "Crawford",
+        "Houston",
+        "Jones",
+        "Monroe",
+        "Peach",
+        "Pulaski",
+        "Taylor",
+        "Twiggs",
+        "Wilkinson"
+      ],
+      "hsa_code": "193"
+    },
+    {
+      "id": "maine",
+      "name": "Maine",
+      "state": "Maine",
+      "state_abb": "ME",
+      "level": "state"
+    },
+    {
+      "id": "marietta",
+      "name": "Marietta, GA",
+      "state": "Georgia",
+      "state_abb": "GA",
+      "level": "local",
+      "counties": [
+        "Cobb"
+      ],
+      "hsa_code": "190"
+    },
+    {
+      "id": "maryland",
+      "name": "Maryland",
+      "state": "Maryland",
+      "state_abb": "MD",
+      "level": "state"
+    },
+    {
+      "id": "massachusetts",
+      "name": "Massachusetts",
+      "state": "Massachusetts",
+      "state_abb": "MA",
+      "level": "state"
+    },
+    {
+      "id": "mcallen",
+      "name": "Mcallen, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Hidalgo",
+        "Starr"
+      ],
+      "hsa_code": "427"
+    },
+    {
+      "id": "medford",
+      "name": "Medford, OR",
+      "state": "Oregon",
+      "state_abb": "OR",
+      "level": "local",
+      "counties": [
+        "Jackson",
+        "Josephine"
+      ],
+      "hsa_code": "973"
+    },
+    {
+      "id": "mesa",
+      "name": "Mesa, CO",
+      "state": "Colorado",
+      "state_abb": "CO",
+      "level": "local",
+      "counties": [
+        "Eagle",
+        "Garfield",
+        "Mesa",
+        "Pitkin",
+        "Rio Blanco"
+      ],
+      "hsa_code": "711"
+    },
+    {
+      "id": "minneapolis",
+      "name": "Minneapolis, MN",
+      "state": "Minnesota",
+      "state_abb": "MN",
+      "level": "local",
+      "counties": [
+        "Anoka",
+        "Carver",
+        "Hennepin",
+        "Le Sueur",
+        "McLeod",
+        "Scott",
+        "Sherburne",
+        "Sibley",
+        "Wright"
+      ],
+      "hsa_code": "540"
+    },
+    {
+      "id": "minnesota",
+      "name": "Minnesota",
+      "state": "Minnesota",
+      "state_abb": "MN",
+      "level": "state"
+    },
+    {
+      "id": "montgomery",
+      "name": "Montgomery, MD",
+      "state": "Maryland",
+      "state_abb": "MD",
+      "level": "local",
+      "counties": [
+        "Charles",
+        "Montgomery",
+        "Prince Georges",
+        "St. Marys"
+      ],
+      "hsa_code": "869"
+    },
+    {
+      "id": "nyc",
+      "name": "NYC",
+      "state": "New York",
+      "state_abb": "NY",
+      "level": "local",
+      "counties": [
+        "Bronx",
+        "Kings",
+        "New York",
+        "Queens",
+        "Richmond"
+      ],
+      "hsa_code": "94"
+    },
+    {
+      "id": "new-york",
+      "name": "New York",
+      "state": "New York",
+      "state_abb": "NY",
+      "level": "state"
+    },
+    {
+      "id": "north-carolina",
+      "name": "North Carolina",
+      "state": "North Carolina",
+      "state_abb": "NC",
+      "level": "state"
+    },
+    {
+      "id": "nenc",
+      "name": "Northeastern, NC",
+      "state": "North Carolina",
+      "state_abb": "NC",
+      "level": "local",
+      "counties": [
+        "Beaufort",
+        "Bertie",
+        "Camden",
+        "Chowan",
+        "Craven",
+        "Currituck",
+        "Dare",
+        "Edgecombe",
+        "Gates",
+        "Greene",
+        "Halifax",
+        "Hertford",
+        "Hyde",
+        "Jones",
+        "Lenoir",
+        "Martin",
+        "Nash",
+        "Northampton",
+        "Pamlico",
+        "Pasquotank",
+        "Perquimans",
+        "Pitt",
+        "Tyrrell",
+        "Washington",
+        "Wilson"
+      ]
+    },
+    {
+      "id": "oregon",
+      "name": "Oregon",
+      "state": "Oregon",
+      "state_abb": "OR",
+      "level": "state"
+    },
+    {
+      "id": "portland",
+      "name": "Portland, ME",
+      "state": "Maine",
+      "state_abb": "ME",
+      "level": "local",
+      "counties": [
+        "Cumberland",
+        "Knox",
+        "Lincoln",
+        "Sagadahoc"
+      ],
+      "hsa_code": "9"
+    },
+    {
+      "id": "portland-or",
+      "name": "Portland, OR",
+      "state": "Oregon",
+      "state_abb": "OR",
+      "level": "local",
+      "counties": [
+        "Clackamas",
+        "Clatsop",
+        "Columbia",
+        "Multnomah",
+        "Washington"
+      ],
+      "hsa_code": "689"
+    },
+    {
+      "id": "rtp-area",
+      "name": "Research Triangle Park Area, NC",
+      "state": "North Carolina",
+      "state_abb": "NC",
+      "level": "local",
+      "counties": [
+        "Alamance",
+        "Chatham",
+        "Durham",
+        "Franklin",
+        "Granville",
+        "Orange",
+        "Person",
+        "Vance",
+        "Wake",
+        "Warren"
+      ]
+    },
+    {
+      "id": "roanoke",
+      "name": "Roanoke, VA",
+      "state": "Virginia",
+      "state_abb": "VA",
+      "level": "local",
+      "counties": [
+        "Amherst",
+        "Appomattox",
+        "Botetourt",
+        "Campbell",
+        "Craig",
+        "Floyd",
+        "Franklin",
+        "Lynchburg",
+        "Roanoke",
+        "Salem"
+      ],
+      "hsa_code": "14"
+    },
+    {
+      "id": "rochester",
+      "name": "Rochester, MN",
+      "state": "Minnesota",
+      "state_abb": "MN",
+      "level": "local",
+      "counties": [
+        "Dodge",
+        "Fillmore",
+        "Mower",
+        "Olmsted",
+        "Steele",
+        "Wabasha",
+        "Winona"
+      ],
+      "hsa_code": "941"
+    },
+    {
+      "id": "rock-hill",
+      "name": "Rock Hill, SC",
+      "state": "South Carolina",
+      "state_abb": "SC",
+      "level": "local",
+      "counties": [
+        "Chester",
+        "York"
+      ],
+      "hsa_code": "244"
+    },
+    {
+      "id": "salem",
+      "name": "Salem, OR",
+      "state": "Oregon",
+      "state_abb": "OR",
+      "level": "local",
+      "counties": [
+        "Marion",
+        "Polk",
+        "Yamhill"
+      ],
+      "hsa_code": "705"
+    },
+    {
+      "id": "salt-lake",
+      "name": "Salt Lake County, UT",
+      "state": "Utah",
+      "state_abb": "UT",
+      "level": "local",
+      "counties": [
+        "Salt Lake"
+      ]
+    },
+    {
+      "id": "san-antonio",
+      "name": "San Antonio, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Atascosa",
+        "Bandera",
+        "Bexar",
+        "Frio",
+        "Gonzales",
+        "Guadalupe",
+        "Kendall",
+        "La Salle",
+        "McMullen",
+        "Medina",
+        "Wilson",
+        "Zavala"
+      ],
+      "hsa_code": "410"
+    },
+    {
+      "id": "san-juan",
+      "name": "San Juan County, UT",
+      "state": "Utah",
+      "state_abb": "UT",
+      "level": "local",
+      "counties": [
+        "San Juan"
+      ]
+    },
+    {
+      "id": "san-marcos",
+      "name": "San Marcos, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Caldwell",
+        "Hays"
+      ],
+      "hsa_code": "510"
+    },
+    {
+      "id": "savannah",
+      "name": "Savannah, GA",
+      "state": "Georgia",
+      "state_abb": "GA",
+      "level": "local",
+      "counties": [
+        "Bryan",
+        "Chatham",
+        "Effingham",
+        "Evans",
+        "Liberty",
+        "Long",
+        "Tattnall"
+      ],
+      "hsa_code": "143"
+    },
+    {
+      "id": "south-augusta",
+      "name": "South Augusta, GA",
+      "state": "Georgia",
+      "state_abb": "GA",
+      "level": "local",
+      "counties": [
+        "Burke",
+        "Columbia",
+        "Jenkins",
+        "Lincoln",
+        "McDuffie",
+        "Richmond"
+      ],
+      "hsa_code": "830"
+    },
+    {
+      "id": "south-carolina",
+      "name": "South Carolina",
+      "state": "South Carolina",
+      "state_abb": "SC",
+      "level": "state"
+    },
+    {
+      "id": "southeast",
+      "name": "Southeast, UT",
+      "state": "Utah",
+      "state_abb": "UT",
+      "level": "local",
+      "counties": [
+        "Carbon",
+        "Emery",
+        "Grand"
+      ]
+    },
+    {
+      "id": "senc",
+      "name": "Southeastern, NC",
+      "state": "North Carolina",
+      "state_abb": "NC",
+      "level": "local",
+      "counties": [
+        "Brunswick",
+        "Carteret",
+        "Columbus",
+        "Duplin",
+        "New Hanover",
+        "Onslow",
+        "Pender"
+      ]
+    },
+    {
+      "id": "southwest",
+      "name": "Southwest, UT",
+      "state": "Utah",
+      "state_abb": "UT",
+      "level": "local",
+      "counties": [
+        "Washington",
+        "Iron",
+        "Kane",
+        "Beaver",
+        "Garfield"
+      ]
+    },
+    {
+      "id": "st-cloud",
+      "name": "St. Cloud, MN",
+      "state": "Minnesota",
+      "state_abb": "MN",
+      "level": "local",
+      "counties": [
+        "Benton",
+        "Meeker",
+        "Morrison",
+        "Stearns",
+        "Todd"
+      ],
+      "hsa_code": "588"
+    },
+    {
+      "id": "st-paul",
+      "name": "St. Paul, MN",
+      "state": "Minnesota",
+      "state_abb": "MN",
+      "level": "local",
+      "counties": [
+        "Chisago",
+        "Dakota",
+        "Ramsey",
+        "Washington"
+      ],
+      "hsa_code": "286"
+    },
+    {
+      "id": "summit",
+      "name": "Summit County, UT",
+      "state": "Utah",
+      "state_abb": "UT",
+      "level": "local",
+      "counties": [
+        "Summit"
+      ]
+    },
+    {
+      "id": "texas",
+      "name": "Texas",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "state"
+    },
+    {
+      "id": "tooele",
+      "name": "Tooele County, UT",
+      "state": "Utah",
+      "state_abb": "UT",
+      "level": "local",
+      "counties": [
+        "Tooele"
+      ]
+    },
+    {
+      "id": "tri-county",
+      "name": "TriCounty, UT",
+      "state": "Utah",
+      "state_abb": "UT",
+      "level": "local",
+      "counties": [
+        "Uintah",
+        "Duchesne",
+        "Daggett"
+      ]
+    },
+    {
+      "id": "triad-area",
+      "name": "Triad Area, NC",
+      "state": "North Carolina",
+      "state_abb": "NC",
+      "level": "local",
+      "counties": [
+        "Alleghany",
+        "Ashe",
+        "Caswell",
+        "Davidson",
+        "Davie",
+        "Forsyth",
+        "Guilford",
+        "Montgomery",
+        "Randolph",
+        "Rockingham",
+        "Stokes",
+        "Surry",
+        "Watauga",
+        "Wilkes",
+        "Yadkin"
+      ]
+    },
+    {
+      "id": "tyler",
+      "name": "Tyler, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Henderson",
+        "Smith",
+        "Van Zandt",
+        "Wood"
+      ],
+      "hsa_code": "441"
+    },
+    {
+      "id": "utah",
+      "name": "Utah",
+      "state": "Utah",
+      "state_abb": "UT",
+      "level": "state"
+    },
+    {
+      "id": "utah-county",
+      "name": "Utah County, UT",
+      "state": "Utah",
+      "state_abb": "UT",
+      "level": "local",
+      "counties": [
+        "Utah"
+      ]
+    },
+    {
+      "id": "virginia",
+      "name": "Virginia",
+      "state": "Virginia",
+      "state_abb": "VA",
+      "level": "state"
+    },
+    {
+      "id": "waco",
+      "name": "Waco, TX",
+      "state": "Texas",
+      "state_abb": "TX",
+      "level": "local",
+      "counties": [
+        "Bosque",
+        "Falls",
+        "Hamilton",
+        "Hill",
+        "Limestone",
+        "McLennan"
+      ],
+      "hsa_code": "462"
+    },
+    {
+      "id": "wasatch",
+      "name": "Wasatch County, UT",
+      "state": "Utah",
+      "state_abb": "UT",
+      "level": "local",
+      "counties": [
+        "Wasatch"
+      ]
+    },
+    {
+      "id": "weber-morgan",
+      "name": "Weber-Morgan, UT",
+      "state": "Utah",
+      "state_abb": "UT",
+      "level": "local",
+      "counties": [
+        "Weber",
+        "Morgan"
+      ]
+    },
+    {
+      "id": "weld",
+      "name": "Weld, CO",
+      "state": "Colorado",
+      "state_abb": "CO",
+      "level": "local",
+      "counties": [
+        "Morgan",
+        "Washington",
+        "Weld",
+        "Yuma"
+      ],
+      "hsa_code": "760"
+    },
+    {
+      "id": "wnc",
+      "name": "Western, NC",
+      "state": "North Carolina",
+      "state_abb": "NC",
+      "level": "local",
+      "counties": [
+        "Avery",
+        "Buncombe",
+        "Burke",
+        "Caldwell",
+        "Cherokee",
+        "Clay",
+        "Graham",
+        "Haywood",
+        "Henderson",
+        "Jackson",
+        "Macon",
+        "Madison",
+        "McDowell",
+        "Mitchell",
+        "Polk",
+        "Rutherford",
+        "Swain",
+        "Transylvania",
+        "Yancey"
+      ]
+    }
+  ]
+}
